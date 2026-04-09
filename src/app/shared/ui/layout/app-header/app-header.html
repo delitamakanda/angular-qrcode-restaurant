@@ -1,0 +1,11 @@
+<header class="app-header">
+  <div class="app-header__brand">
+    <div class="app-header__title">{{ store()?.name || 'Store' }}</div>
+    <div class="app-header__status" [class.closed]="!isOpen()">
+      {{ isOpen() ? 'Open' : 'Closed'  }}
+    </div>
+  </div>
+  <a routerLink="./welcome" class="app-header__link">
+    Home
+  </a>
+</header>
