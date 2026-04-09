@@ -1,0 +1,8 @@
+<section class="menu-page">
+  <input type="search" placeholder="Search a product" [value]="menuStore.searchTerm()" (input)="menuStore.setSearchTerm(($any($event.target)).value)" />
+  <div class="menu-page__grid">
+    @for (item of menuStore.filteredItems(); track item.id) {
+      <app-menu-item-card [item]="item" />
+    }
+  </div>
+</section>
