@@ -19,6 +19,6 @@ export class MenuApiService {
     const params = new HttpParams()
      .set('mode', mode);
 
-    return this.http.get<MenuResponse>(`/api/menus/${storeId}`, { params });
+    return this.http.get<MenuResponse>(`http://localhost:3000/menus/${storeId}`, { params });
   }
 }

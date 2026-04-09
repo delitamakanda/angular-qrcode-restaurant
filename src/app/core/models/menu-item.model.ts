@@ -1,4 +1,5 @@
 import { ModifierGroup } from './modifier.model';
+import { OrderMode } from './store.model';
 
 export interface MenuCategory {
   id: string;
@@ -16,4 +17,5 @@ export interface MenuItem {
   is_sold_out: boolean;
   tags?: string[];
   modifierGroups?: ModifierGroup[];
+  mode_availability?: { [mode in OrderMode]: boolean };
 }

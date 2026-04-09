@@ -7,5 +7,9 @@ export interface Order {
   status: OrderStatus;
   order_number: string;
   estimated_delivery_time?: string;
+  created_at: string;
   total: number;
+  discount: number;
+  fees: number;
+  subtotal: number;
 }

@@ -11,10 +11,10 @@ export class OrderApiService {
   private readonly http = inject(HttpClient);
 
   createOrder(payload: CheckoutPayload): Observable<Order> {
-    return this.http.post<Order>('/api/orders', payload);
+    return this.http.post<Order>('http://localhost:3000/orders', payload);
   }
 
   getOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`/api/orders/${orderId}`);
+    return this.http.get<Order>(`http://localhost:3000/orders/${orderId}`);
   }
 }
