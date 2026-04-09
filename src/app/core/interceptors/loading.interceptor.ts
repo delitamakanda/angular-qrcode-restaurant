@@ -8,7 +8,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
 
   uiStore.startLoading();
 
-  return next.handle(req).pipe(
+  return next(req).pipe(
     finalize(() => {
       uiStore.stopLoading();
     })

@@ -9,7 +9,7 @@ export class CheckoutStore {
   readonly paymentMethod = signal<PaymentMode>('cash');
   readonly couponCode = signal<string | null>(null);
   readonly submitting = signal<boolean>(false);
-  readonly hasPhone = computed(() => this.customer()?.phone?.length > 0);
+  readonly hasPhone = computed(() => !!this.customer()?.phone);
 
   setCustomer(customer: CheckoutCustomer | null): void {
     this.customer.set(customer);
