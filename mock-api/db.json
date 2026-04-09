@@ -1,0 +1,261 @@
+{
+  "stores": [
+    {
+      "id": "demo",
+      "name": "Bubble House",
+      "logo_url": "/images/placeholder-food.jpg",
+      "cover_image_url": "/images/placeholder-food.jpg",
+      "currency": "EUR",
+      "is_open": true,
+      "estimated_wait_minutes": 18,
+      "supported_modes": ["dine_in", "take_away", "delivery"]
+    }
+  ],
+  "categories": [
+    {
+      "id": "cat-milk-tea",
+      "store_id": "demo",
+      "name": "Milk Tea",
+      "sort_order": 1
+    },
+    {
+      "id": "cat-fruit-tea",
+      "store_id": "demo",
+      "name": "Fruit Tea",
+      "sort_order": 2
+    },
+    {
+      "id": "cat-snacks",
+      "store_id": "demo",
+      "name": "Snacks",
+      "sort_order": 3
+    }
+  ],
+  "menuItems": [
+    {
+      "id": "item-classic-milk-tea",
+      "store_id": "demo",
+      "category_id": "cat-milk-tea",
+      "name": "Classic Milk Tea",
+      "description": "Black tea, milk, balanced sweetness",
+      "image_url": "/images/placeholder-food.jpg",
+      "base_price": 55,
+      "is_sold_out": false,
+      "tags": ["popular"],
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
+    },
+    {
+      "id": "item-taro-milk-tea",
+      "store_id": "demo",
+      "category_id": "cat-milk-tea",
+      "name": "Taro Milk Tea",
+      "description": "Creamy taro flavor",
+      "image_url": "/images/placeholder-food.jpg",
+      "base_price": 65,
+      "is_sold_out": false,
+      "tags": ["new"],
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
+    },
+    {
+      "id": "item-passion-fruit",
+      "store_id": "demo",
+      "category_id": "cat-fruit-tea",
+      "name": "Passion Fruit Green Tea",
+      "description": "Tangy and fresh",
+      "image_url": "/images/placeholder-food.jpg",
+      "base_price": 60,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
+    },
+    {
+      "id": "item-fried-chicken",
+      "store_id": "demo",
+      "category_id": "cat-snacks",
+      "name": "Fried Chicken",
+      "description": "Crispy Taiwanese style chicken",
+      "image_url": "/images/placeholder-food.jpg",
+      "base_price": 95,
+      "is_sold_out": true,
+      "tags": ["sold-out"],
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
+    }
+  ],
+  "modifierGroups": [
+    {
+      "id": "mg-size",
+      "menu_item_id": "item-classic-milk-tea",
+      "name": "Size",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-sugar",
+      "menu_item_id": "item-classic-milk-tea",
+      "name": "Sugar Level",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-ice",
+      "menu_item_id": "item-classic-milk-tea",
+      "name": "Ice Level",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-toppings",
+      "menu_item_id": "item-classic-milk-tea",
+      "name": "Toppings",
+      "required": false,
+      "min_select": 1,
+      "max_select": 1
+    }
+  ],
+  "modifierOptions": [
+    {
+      "id": "opt-size-m",
+      "group_id": "mg-size",
+      "name": "Medium",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-size-l",
+      "group_id": "mg-size",
+      "name": "Large",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-sugar-100",
+      "group_id": "mg-sugar",
+      "name": "100%",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-sugar-50",
+      "group_id": "mg-sugar",
+      "name": "50%",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-sugar-0",
+      "group_id": "mg-sugar",
+      "name": "0%",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-ice-regular",
+      "group_id": "mg-ice",
+      "name": "Regular Ice",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-ice-less",
+      "group_id": "mg-ice",
+      "name": "Less Ice",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-ice-no",
+      "group_id": "mg-ice",
+      "name": "No Ice",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-top-boba",
+      "group_id": "mg-toppings",
+      "name": "Boba",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-top-pudding",
+      "group_id": "mg-toppings",
+      "name": "Pudding",
+      "price_delta": 15,
+      "is_available": true
+    },
+    {
+      "id": "opt-top-jelly",
+      "group_id": "mg-toppings",
+      "name": "Jelly",
+      "price_delta": 10,
+      "is_available": true
+    }
+  ],
+  "promotions": [
+    {
+      "id": "promo-welcome",
+      "store_id": "demo",
+      "code": "WELCOME10",
+      "type": "fixed",
+      "value": 10,
+      "is_active": true
+    }
+  ],
+  "orders": [
+    {
+      "id": "order-1001",
+      "store_id": "demo",
+      "order_number": "A001",
+      "status": "accepted",
+      "mode": "take_away",
+      "customer": {
+        "name": "Délita",
+        "phone": "0900000000"
+      },
+      "items": [
+        {
+          "id": "cart-1",
+          "menu_item_id": "item-classic-milk-tea",
+          "name": "Classic Milk Tea",
+          "quantity": 1,
+          "unit_base_price": 55,
+          "selected_options": [
+            {
+              "group_id": "mg-size",
+              "option_id": "opt-size-l",
+              "label": "Large",
+              "price_delta": 10
+            }
+          ],
+          "note": "",
+          "total_price": 65
+        }
+      ],
+      "subtotal": 65,
+      "discount": 0,
+      "fees": 0,
+      "total": 65,
+      "estimated_delivery_time": "2026-04-09T18:45:00.000Z",
+      "created_at": "2026-04-09T18:20:00.000Z"
+    }
+  ]
+}
