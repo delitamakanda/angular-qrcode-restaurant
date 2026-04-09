@@ -1,0 +1,10 @@
+<section class="welcome-page">
+  <h1>{{ store()?.name }}</h1>
+  <p>Select your order mode</p>
+
+  <div class="welcome-page__actions">
+    <button type="button" (click)="selectMode('dine_in')">Dine in</button>
+    <button type="button" (click)="selectMode('take_away')">Take away</button>
+    <button type="button" (click)="selectMode('delivery')">Delivery</button>
+  </div>
+</section>
