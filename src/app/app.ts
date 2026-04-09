@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { LoadingOverlay} from './shared/ui/layout/loading-overlay/loading-overlay';
+import { ShopShell } from './features/shop-shell/shop-shell';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, LoadingOverlay],
+  imports: [ShopShell],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

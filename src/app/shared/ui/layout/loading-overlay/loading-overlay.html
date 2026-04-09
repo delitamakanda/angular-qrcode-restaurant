@@ -1,1 +1,5 @@
-<p>loading-overlay works!</p>
+@if (uiStore.isGlobalLoading()) {
+  <div class="loading-overlay">
+    <div class="loading-overlay__box">Loading...</div>
+  </div>
+}

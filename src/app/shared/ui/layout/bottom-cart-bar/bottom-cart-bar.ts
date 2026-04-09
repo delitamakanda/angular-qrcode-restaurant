@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CartStore } from '../../../../state/cart.store';
 import { CurrencyFormatPipe } from '../../../pipes/currency-format.pipe';
 
 @Component({
   selector: 'app-bottom-cart-bar',
   imports: [
-    RouterLink,
     CurrencyFormatPipe
   ],
   standalone: true,
