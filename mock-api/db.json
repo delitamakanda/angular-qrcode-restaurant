@@ -8,7 +8,11 @@
       "currency": "EUR",
       "is_open": true,
       "estimated_wait_minutes": 18,
-      "supported_modes": ["dine_in", "take_away", "delivery"]
+      "supported_modes": [
+        "dine_in",
+        "take_away",
+        "delivery"
+      ]
     }
   ],
   "categories": [
@@ -31,7 +35,7 @@
       "sort_order": 3
     }
   ],
-  "menuItems": [
+  "menus": [
     {
       "id": "item-classic-milk-tea",
       "store_id": "demo",
@@ -41,7 +45,9 @@
       "image_url": "/images/placeholder-food.jpg",
       "base_price": 55,
       "is_sold_out": false,
-      "tags": ["popular"],
+      "tags": [
+        "popular"
+      ],
       "mode_availability": {
         "dine_in": true,
         "take_away": true,
@@ -57,7 +63,9 @@
       "image_url": "/images/placeholder-food.jpg",
       "base_price": 65,
       "is_sold_out": false,
-      "tags": ["new"],
+      "tags": [
+        "new"
+      ],
       "mode_availability": {
         "dine_in": true,
         "take_away": true,
@@ -89,7 +97,9 @@
       "image_url": "/images/placeholder-food.jpg",
       "base_price": 95,
       "is_sold_out": true,
-      "tags": ["sold-out"],
+      "tags": [
+        "sold-out"
+      ],
       "mode_availability": {
         "dine_in": true,
         "take_away": true,
@@ -97,7 +107,7 @@
       }
     }
   ],
-  "modifierGroups": [
+  "groups": [
     {
       "id": "mg-size",
       "menu_item_id": "item-classic-milk-tea",
@@ -131,7 +141,7 @@
       "max_select": 1
     }
   ],
-  "modifierOptions": [
+  "options": [
     {
       "id": "opt-size-m",
       "group_id": "mg-size",
@@ -256,6 +266,49 @@
       "total": 65,
       "estimated_delivery_time": "2026-04-09T18:45:00.000Z",
       "created_at": "2026-04-09T18:20:00.000Z"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Délita MAKANDA",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "bd78b6bf-7035-4f7d-a504-dc75733e78cb",
+          "menu_item_id": "item-passion-fruit",
+          "quantity": 1,
+          "name": "Passion Fruit Green Tea",
+          "note": "",
+          "unit_base_price": 60,
+          "selected_options": [],
+          "total_price": 60
+        },
+        {
+          "id": "83edd41a-f345-4fe0-805f-8100188b7b60",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        },
+        {
+          "id": "580e364b-67f9-4618-855c-41ead28385bd",
+          "menu_item_id": "item-taro-milk-tea",
+          "quantity": 1,
+          "name": "Taro Milk Tea",
+          "note": "",
+          "unit_base_price": 65,
+          "selected_options": [],
+          "total_price": 65
+        }
+      ],
+      "id": "KKiF88EiUMA"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
