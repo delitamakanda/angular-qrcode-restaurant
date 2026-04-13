@@ -20,6 +20,7 @@ export class WelcomePage {
 
   selectMode(mode: OrderMode): void {
     this.shopStore.selectedMode.set(mode);
-    void this.router.navigate(['../menu'], { relativeTo: this.route });
+    const storeId = this.route.parent?.snapshot.paramMap.get('storeId');
+    void this.router.navigate(['/store', storeId, 'menu']);
   }
 }
