@@ -1,0 +1,20 @@
+<section class="cart-page">
+  <h1>Panier</h1>
+
+  @for (item of cartStore.items(); track item.id) {
+    <div class="cart-row">
+      <div>
+        <strong>{{ item.name }}</strong>
+        <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
+        <div>Total: {{ item.total_price | currencyFormat }}</div>
+
+        <button type="button" (click)="cartStore.removeFromCart(item.id)">Remove</button>
+      </div>
+    </div>
+  }
+
+  <footer class="cart-page__footer">
+    <strong>Total: {{ cartStore.total() | currencyFormat }}</strong>
+    <button type="button" (click)="goToCheckout()">Checkout</button>
+  </footer>
+</section>
