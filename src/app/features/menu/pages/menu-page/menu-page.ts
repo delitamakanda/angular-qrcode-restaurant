@@ -3,6 +3,8 @@ import { MenuItemCard } from '../../../../shared/ui/cards/menu-item-card/menu-it
 import { ActivatedRoute } from '@angular/router';
 import { ShopStore } from '../../../../state/shop.store';
 import { MenuStore } from '../../../../state/menu.store';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-menu-page',
@@ -17,9 +19,13 @@ export class MenuPage {
   private readonly shopStore = inject(ShopStore);
   readonly menuStore = inject(MenuStore);
 
+  private readonly storeId = toSignal(
+    this.route.parent!.paramMap.pipe(map(params => params.get('storeId'))),
+  )
+
   constructor() {
     effect(() => {
-      const storeId = this.route.snapshot.paramMap.get('storeId');
+      const storeId = this.storeId() as string | null;
       const mode = this.shopStore.selectedMode();
 
       if (!storeId || !mode) {
