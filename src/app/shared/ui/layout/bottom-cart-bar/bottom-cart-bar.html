@@ -1,6 +1,6 @@
 @if (isVisible()) {
   <button class="bottom-cart-bar" type="button" (click)="goToCart()">
     <span>{{ count() }} item(s) </span>
-    <strong>${{ total() | currencyFormat }}</strong>
+    <strong>{{ total() | currencyFormat }}</strong>
   </button>
 }
