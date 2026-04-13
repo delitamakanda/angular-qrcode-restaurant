@@ -1,0 +1,22 @@
+<section class="checkout-page">
+  <h1>Checkout</h1>
+
+  <form [formGroup]="checkoutForm" (ngSubmit)="submitForm()">
+    <label for="name">Name</label>
+    <input type="text" id="name" formControlName="name" required />
+
+    <label for="phone">Phone number</label>
+    <input type="tel" id="phone" formControlName="phone" required />
+
+    <label for="payment-method">Payment method</label>
+    <select id="payment-method" formControlName="paymentMethod" required>
+      <option value="cash">Cash</option>
+      <option value="card">Visa/Mastercard</option>
+    </select>
+
+    <label for="coupon-code">Coupon code (optional)</label>
+    <input type="text" id="coupon-code" formControlName="couponCode" />
+
+    <button type="submit" [disabled]="checkoutStore.submitting()">Submit</button>
+  </form>
+</section>
