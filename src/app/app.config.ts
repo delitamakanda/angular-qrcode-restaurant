@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { loadingInterceptor} from './core/interceptors/loading.interceptor';
 import { errorInterceptor} from './core/interceptors/error.interceptor';
 import { localeInterceptor} from './core/interceptors/locale.interceptor';
+import { BASE_API_URL } from './core/config/app.token';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -19,6 +20,10 @@ export const appConfig: ApplicationConfig = {
         localeInterceptor,
       ])
     ),
+    {
+      provide: BASE_API_URL,
+      useValue: '/api'
+    },
     provideAnimationsAsync(),
     provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling({ scrollPositionRestoration: 'enabled' , anchorScrolling: 'enabled'}), withPreloading(PreloadAllModules)),
   ],
