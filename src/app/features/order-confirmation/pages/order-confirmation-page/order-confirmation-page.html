@@ -1,0 +1,10 @@
+<section class="order-confirmation-page">
+  <h1>Order confirmed</h1>
+  @if (order(); as currentOrder) {
+    <p>Order ID: {{ currentOrder.id }}</p>
+    <p>Total: {{ currentOrder.total | currencyFormat }}</p>
+    <p>Order status: {{ currentOrder.status }}</p>
+    <a [routerLink]="['../../tracking', currentOrder.id]">Track order</a>
+  }
+
+</section>
