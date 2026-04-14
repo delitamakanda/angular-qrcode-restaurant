@@ -1,5 +1,6 @@
 export interface ModifierOption {
   id: string;
+  group_id: string;
   name: string;
   price_delta: number;
   is_available: boolean;
