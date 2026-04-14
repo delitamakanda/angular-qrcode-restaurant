@@ -308,6 +308,28 @@
         }
       ],
       "id": "KKiF88EiUMA"
+    },
+    {
+      "store_id": "demo",
+      "mode": "take_away",
+      "customer": {
+        "name": "john doe",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "card",
+      "items": [
+        {
+          "id": "8c90f25b-0d4b-4372-8d74-d3ea2997a2a6",
+          "menu_item_id": "item-passion-fruit",
+          "quantity": 1,
+          "name": "Passion Fruit Green Tea",
+          "note": "",
+          "unit_base_price": 60,
+          "selected_options": [],
+          "total_price": 60
+        }
+      ],
+      "id": "qmUkFEFB_VA"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
