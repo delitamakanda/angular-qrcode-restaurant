@@ -2,10 +2,14 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ShopStore } from '../../../../state/shop.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderMode } from '../../../../core/models/store.model';
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-welcome-page',
-  imports: [],
+  imports: [
+    TuiButton,
+    TuiIcon
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   templateUrl: './welcome-page.html',

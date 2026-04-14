@@ -2,9 +2,16 @@
   <h1>{{ store()?.name }}</h1>
   <p>Select your order mode</p>
 
-  <div class="welcome-page__actions">
-    <button type="button" (click)="selectMode('dine_in')">Dine in</button>
-    <button type="button" (click)="selectMode('take_away')">Take away</button>
-    <button type="button" (click)="selectMode('delivery')">Delivery</button>
+  <div class="welcome-page__actions flex flex-col gap-2">
+    <button tuiButton type="button" (click)="selectMode('dine_in')">
+      <tui-icon icon="@tui.hand-platter"></tui-icon>
+      Dine in
+    </button>
+    <button tuiButton type="button" (click)="selectMode('take_away')">
+      <tui-icon icon="@tui.hamburger"></tui-icon>
+      Take away</button>
+    <button tuiButton type="button" (click)="selectMode('delivery')">
+      <tui-icon icon="@tui.motorbike"></tui-icon>
+      Delivery</button>
   </div>
 </section>
