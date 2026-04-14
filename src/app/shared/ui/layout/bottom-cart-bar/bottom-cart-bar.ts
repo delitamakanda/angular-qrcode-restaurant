@@ -2,11 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartStore } from '../../../../state/cart.store';
 import { CurrencyFormatPipe } from '../../../pipes/currency-format.pipe';
+import { TuiButton } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-bottom-cart-bar',
   imports: [
-    CurrencyFormatPipe
+    CurrencyFormatPipe,
+    TuiButton
   ],
   standalone: true,
   templateUrl: './bottom-cart-bar.html',

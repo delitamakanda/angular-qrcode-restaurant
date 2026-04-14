@@ -1,11 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ShopStore } from '../../../../state/shop.store';
+import { TuiIcon } from '@taiga-ui/core';
+import { TuiBadge, TuiStatus } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-app-header',
   imports: [
-    RouterLink
+    RouterLink,
+    TuiBadge,
+    TuiIcon,
+    TuiStatus,
   ],
   standalone: true,
   templateUrl: './app-header.html',
