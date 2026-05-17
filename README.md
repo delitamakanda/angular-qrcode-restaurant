@@ -47,20 +47,19 @@ cd mock-api && npm ci
 1. Démarrer l'API mock dans un premier terminal :
 
    ```bash
-   cd /home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant/mock-api
+   cd mock-api
    npm start
    ```
 
-2. Démarrer l'application Angular dans un second terminal :
+2. Depuis la racine du projet, démarrer l'application Angular dans un second terminal :
 
    ```bash
-   cd /home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant
    npm start
    ```
 
 3. Ouvrir `http://localhost:4200/`.
 
-Le proxy Angular redirige automatiquement les appels `/api` vers `http://localhost:3000` via `/home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant/proxy.conf.json`.
+Le proxy Angular redirige automatiquement les appels `/api` vers `http://localhost:3000` via `proxy.conf.json`.
 
 ## Parcours disponible
 
@@ -81,7 +80,7 @@ Routes principales :
 
 ## Données mock et API
 
-Les données de démonstration sont définies dans `/home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant/mock-api/db.json`.
+Les données de démonstration sont définies dans `mock-api/db.json`.
 
 Ressources disponibles :
 
