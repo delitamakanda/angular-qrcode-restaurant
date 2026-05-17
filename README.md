@@ -1,77 +1,119 @@
-# AngularQrcodeRestaurant
+# Angular QR Code Restaurant
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+Application Angular de prise de commande en restaurant via QR code. Le projet simule le parcours client complet : choix du mode de commande, consultation du menu, personnalisation d'un produit, panier, validation de commande et confirmation, avec une API mock servie localement ou via Cloudflare Pages Functions.
 
-## Development server
+## Fonctionnalités
 
-To start a local development server, run:
+- page d'accueil du restaurant avec choix du mode de commande (`dine_in`, `take_away`, `delivery`)
+- catalogue filtré par catégories et recherche produit
+- personnalisation des articles avec groupes d'options
+- gestion du panier et calcul des totaux
+- parcours de checkout avec informations client, moyen de paiement et coupon
+- confirmation de commande puis accès à une page de suivi
+- mock API basée sur `mock-api/db.json` et exposée sur `/api/*`
 
-```bash
-ng serve
+## Stack technique
+
+- Angular 21 avec composants standalone
+- Signals Angular pour l'état applicatif
+- Taiga UI pour une partie des composants d'interface
+- `json-server` pour la mock API locale
+- Cloudflare Pages Functions pour servir le front et l'API mock sur un même projet
+
+## Structure du dépôt
+
+```text
+.
+├── functions/api/[[path]].ts   # API mock compatible Cloudflare Pages
+├── mock-api/                   # données locales et serveur json-server
+├── public/                     # fichiers statiques (_redirects, images...)
+└── src/app/                    # application Angular
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Prérequis
 
-## Code scaffolding
+- Node.js 20+
+- npm 11+
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Installation
 
 ```bash
-ng generate --help
+npm ci
+cd mock-api && npm ci
 ```
 
-## Building
+## Lancer le projet en local
 
-To build the project run:
+1. Démarrer l'API mock dans un premier terminal :
+
+   ```bash
+   cd /home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant/mock-api
+   npm start
+   ```
+
+2. Démarrer l'application Angular dans un second terminal :
+
+   ```bash
+   cd /home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant
+   npm start
+   ```
+
+3. Ouvrir `http://localhost:4200/`.
+
+Le proxy Angular redirige automatiquement les appels `/api` vers `http://localhost:3000` via `/home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant/proxy.conf.json`.
+
+## Parcours disponible
+
+La route par défaut redirige vers :
+
+```text
+/store/demo/welcome
+```
+
+Routes principales :
+
+- `/store/:storeId/welcome`
+- `/store/:storeId/menu`
+- `/store/:storeId/cart`
+- `/store/:storeId/checkout`
+- `/store/:storeId/confirmation/:orderId`
+- `/store/:storeId/tracking/:orderId`
+
+## Données mock et API
+
+Les données de démonstration sont définies dans `/home/runner/work/angular-qrcode-restaurant/angular-qrcode-restaurant/mock-api/db.json`.
+
+Ressources disponibles :
+
+- `GET /api/stores/:id`
+- `GET /api/categories?store_id=demo&sort=sort_order`
+- `GET /api/menus?store_id=demo`
+- `GET /api/menus/:id`
+- `GET /api/groups?menu_item_id=...`
+- `GET /api/options?group_id=...`
+- `GET /api/orders/:id`
+- `POST /api/orders`
+
+> Les commandes créées en local sont conservées uniquement en mémoire dans la fonction mock tant que le processus tourne.
+
+## Commandes utiles
 
 ```bash
-ng build
+npm start                     # lance le front Angular
+npm run build                 # build de production
+npx ng test --watch=false     # exécute les tests unitaires Angular/Vitest
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Déploiement sur Cloudflare Pages
 
-## Running unit tests
+Le dépôt est prêt à servir le front et la mock API dans un même projet Cloudflare Pages.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+- **Build command** : `npm run build`
+- **Build output directory** : `dist/angular-qrcode-restaurant/browser`
+- **Function** : `functions/api/[[path]].ts`
+- **Redirects** : `public/_redirects`
 
-```bash
-ng test
-```
+## Ressources complémentaires
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Deploy on Cloudflare Pages (front + mock API)
-
-This repository is now ready to deploy both the Angular front-end and the mock API on a single Cloudflare Pages project:
-
-- Front-end static files are generated by `ng build`
-- Mock API is served by Cloudflare Pages Functions from `functions/api/[[path]].ts` on `/api/*`
-
-### Build settings (Cloudflare Pages)
-
-- **Build command**: `npm run build`
-- **Build output directory**: `dist/angular-qrcode-restaurant/browser`
-
-### Required files
-
-- `wrangler.toml`: Pages build output configuration
-- `public/_redirects`: SPA fallback + API route preservation
-- `functions/api/[[path]].ts`: mock API routes compatible with existing `/api` calls
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Angular CLI : <https://angular.dev/tools/cli>
+- Cloudflare Pages Functions : <https://developers.cloudflare.com/pages/functions/>
