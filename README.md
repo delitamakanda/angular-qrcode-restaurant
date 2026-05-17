@@ -1,36 +1,36 @@
 # Angular QR Code Restaurant
 
-Application Angular de prise de commande en restaurant via QR code. Le projet simule le parcours client complet : choix du mode de commande, consultation du menu, personnalisation d'un produit, panier, validation de commande et confirmation, avec une API mock servie localement ou via Cloudflare Pages Functions.
+Angular application for restaurant ordering via QR code. The project simulates the main customer journey: choosing an order mode, browsing the menu, customizing a product, reviewing the cart, submitting checkout information, and confirming an order, with a mock API available locally or through Cloudflare Pages Functions.
 
-## Fonctionnalités
+## Features
 
-- page d'accueil du restaurant avec choix du mode de commande (`dine_in`, `take_away`, `delivery`)
-- catalogue filtré par catégories et recherche produit
-- personnalisation des articles avec groupes d'options
-- gestion du panier et calcul des totaux
-- parcours de checkout avec informations client, moyen de paiement et coupon
-- confirmation de commande puis accès à une page de suivi
-- mock API basée sur `mock-api/db.json` et exposée sur `/api/*`
+- restaurant landing page with order mode selection (`dine_in`, `take_away`, `delivery`)
+- product catalog with category filtering and search
+- product customization with modifier groups and options
+- cart management and total calculation
+- checkout flow with customer details, payment method, and coupon code
+- order confirmation with access to the tracking page
+- mock API backed by `mock-api/db.json` and exposed under `/api/*`
 
-## Stack technique
+## Tech stack
 
-- Angular 21 avec composants standalone
-- Signals Angular pour l'état applicatif
-- Taiga UI pour une partie des composants d'interface
-- `json-server` pour la mock API locale
-- Cloudflare Pages Functions pour servir le front et l'API mock sur un même projet
+- Angular 21 with standalone components
+- Angular Signals for application state
+- Taiga UI for part of the interface
+- `json-server` for the local mock API
+- Cloudflare Pages Functions to serve the frontend and mock API from one project
 
-## Structure du dépôt
+## Repository structure
 
 ```text
 .
-├── functions/api/[[path]].ts   # API mock compatible Cloudflare Pages
-├── mock-api/                   # données locales et serveur json-server
-├── public/                     # fichiers statiques (_redirects, images...)
-└── src/app/                    # application Angular
+├── functions/api/[[path]].ts   # Cloudflare Pages-compatible mock API
+├── mock-api/                   # local data and json-server configuration
+├── public/                     # static files (_redirects, images...)
+└── src/app/                    # Angular application
 ```
 
-## Prérequis
+## Prerequisites
 
 - Node.js 20+
 - npm 11+
@@ -42,34 +42,34 @@ npm ci
 cd mock-api && npm ci
 ```
 
-## Lancer le projet en local
+## Run locally
 
-1. Démarrer l'API mock dans un premier terminal :
+1. Start the mock API in a first terminal:
 
    ```bash
    cd mock-api
    npm start
    ```
 
-2. Depuis la racine du projet, démarrer l'application Angular dans un second terminal :
+2. From the project root, start the Angular application in a second terminal:
 
    ```bash
    npm start
    ```
 
-3. Ouvrir `http://localhost:4200/`.
+3. Open `http://localhost:4200/`.
 
-Le proxy Angular redirige automatiquement les appels `/api` vers `http://localhost:3000` via `proxy.conf.json`.
+The Angular dev server proxies `/api` requests to `http://localhost:3000` through `proxy.conf.json`.
 
-## Parcours disponible
+## Available flow
 
-La route par défaut redirige vers :
+The default route redirects to:
 
 ```text
 /store/demo/welcome
 ```
 
-Routes principales :
+Main routes:
 
 - `/store/:storeId/welcome`
 - `/store/:storeId/menu`
@@ -78,11 +78,11 @@ Routes principales :
 - `/store/:storeId/confirmation/:orderId`
 - `/store/:storeId/tracking/:orderId`
 
-## Données mock et API
+## Mock data and API
 
-Les données de démonstration sont définies dans `mock-api/db.json`.
+Demo data is defined in `mock-api/db.json`.
 
-Ressources disponibles :
+Available resources:
 
 - `GET /api/stores/:id`
 - `GET /api/categories?store_id=demo&sort=sort_order`
@@ -93,26 +93,26 @@ Ressources disponibles :
 - `GET /api/orders/:id`
 - `POST /api/orders`
 
-> Les commandes créées en local sont conservées uniquement en mémoire dans la fonction mock tant que le processus tourne.
+> Orders created locally are kept in memory only while the mock process is running.
 
-## Commandes utiles
+## Useful commands
 
 ```bash
-npm start                     # lance le front Angular
-npm run build                 # build de production
-npx ng test --watch=false     # exécute les tests unitaires Angular/Vitest
+npm start                     # start the Angular frontend
+npm run build                 # create a production build
+npx ng test --watch=false     # run Angular/Vitest unit tests
 ```
 
-## Déploiement sur Cloudflare Pages
+## Deploy to Cloudflare Pages
 
-Le dépôt est prêt à servir le front et la mock API dans un même projet Cloudflare Pages.
+The repository is ready to serve both the frontend and the mock API from a single Cloudflare Pages project.
 
-- **Build command** : `npm run build`
-- **Build output directory** : `dist/angular-qrcode-restaurant/browser`
-- **Function** : `functions/api/[[path]].ts`
-- **Redirects** : `public/_redirects`
+- **Build command**: `npm run build`
+- **Build output directory**: `dist/angular-qrcode-restaurant/browser`
+- **Function**: `functions/api/[[path]].ts`
+- **Redirects**: `public/_redirects`
 
-## Ressources complémentaires
+## Additional resources
 
-- Angular CLI : <https://angular.dev/tools/cli>
-- Cloudflare Pages Functions : <https://developers.cloudflare.com/pages/functions/>
+- Angular CLI: <https://angular.dev/tools/cli>
+- Cloudflare Pages Functions: <https://developers.cloudflare.com/pages/functions/>
