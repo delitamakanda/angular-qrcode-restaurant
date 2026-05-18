@@ -1,10 +1,18 @@
 import { TestBed } from '@angular/core/testing';
+import { provideTaiga } from '@taiga-ui/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
 import { App } from './app';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        provideTaiga(),
+        provideRouter([]),
+        provideHttpClient(),
+      ],
     }).compileComponents();
   });
 
