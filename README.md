@@ -1,4 +1,4 @@
-# Angular QR Code Restaurant
+# Angular QR Code Restaurant [![CI](https://github.com/delitamakanda/angular-qrcode-restaurant/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/delitamakanda/angular-qrcode-restaurant/actions/workflows/ci.yml)
 
 Angular application for restaurant ordering via QR code. The project simulates the main customer journey: choosing an order mode, browsing the menu, customizing a product, reviewing the cart, submitting checkout information, and confirming an order, with a mock API available locally or through Cloudflare Pages Functions.
 
