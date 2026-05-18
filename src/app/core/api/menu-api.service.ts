@@ -12,7 +12,7 @@ export interface MenuResponse {
 }
 
 export interface MenuItemWithModifiers extends MenuItem {
-  modifierGroups: Array<ModifierGroup & { options: ModifierOption[]  }>;
+  modifierGroups: (ModifierGroup & { options: ModifierOption[]  })[];
 }
 
 @Injectable({

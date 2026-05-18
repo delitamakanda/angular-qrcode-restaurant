@@ -17,5 +17,5 @@ export interface MenuItem {
   is_sold_out: boolean;
   tags?: string[];
   modifierGroups?: ModifierGroup[];
-  mode_availability?: { [mode in OrderMode]: boolean };
+  mode_availability?: Record<OrderMode, boolean>;
 }
