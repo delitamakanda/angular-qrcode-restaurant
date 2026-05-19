@@ -28,7 +28,7 @@
                 "input": "public"
               },
               {
-                "glob": "{home,hand-platter,hamburger,motorbike}.svg",
+                "glob": "{home,hand-platter,hamburger,motorbike,loader-pinwheel}.svg",
                 "input": "node_modules/@taiga-ui/icons/src",
                 "output": "assets/taiga-ui/icons"
               }
@@ -53,7 +53,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,

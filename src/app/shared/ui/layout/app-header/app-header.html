@@ -7,4 +7,9 @@
   </div>
   <tui-icon routerLink="./welcome" class="app-header__link shrink-0" icon="@tui.home">
   </tui-icon>
+  <div class="app-header__actions flex gap-2">
+    <button tuiButton appearance="secondary" size="s" type="button" (click)="reloadPage()">
+      <tui-icon icon="@tui.loader-pinwheel"></tui-icon>
+    </button>
+  </div>
 </header>
