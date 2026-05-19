@@ -10,6 +10,7 @@ import {
   withInMemoryScrolling,
   withPreloading,
   PreloadAllModules,
+  withViewTransitions,
 } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
@@ -30,6 +31,7 @@ export const appConfig: ApplicationConfig = {
     },
     provideRouter(
       routes,
+      withViewTransitions(),
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
