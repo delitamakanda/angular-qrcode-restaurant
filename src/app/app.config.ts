@@ -3,6 +3,7 @@ import {
   ApplicationConfig,
   provideZonelessChangeDetection,
   provideBrowserGlobalErrorListeners,
+  isDevMode,
 } from '@angular/core';
 import {
   provideRouter,
@@ -19,6 +20,7 @@ import { localeInterceptor } from './core/interceptors/locale.interceptor';
 import { BASE_API_URL } from './core/config/app.token';
 
 import { routes } from './app.routes';
+import { provideServiceWorker } from '@angular/service-worker';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,5 +39,9 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
     ),
     provideTaiga(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };
