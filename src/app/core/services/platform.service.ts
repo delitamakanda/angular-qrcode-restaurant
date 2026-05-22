@@ -1,13 +1,13 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { ErrorHandler, Injectable, computed, inject, signal } from '@angular/core';
 
 type InstallPromptOutcome = 'accepted' | 'dismissed';
 
-interface InstallPromptResult {
+export interface InstallPromptResult {
   outcome: InstallPromptOutcome;
   platform: string;
 }
 
-interface BeforeInstallPromptEvent extends Event {
+export interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
   userChoice: Promise<InstallPromptResult>;
 }
@@ -16,6 +16,7 @@ interface BeforeInstallPromptEvent extends Event {
   providedIn: 'root',
 })
 export class PlatformService {
+  private readonly errorHandler = inject(ErrorHandler);
   private readonly installPromptEvent = signal<BeforeInstallPromptEvent | null>(null);
   readonly canInstall = computed(() => this.installPromptEvent() !== null);
 
@@ -46,6 +47,8 @@ export class PlatformService {
     try {
       await installPromptEvent.prompt();
       await installPromptEvent.userChoice;
+    } catch (error) {
+      this.errorHandler.handleError(error);
     } finally {
       this.installPromptEvent.set(null);
     }
