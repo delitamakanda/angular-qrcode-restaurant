@@ -3,9 +3,21 @@ import { TestBed } from '@angular/core/testing';
 import { BeforeInstallPromptEvent, PlatformService } from './platform.service';
 
 describe('PlatformService', () => {
+  let handleErrorSpy: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
+    handleErrorSpy = vi.fn();
+
     TestBed.configureTestingModule({
-      providers: [PlatformService],
+      providers: [
+        PlatformService,
+        {
+          provide: ErrorHandler,
+          useValue: {
+            handleError: handleErrorSpy,
+          },
+        },
+      ],
     });
   });
 
@@ -62,8 +74,6 @@ describe('PlatformService', () => {
 
   it('should report install prompt errors through Angular error handling', async () => {
     const service = injectPlatformService();
-    const { errorHandler } = service as unknown as { errorHandler: ErrorHandler };
-    const handleErrorSpy = vi.spyOn(errorHandler, 'handleError').mockImplementation(() => undefined);
     const event = new Event('beforeinstallprompt') as BeforeInstallPromptEvent;
     const installError = new Error('prompt failed');
 
