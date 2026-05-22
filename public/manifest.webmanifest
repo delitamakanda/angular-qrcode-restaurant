@@ -1,9 +1,11 @@
 {
-  "name": "angular-qrcode-restaurant",
-  "short_name": "angular-qrcode-restaurant",
+  "name": "QR Restaurant",
+  "short_name": "QR Restaurant",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "theme_color": "#dc2626",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "icons/icon-72x72.png",

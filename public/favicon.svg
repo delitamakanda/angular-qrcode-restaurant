@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="50" fill="#dc2626"/>
+  <!-- Fork (left) -->
+  <rect x="30" y="15" width="4" height="30" rx="2" fill="white"/>
+  <rect x="25" y="15" width="4" height="18" rx="2" fill="white"/>
+  <rect x="35" y="15" width="4" height="18" rx="2" fill="white"/>
+  <rect x="25" y="33" width="14" height="4" rx="2" fill="white"/>
+  <rect x="30" y="37" width="4" height="38" rx="2" fill="white"/>
+  <!-- Knife (right) -->
+  <rect x="62" y="15" width="4" height="60" rx="2" fill="white"/>
+  <path d="M62 15 Q72 20 66 35 L62 35 Z" fill="white"/>
+</svg>
