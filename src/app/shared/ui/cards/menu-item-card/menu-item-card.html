@@ -1,16 +1,5 @@
 <article class="menu-item-card">
-  <div class="menu-item-card__header">
-    <h3>{{ item().name }}</h3>
-    <button
-      type="button"
-      class="menu-item-card__favorite"
-      [class.menu-item-card__favorite--active]="isFavorite()"
-      (click)="toggleFavorite()"
-    >
-      <tui-icon [icon]="isFavorite() ? '@tui.heart' : '@tui.heart'" [style.color]="isFavorite() ? '#ef4444' : '#9ca3af'"></tui-icon>
-      <span class="sr-only">{{ isFavorite() ? 'Remove from favorites' : 'Add to favorites' }}</span>
-    </button>
-  </div>
+  <h3>{{ item().name }}</h3>
   <p>{{ item().description }}</p>
   <p>Price: {{ item().base_price | currencyFormat }}</p>
 

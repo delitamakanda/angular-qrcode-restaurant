@@ -1,15 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { MenuItem } from '../../../../core/models/menu-item.model';
 import { CartStore } from '../../../../state/cart.store';
-import { FavoritesStore } from '../../../../state/favorites.store';
 import { CurrencyFormatPipe } from '../../../pipes/currency-format.pipe';
-import { TuiIcon } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-menu-item-card',
   imports: [
-    CurrencyFormatPipe,
-    TuiIcon,
+    CurrencyFormatPipe
   ],
   standalone: true,
   templateUrl: './menu-item-card.html',
@@ -19,13 +16,6 @@ import { TuiIcon } from '@taiga-ui/core';
 export class MenuItemCard {
   readonly item = input.required<MenuItem>()
   private readonly cartStore = inject(CartStore);
-  private readonly favoritesStore = inject(FavoritesStore);
-
-  readonly isFavorite = computed(() => this.favoritesStore.isFavorite(this.item().id));
-
-  toggleFavorite(): void {
-    this.favoritesStore.toggleFavorite(this.item().id);
-  }
 
   addToCart(): void {
     const product = this.item();
