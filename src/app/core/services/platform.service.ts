@@ -46,6 +46,7 @@ export class PlatformService {
 
     try {
       await installPromptEvent.prompt();
+      // Wait for the browser install flow to settle before clearing the deferred prompt.
       await installPromptEvent.userChoice;
     } catch (error) {
       this.errorHandler.handleError(error);
