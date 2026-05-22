@@ -1,0 +1,21 @@
+.menu-item-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.menu-item-card__favorite {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0;
+  line-height: 1;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.menu-item-card__favorite--active {
+  color: #ef4444;
+}
