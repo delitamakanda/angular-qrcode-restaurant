@@ -23,8 +23,8 @@ export class MenuStore {
       const matchesSearchTerm =
         item.name.toLowerCase().includes(search) ||
         !search ||
-        item.tags?.some((tag) => tag.toLowerCase().includes(search)) ||
-        item.description?.toLowerCase().includes(search);
+        (item.tags?.some((tag) => tag.toLowerCase().includes(search)) ?? false) ||
+        (item.description?.toLowerCase().includes(search) ?? false);
       const matchesCategoryId = !categoryId || item.category_id === categoryId;
       return matchesSearchTerm && matchesCategoryId;
     });

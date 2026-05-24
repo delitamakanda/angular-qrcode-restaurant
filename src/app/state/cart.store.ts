@@ -65,7 +65,7 @@ export class CartStore {
       return;
     }
     try {
-      const cartItems = JSON.parse(storedCart);
+      const cartItems = JSON.parse(storedCart) as CartItem[];
       this.items.set(cartItems);
     } catch {
       this.items.set([]);
