@@ -9,19 +9,13 @@ import { PlatformService } from '../../../../core/services/platform.service';
 
 @Component({
   selector: 'app-app-header',
-  imports: [
-    RouterLink,
-    TuiButton,
-    TuiBadge,
-    TuiIcon,
-    TuiStatus,
-  ],
+  imports: [RouterLink, TuiButton, TuiBadge, TuiIcon, TuiStatus],
   standalone: true,
   templateUrl: './app-header.html',
   styleUrl: './app-header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppHeader implements OnInit  {
+export class AppHeader implements OnInit {
   private readonly platformService = inject(PlatformService);
   private readonly swUpdate = inject(SwUpdate);
   private readonly shopStore = inject(ShopStore);
@@ -31,11 +25,12 @@ export class AppHeader implements OnInit  {
   protected isUpdateAvailable = false;
 
   ngOnInit(): void {
-      if (this.swUpdate.isEnabled) {
-        this.swUpdate.versionUpdates.pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
-        .subscribe(() => this.isUpdateAvailable = true);
-      }
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.versionUpdates
+        .pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
+        .subscribe(() => (this.isUpdateAvailable = true));
     }
+  }
 
   reloadPage(): void {
     if (this.isUpdateAvailable) {

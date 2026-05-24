@@ -1,9 +1,9 @@
-import { environment } from "@environments/environment";
+import { environment } from '@environments/environment';
 
 export interface ApiConfig {
-    BASE_API_URL: string;
+  BASE_API_URL: string;
 }
 
 export const API_CONFIG: ApiConfig = {
-    BASE_API_URL: environment.BASE_API_URL,
+  BASE_API_URL: environment.BASE_API_URL,
 };

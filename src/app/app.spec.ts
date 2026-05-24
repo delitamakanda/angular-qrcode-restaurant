@@ -8,11 +8,7 @@ describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [
-        provideTaiga(),
-        provideRouter([]),
-        provideHttpClient(),
-      ],
+      providers: [provideTaiga(), provideRouter([]), provideHttpClient()],
     }).compileComponents();
   });
 

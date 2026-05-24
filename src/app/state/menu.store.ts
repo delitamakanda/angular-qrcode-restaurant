@@ -19,19 +19,23 @@ export class MenuStore {
   readonly filteredItems = computed(() => {
     const search = this.searchTerm().toLowerCase();
     const categoryId = this.selectedCategoryId();
-    return this.items().filter(item => {
-      const matchesSearchTerm = item.name.toLowerCase().includes(search) || !search || item.tags?.some(tag => tag.toLowerCase().includes(search)) || item.description?.toLowerCase().includes(search);
-      const matchesCategoryId = ! categoryId || item.category_id === categoryId;
+    return this.items().filter((item) => {
+      const matchesSearchTerm =
+        item.name.toLowerCase().includes(search) ||
+        !search ||
+        item.tags?.some((tag) => tag.toLowerCase().includes(search)) ||
+        item.description?.toLowerCase().includes(search);
+      const matchesCategoryId = !categoryId || item.category_id === categoryId;
       return matchesSearchTerm && matchesCategoryId;
-    })
-  })
+    });
+  });
 
-  async loadMenu(storeId: string, mode: OrderMode) : Promise<void> {
+  async loadMenu(storeId: string, mode: OrderMode): Promise<void> {
     this.isLoading.set(true);
     try {
       const response = await firstValueFrom(this.menuApiService.getMenu(storeId, mode));
       this.categories.set([...response.categories].sort((a, b) => a.sort_order - b.sort_order));
-      this.items.set(response.items)
+      this.items.set(response.items);
       if (!this.selectedCategoryId() && response.categories.length > 0) {
         this.selectedCategoryId.set(response.categories[0].id);
       }
@@ -47,5 +51,4 @@ export class MenuStore {
   setSelectedCategory(categoryId: string | null): void {
     this.selectedCategoryId.set(categoryId);
   }
-
 }

@@ -13,9 +13,15 @@ const json = (data: unknown, status = 200): Response =>
 const notFound = () => json({ message: 'Not found' }, 404);
 
 const parsePath = (url: URL): string[] =>
-  url.pathname.replace(/^\/api\/?/, '').split('/').filter(Boolean);
+  url.pathname
+    .replace(/^\/api\/?/, '')
+    .split('/')
+    .filter(Boolean);
 
-const filterByQuery = <T extends Record<string, unknown>>(items: T[], query: URLSearchParams): T[] => {
+const filterByQuery = <T extends Record<string, unknown>>(
+  items: T[],
+  query: URLSearchParams,
+): T[] => {
   let filtered = [...items];
   query.forEach((value, key) => {
     if (key === 'sort') {
@@ -38,7 +44,9 @@ const filterByQuery = <T extends Record<string, unknown>>(items: T[], query: URL
 };
 
 const createOrder = async (request: Request): Promise<Response> => {
-  const payload = (await request.json()) as Partial<DbOrder> & { items?: Array<{ total_price?: number }> };
+  const payload = (await request.json()) as Partial<DbOrder> & {
+    items?: Array<{ total_price?: number }>;
+  };
   const subtotal = payload.items?.reduce((sum, item) => sum + (item.total_price ?? 0), 0) ?? 0;
   const now = new Date().toISOString();
   const nextNumber = orders.length + 1;

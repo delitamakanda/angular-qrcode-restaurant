@@ -15,7 +15,11 @@ export class NetworkAwarePreloadingStrategy implements PreloadingStrategy {
   }
 
   private isPreloadingRoute(route: Route): boolean {
-    const networkInfo = (window.navigator as { connection?: { saveData: boolean; effectiveType: string; rtt: number; downlink: number }}).connection;
+    const networkInfo = (
+      window.navigator as {
+        connection?: { saveData: boolean; effectiveType: string; rtt: number; downlink: number };
+      }
+    ).connection;
 
     if (networkInfo) {
       // economy mode

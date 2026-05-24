@@ -9,9 +9,7 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.css',
-  imports: [
-    CurrencyFormatPipe
-  ]
+  imports: [CurrencyFormatPipe],
 })
 export class CartPage {
   protected readonly cartStore = inject(CartStore);

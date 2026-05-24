@@ -9,17 +9,17 @@ import { firstValueFrom } from 'rxjs';
 export class ShopStore {
   private readonly storeApiService = inject(StoreApiService);
 
-  readonly store = signal<Store|null>(null);
+  readonly store = signal<Store | null>(null);
   readonly selectedMode = signal<OrderMode | null>(null);
   readonly isLoading = signal<boolean>(false);
-  readonly isOpen = computed(() =>this.store()?.is_open ?? false);
-  readonly currency = computed(() => this.store()?.currency?? 'EUR');
-  readonly estimatedWaitTime = computed(() => this.store()?.estimated_wait_minutes?? 0);
+  readonly isOpen = computed(() => this.store()?.is_open ?? false);
+  readonly currency = computed(() => this.store()?.currency ?? 'EUR');
+  readonly estimatedWaitTime = computed(() => this.store()?.estimated_wait_minutes ?? 0);
 
-  async loadStore(storeId: string) : Promise<void> {
+  async loadStore(storeId: string): Promise<void> {
     this.isLoading.set(true);
     try {
-      const store = await firstValueFrom(this.storeApiService.getStore(storeId))
+      const store = await firstValueFrom(this.storeApiService.getStore(storeId));
       this.store.set(store);
 
       if (!this.selectedMode() && store.supported_modes.length > 0) {

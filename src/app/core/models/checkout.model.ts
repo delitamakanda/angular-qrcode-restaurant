@@ -1,7 +1,7 @@
 import { OrderMode } from './store.model';
-import { CartItem} from './cart.model';
+import { CartItem } from './cart.model';
 
-export type PaymentMode = 'card' | 'cash'  | 'paypal' | 'applePay';
+export type PaymentMode = 'card' | 'cash' | 'paypal' | 'applePay';
 
 export interface CheckoutCustomer {
   name?: string;

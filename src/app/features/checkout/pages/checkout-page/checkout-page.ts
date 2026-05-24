@@ -27,9 +27,9 @@ export class CheckoutPage {
   readonly checkoutForm = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
     phone: ['', [Validators.required, Validators.pattern(/^\+[1-9]\d{1,14}$/)]],
-    paymentMethod: ['cash' as const, [Validators.required] ],
+    paymentMethod: ['cash' as const, [Validators.required]],
     couponCode: [''],
-  })
+  });
 
   async submitForm(): Promise<void> {
     if (this.checkoutForm.invalid) {
@@ -39,28 +39,26 @@ export class CheckoutPage {
 
     const store = this.shopStore.store();
     const mode = this.shopStore.selectedMode();
-    if (!store ||!mode) {
+    if (!store || !mode) {
       return;
     }
-    this.checkoutStore.setSubmitting(true)
+    this.checkoutStore.setSubmitting(true);
 
     try {
       const value = this.checkoutForm.getRawValue();
       const order = await firstValueFrom(
-        this.orderApiService.createOrder(
-          {
-            store_id: store.id,
-            mode,
-            customer: {
-              name: value.name,
-              phone: value.phone,
-            },
-            coupon_code: value.couponCode || undefined,
-            payment_mode: value.paymentMethod,
-            items: this.cartStore.items(),
-          }
-        )
-      )
+        this.orderApiService.createOrder({
+          store_id: store.id,
+          mode,
+          customer: {
+            name: value.name,
+            phone: value.phone,
+          },
+          coupon_code: value.couponCode || undefined,
+          payment_mode: value.paymentMethod,
+          items: this.cartStore.items(),
+        }),
+      );
       this.cartStore.clearCart();
       this.checkoutStore.resetForm();
 
@@ -68,7 +66,7 @@ export class CheckoutPage {
         relativeTo: this.route,
       });
     } finally {
-      this.checkoutStore.setSubmitting(false)
+      this.checkoutStore.setSubmitting(false);
     }
   }
 }

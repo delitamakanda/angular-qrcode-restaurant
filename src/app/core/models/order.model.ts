@@ -1,5 +1,10 @@
-export type OrderStatus = 'pending' | 'accepted' | 'preparing'| 'ready'| 'cancelled' | 'completed';
-
+export type OrderStatus =
+  | 'pending'
+  | 'accepted'
+  | 'preparing'
+  | 'ready'
+  | 'cancelled'
+  | 'completed';
 
 export interface Order {
   id: string;

@@ -5,11 +5,7 @@ import { BottomCartBar } from '../../shared/ui/layout/bottom-cart-bar/bottom-car
 
 @Component({
   selector: 'app-shop-shell',
-  imports: [
-    RouterOutlet,
-    AppHeader,
-    BottomCartBar
-  ],
+  imports: [RouterOutlet, AppHeader, BottomCartBar],
   templateUrl: './shop-shell.html',
   styleUrl: './shop-shell.css',
   standalone: true,
