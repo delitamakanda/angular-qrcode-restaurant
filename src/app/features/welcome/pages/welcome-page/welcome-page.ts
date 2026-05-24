@@ -6,10 +6,7 @@ import { TuiButton, TuiIcon } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-welcome-page',
-  imports: [
-    TuiButton,
-    TuiIcon
-  ],
+  imports: [TuiButton, TuiIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   templateUrl: './welcome-page.html',

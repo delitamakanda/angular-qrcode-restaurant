@@ -8,10 +8,10 @@ export class UiStore {
   readonly isGlobalLoading = computed(() => this.loadingCount() > 0);
 
   startLoading(): void {
-    this.loadingCount.update(count => count + 1);
+    this.loadingCount.update((count) => count + 1);
   }
 
   stopLoading(): void {
-    this.loadingCount.update(count => Math.max(count - 1, 0));
+    this.loadingCount.update((count) => Math.max(count - 1, 0));
   }
 }

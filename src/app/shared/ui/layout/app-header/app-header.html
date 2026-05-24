@@ -1,15 +1,32 @@
-<header class="app-header flex items-center justify-between px-4 py-2 bg-white border-gray-200 shadow-sm md:px-6">
-  <div class="app-header__brand  flex items-center gap-3">
-    <h1 class="app-header__title text-lg font-semibold text-gray-900 md:text-xl">{{ store()?.name || 'Store' }}</h1>
-    <div tuiBadge tuiStatus size="m" appearance="positive" class="app-header__status" [class.closed]="!isOpen()">
-      {{ isOpen() ? 'Open' : 'Closed'  }}
+<header
+  class="app-header flex items-center justify-between px-4 py-2 bg-white border-gray-200 shadow-sm md:px-6"
+>
+  <div class="app-header__brand flex items-center gap-3">
+    <h1 class="app-header__title text-lg font-semibold text-gray-900 md:text-xl">
+      {{ store()?.name || 'Store' }}
+    </h1>
+    <div
+      tuiBadge
+      tuiStatus
+      size="m"
+      appearance="positive"
+      class="app-header__status"
+      [class.closed]="!isOpen()"
+    >
+      {{ isOpen() ? 'Open' : 'Closed' }}
     </div>
   </div>
-  <tui-icon routerLink="./welcome" class="app-header__link shrink-0" icon="@tui.home">
-  </tui-icon>
+  <tui-icon routerLink="./welcome" class="app-header__link shrink-0" icon="@tui.home"> </tui-icon>
   <div class="app-header__actions flex gap-2">
     @if (canInstall()) {
-      <button tuiButton appearance="secondary" size="s" type="button" aria-label="Install this application" (click)="installApp()">
+      <button
+        tuiButton
+        appearance="secondary"
+        size="s"
+        type="button"
+        aria-label="Install this application"
+        (click)="installApp()"
+      >
         Install App
       </button>
     }

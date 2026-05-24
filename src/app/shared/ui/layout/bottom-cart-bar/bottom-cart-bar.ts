@@ -6,10 +6,7 @@ import { TuiButton } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-bottom-cart-bar',
-  imports: [
-    CurrencyFormatPipe,
-    TuiButton
-  ],
+  imports: [CurrencyFormatPipe, TuiButton],
   standalone: true,
   templateUrl: './bottom-cart-bar.html',
   styleUrl: './bottom-cart-bar.css',
@@ -24,6 +21,6 @@ export class BottomCartBar {
   readonly isVisible = computed(() => this.count() > 0);
 
   goToCart(): void {
-    void this.router.navigate(['./cart'], { relativeTo: this.route }  );
+    void this.router.navigate(['./cart'], { relativeTo: this.route });
   }
 }

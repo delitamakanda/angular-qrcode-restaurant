@@ -8,11 +8,7 @@
       "currency": "EUR",
       "is_open": true,
       "estimated_wait_minutes": 18,
-      "supported_modes": [
-        "dine_in",
-        "take_away",
-        "delivery"
-      ]
+      "supported_modes": ["dine_in", "take_away", "delivery"]
     }
   ],
   "categories": [
@@ -45,9 +41,7 @@
       "image_url": "/images/placeholder-food.jpg",
       "base_price": 55,
       "is_sold_out": false,
-      "tags": [
-        "popular"
-      ],
+      "tags": ["popular"],
       "mode_availability": {
         "dine_in": true,
         "take_away": true,
@@ -63,9 +57,7 @@
       "image_url": "/images/placeholder-food.jpg",
       "base_price": 65,
       "is_sold_out": false,
-      "tags": [
-        "new"
-      ],
+      "tags": ["new"],
       "mode_availability": {
         "dine_in": true,
         "take_away": true,
@@ -97,9 +89,7 @@
       "image_url": "/images/placeholder-food.jpg",
       "base_price": 95,
       "is_sold_out": true,
-      "tags": [
-        "sold-out"
-      ],
+      "tags": ["sold-out"],
       "mode_availability": {
         "dine_in": true,
         "take_away": true,

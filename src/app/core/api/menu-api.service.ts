@@ -12,7 +12,7 @@ export interface MenuResponse {
 }
 
 export interface MenuItemWithModifiers extends MenuItem {
-  modifierGroups: (ModifierGroup & { options: ModifierOption[]  })[];
+  modifierGroups: (ModifierGroup & { options: ModifierOption[] })[];
 }
 
 @Injectable({
@@ -20,7 +20,7 @@ export interface MenuItemWithModifiers extends MenuItem {
 })
 export class MenuApiService {
   private readonly http = inject(HttpClient);
-  private readonly config  = inject(APP_TOKEN_CONFIG);
+  private readonly config = inject(APP_TOKEN_CONFIG);
 
   getCategories(storeId: string): Observable<MenuCategory[]> {
     const params = new HttpParams().set('store_id', storeId).set('sort', 'sort_order');
@@ -33,18 +33,18 @@ export class MenuApiService {
       params = params.set('category_id', categoryId);
     }
     return this.http.get<MenuItem[]>(`${this.config.BASE_API_URL}/menus`, { params }).pipe(
-      map(items => {
+      map((items) => {
         if (mode) {
-          return items.filter(item => item.mode_availability?.[mode] === true);
+          return items.filter((item) => item.mode_availability?.[mode] === true);
         }
         return items;
-      })
+      }),
     );
   }
 
   getModifierGroups(itemId: string): Observable<ModifierGroup[]> {
     const params = new HttpParams().set('menu_item_id', itemId);
-    return this.http.get<ModifierGroup[]>(`${this.config.BASE_API_URL}/groups`, { params } );
+    return this.http.get<ModifierGroup[]>(`${this.config.BASE_API_URL}/groups`, { params });
   }
 
   getModifierOptions(groupId: string): Observable<ModifierOption[]> {
@@ -54,35 +54,35 @@ export class MenuApiService {
 
   getItemWithModifiers(itemId: string): Observable<MenuItemWithModifiers> {
     return this.http.get<MenuItem>(`${this.config.BASE_API_URL}/menus/${itemId}`).pipe(
-      map(item => item),
-      switchMap(item =>
+      map((item) => item),
+      switchMap((item) =>
         this.getModifierGroups(itemId).pipe(
-        switchMap(groups => {
-          if (!groups.length) {
-            return of({
-              ...item,
-              modifierGroups: [],
-            });
-          }
+          switchMap((groups) => {
+            if (!groups.length) {
+              return of({
+                ...item,
+                modifierGroups: [],
+              });
+            }
 
-          return forkJoin(
-            groups.map(group =>
-              this.getModifierOptions(group.id).pipe(
-              map(options => ({
-                ...group,
-                options
-              }))
-            )
-          )
-        ).pipe(
-            map(groupsWithOptions => ({
-              ...item,
-              modifierGroups: groupsWithOptions
-            }))
-          );
-        })
-      )
-    )
+            return forkJoin(
+              groups.map((group) =>
+                this.getModifierOptions(group.id).pipe(
+                  map((options) => ({
+                    ...group,
+                    options,
+                  })),
+                ),
+              ),
+            ).pipe(
+              map((groupsWithOptions) => ({
+                ...item,
+                modifierGroups: groupsWithOptions,
+              })),
+            );
+          }),
+        ),
+      ),
     );
   }
 
@@ -90,8 +90,6 @@ export class MenuApiService {
     return forkJoin({
       categories: this.getCategories(storeId),
       items: this.getItems(storeId, mode),
-    }).pipe(
-      map(({ categories, items }) => ({ categories, items  }))
-    )
+    }).pipe(map(({ categories, items }) => ({ categories, items })));
   }
 }

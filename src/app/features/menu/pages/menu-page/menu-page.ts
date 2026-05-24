@@ -12,7 +12,7 @@ import { map } from 'rxjs';
   templateUrl: './menu-page.html',
   styleUrl: './menu-page.css',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuPage {
   private readonly route = inject(ActivatedRoute);
@@ -20,8 +20,8 @@ export class MenuPage {
   readonly menuStore = inject(MenuStore);
 
   private readonly storeId = toSignal(
-    this.route.parent!.paramMap.pipe(map(params => params.get('storeId'))),
-  )
+    this.route.parent!.paramMap.pipe(map((params) => params.get('storeId'))),
+  );
 
   constructor() {
     effect(() => {

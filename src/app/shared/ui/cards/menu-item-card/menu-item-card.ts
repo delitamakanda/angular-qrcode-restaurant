@@ -5,16 +5,14 @@ import { CurrencyFormatPipe } from '@app/shared/pipes/currency-format.pipe';
 
 @Component({
   selector: 'app-menu-item-card',
-  imports: [
-    CurrencyFormatPipe
-  ],
+  imports: [CurrencyFormatPipe],
   standalone: true,
   templateUrl: './menu-item-card.html',
   styleUrls: ['./menu-item-card.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuItemCard {
-  readonly item = input.required<MenuItem>()
+  readonly item = input.required<MenuItem>();
   private readonly cartStore = inject(CartStore);
 
   addToCart(): void {
@@ -32,6 +30,6 @@ export class MenuItemCard {
       unit_base_price: product.base_price,
       selected_options: [],
       total_price: product.base_price,
-    })
+    });
   }
 }

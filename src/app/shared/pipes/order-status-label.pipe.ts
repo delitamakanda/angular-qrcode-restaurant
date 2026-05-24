@@ -5,7 +5,6 @@ import { OrderStatus } from '@app/core/models/order.model';
   name: 'orderStatusLabel',
 })
 export class OrderStatusLabelPipe implements PipeTransform {
-
   transform(status: OrderStatus): string {
     switch (status) {
       case 'pending':
@@ -14,7 +13,7 @@ export class OrderStatusLabelPipe implements PipeTransform {
         return 'Accepted';
       case 'preparing':
         return 'Preparing';
-      case'ready':
+      case 'ready':
         return 'Ready';
       case 'cancelled':
         return 'Cancelled';
@@ -23,6 +22,5 @@ export class OrderStatusLabelPipe implements PipeTransform {
       default:
         return 'Unknown';
     }
-
   }
 }

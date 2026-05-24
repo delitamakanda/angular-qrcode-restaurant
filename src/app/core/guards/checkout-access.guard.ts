@@ -7,8 +7,8 @@ export const checkoutAccessGuard: CanActivateFn = () => {
   const router = inject(Router);
   const route = inject(ActivatedRoute);
 
-  if(!cartStore.items().length) {
-    return router.createUrlTree(['../menu'], { relativeTo: route }  );
+  if (!cartStore.items().length) {
+    return router.createUrlTree(['../menu'], { relativeTo: route });
   }
   return true;
 };

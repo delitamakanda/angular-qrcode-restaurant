@@ -17,7 +17,7 @@ export class OrderConfirmationPage {
   private readonly route = inject(ActivatedRoute);
   private readonly orderApi = inject(OrderApiService);
 
-  readonly order = signal<Order | null>(null)
+  readonly order = signal<Order | null>(null);
 
   constructor() {
     this.loadOrder();

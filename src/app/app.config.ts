@@ -42,7 +42,7 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
-      withPreloading(NetworkAwarePreloadingStrategy)
+      withPreloading(NetworkAwarePreloadingStrategy),
     ),
     provideTaiga(),
     provideServiceWorker('ngsw-worker.js', {

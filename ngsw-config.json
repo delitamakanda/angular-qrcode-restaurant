@@ -35,7 +35,8 @@
         "maxAge": "24h",
         "timeout": "105s"
       }
-    }, {
+    },
+    {
       "name": "api-menus",
       "urls": ["/api/menus/**"],
       "cacheConfig": {

@@ -1,7 +1,6 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
 import { CartItem } from '@app/core/models/cart.model';
 
-
 const CART_STORAGE_KEY = 'cashier-cart';
 
 @Injectable({
@@ -27,11 +26,11 @@ export class CartStore {
   }
 
   addToCart(item: CartItem): void {
-    this.items.update(items => [...items, item]);
+    this.items.update((items) => [...items, item]);
   }
 
   removeFromCart(itemId: string): void {
-    this.items.update(items => items.filter(item => item.id!== itemId));
+    this.items.update((items) => items.filter((item) => item.id !== itemId));
   }
 
   updateQuantity(itemId: string, quantity: number): void {
@@ -39,17 +38,19 @@ export class CartStore {
       this.removeFromCart(itemId);
       return;
     }
-    this.items.update(items => items.map(item => {
-      if (item.id !== itemId) {
-        return item;
-      }
-      const oldUnit = item.total_price / item.quantity;
-      return {
-        ...item,
-        quantity,
-        total_price: oldUnit * quantity,
-      };
-    }))
+    this.items.update((items) =>
+      items.map((item) => {
+        if (item.id !== itemId) {
+          return item;
+        }
+        const oldUnit = item.total_price / item.quantity;
+        return {
+          ...item,
+          quantity,
+          total_price: oldUnit * quantity,
+        };
+      }),
+    );
   }
 
   clearCart(): void {

@@ -1,5 +1,12 @@
 @if (isVisible()) {
-  <button tuiButton appearance="secondary" size="s" class="bottom-cart-bar" type="button" (click)="goToCart()">
+  <button
+    tuiButton
+    appearance="secondary"
+    size="s"
+    class="bottom-cart-bar"
+    type="button"
+    (click)="goToCart()"
+  >
     <span>{{ count() }} item(s) </span>
     <strong>{{ total() | currencyFormat }}</strong>
   </button>
