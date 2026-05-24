@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { MenuItem } from '../../../../core/models/menu-item.model';
-import { CartStore } from '../../../../state/cart.store';
-import { CurrencyFormatPipe } from '../../../pipes/currency-format.pipe';
+import { MenuItem } from '@app/core/models/menu-item.model';
+import { CartStore } from '@app/state/cart.store';
+import { CurrencyFormatPipe } from '@app/shared/pipes/currency-format.pipe';
 
 @Component({
   selector: 'app-menu-item-card',
@@ -10,7 +10,7 @@ import { CurrencyFormatPipe } from '../../../pipes/currency-format.pipe';
   ],
   standalone: true,
   templateUrl: './menu-item-card.html',
-  styleUrl: './menu-item-card.css',
+  styleUrls: ['./menu-item-card.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MenuItemCard {

@@ -1,5 +1,5 @@
 import { computed, effect, Injectable, signal } from '@angular/core';
-import { CartItem } from '../core/models/cart.model';
+import { CartItem } from '@app/core/models/cart.model';
 
 
 const CART_STORAGE_KEY = 'cashier-cart';

@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { CheckoutCustomer, PaymentMode } from '../core/models/checkout.model';
+import { CheckoutCustomer, PaymentMode } from '@app/core/models/checkout.model';
 
 @Injectable({
   providedIn: 'root',
