@@ -9,11 +9,16 @@ module.exports = defineConfig([
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
-      tseslint.configs.recommended,
-      tseslint.configs.stylistic,
+      tseslint.configs.strictTypeChecked,
+      tseslint.configs.stylisticTypeChecked,
       angular.configs.tsRecommended,
     ],
     processor: angular.processInlineTemplates,
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
     rules: {
       '@angular-eslint/directive-selector': [
         'error',
@@ -31,6 +36,8 @@ module.exports = defineConfig([
           style: 'kebab-case',
         },
       ],
+      '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
+      '@typescript-eslint/unbound-method': ['error', { ignoreStatic: true }],
     },
   },
   {

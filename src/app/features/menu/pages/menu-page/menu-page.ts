@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ShopStore } from '../../../../state/shop.store';
 import { MenuStore } from '../../../../state/menu.store';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { map, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'app-menu-page',
@@ -20,7 +20,7 @@ export class MenuPage {
   readonly menuStore = inject(MenuStore);
 
   private readonly storeId = toSignal(
-    this.route.parent!.paramMap.pipe(map((params) => params.get('storeId'))),
+    (this.route.parent?.paramMap ?? EMPTY).pipe(map((params) => params.get('storeId'))),
   );
 
   constructor() {

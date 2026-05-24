@@ -34,7 +34,9 @@ export class AppHeader implements OnInit {
 
   reloadPage(): void {
     if (this.isUpdateAvailable) {
-      this.swUpdate.activateUpdate().then(() => document.location.reload());
+      void this.swUpdate.activateUpdate().then(() => {
+        document.location.reload();
+      });
     } else {
       document.location.reload();
     }

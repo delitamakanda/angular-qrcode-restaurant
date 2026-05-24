@@ -46,7 +46,7 @@ export class NetworkAwarePreloadingStrategy implements PreloadingStrategy {
       }
 
       // check for explicit preload false
-      if (route.data && route.data['preload'] === false) {
+      if (route.data?.['preload'] === false) {
         return false;
       }
     }

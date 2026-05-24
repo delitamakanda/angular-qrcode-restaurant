@@ -5,9 +5,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CurrencyFormatPipe implements PipeTransform {
   transform(value: number, currencyCode?: string, locale?: string): string {
-    return new Intl.NumberFormat(locale || 'en-US', {
+    return new Intl.NumberFormat(locale ?? 'en-US', {
       style: 'currency',
-      currency: currencyCode || 'USD',
+      currency: currencyCode ?? 'USD',
       minimumFractionDigits: 2,
     }).format(value);
   }

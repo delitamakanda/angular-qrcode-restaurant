@@ -20,7 +20,7 @@ export class OrderConfirmationPage {
   readonly order = signal<Order | null>(null);
 
   constructor() {
-    this.loadOrder();
+    void this.loadOrder();
   }
 
   private async loadOrder(): Promise<void> {
