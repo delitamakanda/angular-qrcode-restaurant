@@ -21,6 +21,7 @@ import { BASE_API_URL } from './core/config/app.token';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
+import { NetworkAwarePreloadingStrategy } from './core/preload/network-aware-preloading-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,6 +38,7 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
+      withPreloading(NetworkAwarePreloadingStrategy)
     ),
     provideTaiga(),
     provideServiceWorker('ngsw-worker.js', {
