@@ -9,7 +9,6 @@
     "format:check": "prettier --check .",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "test:watch:false": "ng test --watch=false",
     "lint": "ng lint",
     "mock:api": "cd mock-api && npm run start:static",
     "prepare": "husky"
