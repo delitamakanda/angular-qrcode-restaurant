@@ -13,24 +13,28 @@ import {
   PreloadAllModules,
   withViewTransitions,
 } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 import { errorInterceptor } from './core/interceptors/error.interceptor';
 import { localeInterceptor } from './core/interceptors/locale.interceptor';
-import { BASE_API_URL } from './core/config/app.token';
+import { APP_TOKEN_CONFIG } from './core/config/app.token';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
 import { NetworkAwarePreloadingStrategy } from './core/preload/network-aware-preloading-strategy';
+import { API_CONFIG } from './core/config/env.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
-    provideHttpClient(withInterceptors([loadingInterceptor, errorInterceptor, localeInterceptor])),
+    provideHttpClient(
+      withInterceptors([loadingInterceptor, errorInterceptor, localeInterceptor]),
+      withFetch(),
+    ),
     {
-      provide: BASE_API_URL,
-      useValue: '/api',
+      provide: APP_TOKEN_CONFIG,
+      useValue: API_CONFIG,
     },
     provideRouter(
       routes,
