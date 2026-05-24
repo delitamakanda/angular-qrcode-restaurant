@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CheckoutPayload } from '../models/checkout.model';
+import { CheckoutPayload } from '@app/core/models/checkout.model';
 import { Observable } from 'rxjs';
-import { Order } from '../models/order.model';
-import { BASE_API_URL } from '../config/app.token';
+import { Order } from '@app/core/models/order.model';
+import { BASE_API_URL } from '@app/core/config/app.token';
 
 @Injectable({
   providedIn: 'root',

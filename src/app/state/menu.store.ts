@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { MenuApiService } from '../core/api/menu-api.service';
-import { MenuCategory, MenuItem } from '../core/models/menu-item.model';
-import { OrderMode } from '../core/models/store.model';
+import { MenuApiService } from '@app/core/api/menu-api.service';
+import { MenuCategory, MenuItem } from '@app/core/models/menu-item.model';
+import { OrderMode } from '@app/core/models/store.model';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({

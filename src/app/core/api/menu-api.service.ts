@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { MenuCategory, MenuItem } from '../models/menu-item.model';
+import { MenuCategory, MenuItem } from '@app/core/models/menu-item.model';
 import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
-import { OrderMode } from '../models/store.model';
-import { BASE_API_URL } from '../config/app.token';
-import { ModifierGroup, ModifierOption } from '../models/modifier.model';
+import { OrderMode } from '@app/core/models/store.model';
+import { BASE_API_URL } from '@app/core/config/app.token';
+import { ModifierGroup, ModifierOption } from '@app/core/models/modifier.model';
 
 export interface MenuResponse {
   categories: MenuCategory[];

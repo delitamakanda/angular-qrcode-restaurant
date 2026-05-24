@@ -1,6 +1,6 @@
 import { ActivatedRoute, CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { CartStore } from '../../state/cart.store';
+import { CartStore } from '@app/state/cart.store';
 
 export const checkoutAccessGuard: CanActivateFn = () => {
   const cartStore = inject(CartStore);

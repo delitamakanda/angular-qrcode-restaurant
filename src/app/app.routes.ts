@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { storeLoadedGuard } from './core/guards/store-loaded.guard';
-import { checkoutAccessGuard } from './core/guards/checkout-access.guard';
+import { storeLoadedGuard } from '@app/core/guards/store-loaded.guard';
+import { checkoutAccessGuard } from '@app/core/guards/checkout-access.guard';
 
 export const routes: Routes = [
   {

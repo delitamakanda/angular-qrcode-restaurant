@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { StoreApiService } from '../core/api/store-api.service';
-import { OrderMode, Store } from '../core/models/store.model';
+import { StoreApiService } from '@app/core/api/store-api.service';
+import { OrderMode, Store } from '@app/core/models/store.model';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
