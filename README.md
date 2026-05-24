@@ -99,6 +99,8 @@ Available resources:
 
 ```bash
 npm start                     # start the Angular frontend
+npm run format               # format files with Prettier
+npm run format:check         # check formatting with Prettier
 npm run build                 # create a production build
 npx ng test --watch=false     # run Angular/Vitest unit tests
 ```
