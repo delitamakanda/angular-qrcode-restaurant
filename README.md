@@ -30,16 +30,16 @@ Angular application for restaurant ordering via QR code. The project simulates t
 └── src/app/                    # Angular application
 ```
 
-## Architecture diagram
+## Architecture Diagram
 
 ```mermaid
 flowchart LR
-    U[Customer browser]
+    B[Customer browser]
     A[Angular app<br/>src/app]
     P[Cloudflare Pages Function<br/>functions/api/[[path]].ts]
     M[Local mock API<br/>mock-api/db.json]
 
-    U -->|HTTP| A
+    B -->|HTTP| A
     A -->|/api/*| P
     P -->|read/write demo data| M
 ```
