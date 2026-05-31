@@ -2,12 +2,14 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { StoreApiService } from '@app/core/api/store-api.service';
 import { OrderMode, Store } from '@app/core/models/store.model';
 import { firstValueFrom } from 'rxjs';
+import { UiStore } from './ui.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ShopStore {
   private readonly storeApiService = inject(StoreApiService);
+  private readonly uiStore = inject(UiStore);
 
   readonly store = signal<Store | null>(null);
   readonly selectedMode = signal<OrderMode | null>(null);
@@ -17,6 +19,8 @@ export class ShopStore {
   readonly estimatedWaitTime = computed(() => this.store()?.estimated_wait_minutes ?? 0);
 
   async loadStore(storeId: string): Promise<void> {
+    const taskId = `loadStore-${storeId}`;
+    this.uiStore.startLoading(taskId);
     this.isLoading.set(true);
     try {
       const store = await firstValueFrom(this.storeApiService.getStore(storeId));
@@ -27,6 +31,7 @@ export class ShopStore {
       }
     } finally {
       this.isLoading.set(false);
+      this.uiStore.stopLoading(taskId);
     }
   }
 
