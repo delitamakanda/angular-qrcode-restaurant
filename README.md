@@ -3,6 +3,7 @@
 Angular application for restaurant ordering via QR code. The project simulates the main customer journey: choosing an order mode, browsing the menu, customizing a product, reviewing the cart, submitting checkout information, and confirming an order, with a mock API available locally or through Cloudflare Pages Functions.
 
 ## QRCODE
+
 <img src="angular-qrcode-restaurant-1024.jpeg" alt="Alt Text" width="200" height="200">
 
 ## Features
