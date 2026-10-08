@@ -4,7 +4,9 @@ Angular application for restaurant ordering via QR code. The project simulates t
 
 ## QRCODE
 
-<img src="angular-qrcode-restaurant-1024.jpeg" alt="Alt Text" width="200" height="200">
+<img src="angular-qrcode-restaurant-1024.png" alt="QR code vers https://angular-qrcode-restaurant.pages.dev/store/demo/welcome" width="200" height="200">
+
+Regénérer le QR code localement (sans service tiers) : `npm run qrcode` (ou `npm run qrcode -- <url>` pour une autre URL).
 
 ## Features
 
