@@ -1,0 +1,57 @@
+# Boucle de revue : dans une pull request, commente `@claude …` (commentaire
+# général, commentaire de ligne ou revue) pour que l'agent applique tes retours
+# sur la branche de la PR. Seules les personnes ayant accès en écriture au
+# dépôt peuvent déclencher l'agent.
+name: Agent – retours de revue
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  pull_request_review:
+    types: [submitted]
+
+permissions:
+  contents: read
+
+jobs:
+  respond:
+    if: |
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    concurrency:
+      group: agent-review-${{ github.event.issue.number || github.event.pull_request.number }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          additional_permissions: |
+            actions: read
+          claude_args: |
+            --model ${{ vars.AGENT_MODEL || 'sonnet' }}
+            --max-turns 60
+            --append-system-prompt "Respecte CLAUDE.md et AGENTS.md. Avant de pousser, fais passer npm run lint, npx ng test --watch=false, npx ng build et npm run format:check. Ne modifie jamais .github/. Réponds en français."
+            --allowedTools "Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*)"

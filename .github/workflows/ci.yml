@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  # Lancé par l'agent sur ses branches (une PR créée avec GITHUB_TOKEN ne déclenche pas `pull_request`).
+  workflow_dispatch:
 
 permissions:
   contents: read

@@ -125,6 +125,10 @@ npm run build                 # create a production build
 npx ng test --watch=false     # run Angular/Vitest unit tests
 ```
 
+## Agentic workflow
+
+Issues are used as specs: a Claude agent refines them into specifications, implements one ticket at a time and opens a pull request for human review, while a GitHub Project board is kept in sync. See [docs/agentic-workflow.md](docs/agentic-workflow.md) for the lifecycle, labels and one-time setup.
+
 ## Deploy to Cloudflare Pages
 
 The repository is ready to serve both the frontend and the mock API from a single Cloudflare Pages project.
