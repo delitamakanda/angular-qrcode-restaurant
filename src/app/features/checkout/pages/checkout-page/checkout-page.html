@@ -2,11 +2,29 @@
   <h1>Checkout</h1>
 
   <form [formGroup]="checkoutForm" (ngSubmit)="submitForm()">
-    <label for="name">Name</label>
-    <input type="text" id="name" formControlName="name" required />
+    <div class="checkout-page__field">
+      <tui-textfield>
+        <label tuiLabel for="name">Name</label>
+        <input tuiInput type="text" id="name" autocomplete="name" formControlName="name" required />
+      </tui-textfield>
+      <tui-error formControlName="name" />
+    </div>
 
-    <label for="phone">Phone number</label>
-    <input type="tel" id="phone" formControlName="phone" required />
+    <div class="checkout-page__field">
+      <tui-textfield>
+        <label tuiLabel for="phone">Phone number</label>
+        <input
+          tuiInput
+          type="tel"
+          id="phone"
+          inputmode="tel"
+          autocomplete="tel"
+          formControlName="phone"
+          required
+        />
+      </tui-textfield>
+      <tui-error formControlName="phone" />
+    </div>
 
     <label for="payment-method">Payment method</label>
     <select id="payment-method" formControlName="paymentMethod" required>
@@ -14,8 +32,18 @@
       <option value="card">Visa/Mastercard</option>
     </select>
 
-    <label for="coupon-code">Coupon code (optional)</label>
-    <input type="text" id="coupon-code" formControlName="couponCode" />
+    <div class="checkout-page__field">
+      <tui-textfield>
+        <label tuiLabel for="coupon-code">Coupon code (optional)</label>
+        <input
+          tuiInput
+          type="text"
+          id="coupon-code"
+          autocomplete="off"
+          formControlName="couponCode"
+        />
+      </tui-textfield>
+    </div>
 
     <button tuiButton type="submit" size="l" [disabled]="checkoutStore.submitting()">Submit</button>
   </form>

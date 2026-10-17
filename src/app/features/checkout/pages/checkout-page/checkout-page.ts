@@ -6,15 +6,27 @@ import { ShopStore } from '../../../../state/shop.store';
 import { OrderApiService } from '../../../../core/api/order-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TuiButton } from '@taiga-ui/core';
+import {
+  TuiButton,
+  TuiError,
+  TuiLabel,
+  TuiTextfield,
+  TuiInput,
+  tuiValidationErrorsProvider,
+} from '@taiga-ui/core';
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [ReactiveFormsModule, TuiButton],
-  standalone: true,
+  imports: [ReactiveFormsModule, TuiButton, TuiTextfield, TuiLabel, TuiError, TuiInput],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    tuiValidationErrorsProvider({
+      required: 'Required field',
+      pattern: 'Expected format: +33612345678',
+    }),
+  ],
 })
 export class CheckoutPage {
   private readonly fb = inject(FormBuilder);
