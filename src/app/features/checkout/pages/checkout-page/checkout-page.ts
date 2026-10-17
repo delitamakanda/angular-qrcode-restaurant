@@ -7,6 +7,7 @@ import { OrderApiService } from '../../../../core/api/order-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import {
+  TuiButton,
   TuiError,
   TuiLabel,
   TuiTextfield,
@@ -16,7 +17,7 @@ import {
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [ReactiveFormsModule, TuiTextfield, TuiLabel, TuiError, TuiInput],
+  imports: [ReactiveFormsModule, TuiButton, TuiTextfield, TuiLabel, TuiError, TuiInput],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
