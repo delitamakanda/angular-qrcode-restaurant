@@ -70,7 +70,6 @@ Le premier lancement manuel importe tout le backlog existant dans le board.
    niveau du dépôt. Les jobs qui les lisent déclarent `environment: claude`.
    **Authentification Claude** : ajoute dans cet environnement l'un des deux
    secrets :
-   - `ANTHROPIC_API_KEY` (clé API, facturée à l'usage), ou
    - `CLAUDE_CODE_OAUTH_TOKEN` (abonnement Claude, généré avec
      `claude setup-token`).
 3. **PR créées par Actions** : _Settings → Actions → General → Workflow
