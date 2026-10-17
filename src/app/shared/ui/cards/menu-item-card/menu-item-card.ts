@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { MenuItem } from '@app/core/models/menu-item.model';
+import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
 import { CurrencyFormatPipe } from '@app/shared/pipes/currency-format.pipe';
 import { TuiButton } from '@taiga-ui/core';
@@ -15,6 +16,7 @@ import { TuiButton } from '@taiga-ui/core';
 export class MenuItemCard {
   readonly item = input.required<MenuItem>();
   private readonly cartStore = inject(CartStore);
+  private readonly notifications = inject(NotificationService);
 
   addToCart(): void {
     const product = this.item();
@@ -32,5 +34,6 @@ export class MenuItemCard {
       selected_options: [],
       total_price: product.base_price,
     });
+    this.notifications.success(`${product.name} added to cart`);
   }
 }
