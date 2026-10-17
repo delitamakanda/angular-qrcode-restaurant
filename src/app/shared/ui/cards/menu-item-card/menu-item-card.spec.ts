@@ -15,6 +15,6 @@ describe('MenuItemCard accessibility', () => {
 
     const button = (fixture.nativeElement as HTMLElement).querySelector('button');
 
-    expect(button?.getAttribute('aria-label')).toBe('Add Burger to cart');
+    expect(button?.getAttribute('aria-label')).toBe('Add to cart: Burger');
   });
 });
