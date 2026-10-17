@@ -28,7 +28,7 @@
                 "input": "public"
               },
               {
-                "glob": "{home,hand-platter,hamburger,motorbike,loader-pinwheel,x}.svg",
+                "glob": "{home,hand-platter,hamburger,motorbike,loader-pinwheel,x,circle-check,search}.svg",
                 "input": "node_modules/@taiga-ui/icons/src",
                 "output": "assets/taiga-ui/icons"
               }
