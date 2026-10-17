@@ -211,6 +211,9 @@ jobs:
           [ -s "$msg" ] || echo "feat: implement #$ISSUE" > "$msg"
           printf '\nRefs #%s\n' "$ISSUE" >> "$msg"
           HUSKY=0 git commit -q -F "$msg"
+          # claude-code-action laisse derrière lui un jeton révoqué : on repart du GITHUB_TOKEN du job.
+          git config --unset-all http.https://github.com/.extraheader || true
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GH_REPO}.git"
           git push -u origin "$BRANCH"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
