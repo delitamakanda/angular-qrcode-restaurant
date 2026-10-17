@@ -5,6 +5,7 @@
     size="s"
     class="bottom-cart-bar"
     type="button"
+    [attr.aria-label]="count() + ' item(s) ' + (total() | currencyFormat) + ', view cart'"
     (click)="goToCart()"
   >
     <span>{{ count() }} item(s) </span>

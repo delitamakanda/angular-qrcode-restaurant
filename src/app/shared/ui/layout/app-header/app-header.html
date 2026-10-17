@@ -16,7 +16,9 @@
       {{ isOpen() ? 'Open' : 'Closed' }}
     </div>
   </div>
-  <tui-icon routerLink="./welcome" class="app-header__link shrink-0" icon="@tui.home"> </tui-icon>
+  <a routerLink="./welcome" class="app-header__link shrink-0" aria-label="Home">
+    <tui-icon icon="@tui.home" aria-hidden="true"></tui-icon>
+  </a>
   <div class="app-header__actions flex gap-2">
     @if (canInstall()) {
       <button
@@ -30,8 +32,15 @@
         Install App
       </button>
     }
-    <button tuiButton appearance="secondary" size="s" type="button" (click)="reloadPage()">
-      <tui-icon icon="@tui.loader-pinwheel"></tui-icon>
+    <button
+      tuiButton
+      appearance="secondary"
+      size="s"
+      type="button"
+      aria-label="Reload page"
+      (click)="reloadPage()"
+    >
+      <tui-icon icon="@tui.loader-pinwheel" aria-hidden="true"></tui-icon>
     </button>
   </div>
 </header>
