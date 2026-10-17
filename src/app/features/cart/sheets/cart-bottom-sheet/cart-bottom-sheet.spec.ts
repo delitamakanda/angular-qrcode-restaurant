@@ -48,6 +48,24 @@ describe('CartBottomSheet', () => {
     expect(completeWith).toHaveBeenCalledWith(undefined);
   });
 
+  it('removes and announces a line swiped left past the threshold', () => {
+    const { fixture, cart, el } = setup();
+    const row = el.querySelector<HTMLElement>('.cart-sheet__row');
+    const pointer = (type: string, clientX: number) => {
+      const event = new Event(type, { bubbles: true });
+      Object.assign(event, { pointerId: 1, pointerType: 'touch', clientX, clientY: 0 });
+      row?.dispatchEvent(event);
+    };
+
+    pointer('pointerdown', 300);
+    pointer('pointermove', 100);
+    pointer('pointerup', 100);
+    fixture.detectChanges();
+
+    expect(cart.items()).toHaveLength(0);
+    expect(el.querySelector('[role="status"]')?.textContent).toContain('Burger retiré du panier');
+  });
+
   it('updates the quantity through the store', () => {
     const { fixture, cart, el } = setup();
 
