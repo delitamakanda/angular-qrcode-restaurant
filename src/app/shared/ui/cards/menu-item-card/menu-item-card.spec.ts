@@ -37,6 +37,7 @@ describe('MenuItemCard', () => {
     const button = (create().nativeElement as HTMLElement).querySelector('button');
 
     expect(button?.getAttribute('aria-label')).toBe('Add to cart: Burger');
+    expect(button?.hasAttribute('tuiButton')).toBe(true);
   });
 
   it('adds to the cart and notifies the user', () => {

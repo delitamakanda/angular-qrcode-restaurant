@@ -3,10 +3,11 @@ import { MenuItem } from '@app/core/models/menu-item.model';
 import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
 import { CurrencyFormatPipe } from '@app/shared/pipes/currency-format.pipe';
+import { TuiButton } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-menu-item-card',
-  imports: [CurrencyFormatPipe],
+  imports: [CurrencyFormatPipe, TuiButton],
   standalone: true,
   templateUrl: './menu-item-card.html',
   styleUrls: ['./menu-item-card.css'],
