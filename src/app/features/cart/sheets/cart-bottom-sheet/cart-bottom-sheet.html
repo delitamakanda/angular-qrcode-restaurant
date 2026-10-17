@@ -1,44 +1,49 @@
 <div class="cart-sheet">
+  <p class="cart-sheet__live" role="status" aria-live="polite">{{ announcement() }}</p>
+
   <ul class="cart-sheet__list">
     @for (item of cartStore.items(); track item.id) {
-      <li class="cart-sheet__row">
-        <div class="cart-sheet__info">
-          <strong>{{ item.name }}</strong>
-          <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
-          <div>Total: {{ item.total_price | currencyFormat }}</div>
-        </div>
-        <div class="cart-sheet__actions">
-          <button
-            tuiButton
-            type="button"
-            appearance="secondary"
-            size="m"
-            [attr.aria-label]="'Decrease quantity of ' + item.name"
-            (click)="cartStore.updateQuantity(item.id, item.quantity - 1)"
-          >
-            −
-          </button>
-          <span aria-hidden="true">{{ item.quantity }}</span>
-          <button
-            tuiButton
-            type="button"
-            appearance="secondary"
-            size="m"
-            [attr.aria-label]="'Increase quantity of ' + item.name"
-            (click)="cartStore.updateQuantity(item.id, item.quantity + 1)"
-          >
-            +
-          </button>
-          <button
-            tuiButton
-            type="button"
-            appearance="flat"
-            size="m"
-            [attr.aria-label]="'Remove ' + item.name + ' from cart'"
-            (click)="cartStore.removeFromCart(item.id)"
-          >
-            Remove
-          </button>
+      <li class="cart-sheet__item">
+        <span class="cart-sheet__swipe-action" aria-hidden="true">Remove</span>
+        <div class="cart-sheet__row" appSwipeAction (swiped)="onSwiped(item.id, item.name)">
+          <div class="cart-sheet__info">
+            <strong>{{ item.name }}</strong>
+            <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
+            <div>Total: {{ item.total_price | currencyFormat }}</div>
+          </div>
+          <div class="cart-sheet__actions">
+            <button
+              tuiButton
+              type="button"
+              appearance="secondary"
+              size="m"
+              [attr.aria-label]="'Decrease quantity of ' + item.name"
+              (click)="cartStore.updateQuantity(item.id, item.quantity - 1)"
+            >
+              −
+            </button>
+            <span aria-hidden="true">{{ item.quantity }}</span>
+            <button
+              tuiButton
+              type="button"
+              appearance="secondary"
+              size="m"
+              [attr.aria-label]="'Increase quantity of ' + item.name"
+              (click)="cartStore.updateQuantity(item.id, item.quantity + 1)"
+            >
+              +
+            </button>
+            <button
+              tuiButton
+              type="button"
+              appearance="flat"
+              size="m"
+              [attr.aria-label]="'Remove ' + item.name + ' from cart'"
+              (click)="cartStore.removeFromCart(item.id)"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       </li>
     }
