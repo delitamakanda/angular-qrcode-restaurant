@@ -61,6 +61,7 @@ jobs:
     needs: pick
     if: needs.pick.outputs.issue != ''
     runs-on: ubuntu-latest
+    environment: claude
     timeout-minutes: 60
     concurrency:
       group: agent-implement
