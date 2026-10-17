@@ -5,14 +5,7 @@
     <div class="checkout-page__field">
       <tui-textfield>
         <label tuiLabel for="name">Name</label>
-        <input
-          tuiTextfield
-          type="text"
-          id="name"
-          autocomplete="name"
-          formControlName="name"
-          required
-        />
+        <input tuiInput type="text" id="name" autocomplete="name" formControlName="name" required />
       </tui-textfield>
       <tui-error formControlName="name" />
     </div>
@@ -21,7 +14,7 @@
       <tui-textfield>
         <label tuiLabel for="phone">Phone number</label>
         <input
-          tuiTextfield
+          tuiInput
           type="tel"
           id="phone"
           inputmode="tel"
@@ -43,7 +36,7 @@
       <tui-textfield>
         <label tuiLabel for="coupon-code">Coupon code (optional)</label>
         <input
-          tuiTextfield
+          tuiInput
           type="text"
           id="coupon-code"
           autocomplete="off"

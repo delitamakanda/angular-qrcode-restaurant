@@ -6,11 +6,17 @@ import { ShopStore } from '../../../../state/shop.store';
 import { OrderApiService } from '../../../../core/api/order-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { TuiError, TuiLabel, TuiTextfield, tuiValidationErrorsProvider } from '@taiga-ui/core';
+import {
+  TuiError,
+  TuiLabel,
+  TuiTextfield,
+  TuiInput,
+  tuiValidationErrorsProvider,
+} from '@taiga-ui/core';
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [ReactiveFormsModule, TuiTextfield, TuiLabel, TuiError],
+  imports: [ReactiveFormsModule, TuiTextfield, TuiLabel, TuiError, TuiInput],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
