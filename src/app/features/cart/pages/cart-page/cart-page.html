@@ -8,7 +8,13 @@
         <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
         <div>Total: {{ item.total_price | currencyFormat }}</div>
 
-        <button type="button" (click)="cartStore.removeFromCart(item.id)">Remove</button>
+        <button
+          type="button"
+          [attr.aria-label]="'Remove ' + item.name + ' from cart'"
+          (click)="cartStore.removeFromCart(item.id)"
+        >
+          Remove
+        </button>
       </div>
     </div>
   }
