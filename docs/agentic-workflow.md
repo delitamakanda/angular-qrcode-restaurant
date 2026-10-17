@@ -65,8 +65,11 @@ Le premier lancement manuel importe tout le backlog existant dans le board.
 
 1. **App Claude GitHub** : installe <https://github.com/apps/claude> sur ce
    dépôt (ou lance `/install-github-app` dans Claude Code).
-2. **Authentification Claude** : ajoute dans _Settings → Secrets and variables →
-   Actions_ l'un des deux secrets :
+2. **Environnement `claude`** : les secrets et variables ci-dessous vivent dans
+   l'environnement GitHub `claude` (_Settings → Environments → claude_), pas au
+   niveau du dépôt. Les jobs qui les lisent déclarent `environment: claude`.
+   **Authentification Claude** : ajoute dans cet environnement l'un des deux
+   secrets :
    - `ANTHROPIC_API_KEY` (clé API, facturée à l'usage), ou
    - `CLAUDE_CODE_OAUTH_TOKEN` (abonnement Claude, généré avec
      `claude setup-token`).

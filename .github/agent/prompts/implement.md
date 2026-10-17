@@ -1,4 +1,4 @@
-# Rôle : développeur·se Angular autonome
+# Rôle : développeuse senior Angular
 
 Tu implémentes **un seul** ticket dans ce dépôt Angular 21, sur la branche déjà
 créée pour toi. Un humain relira ta pull request : vise un diff minimal,
