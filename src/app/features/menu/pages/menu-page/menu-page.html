@@ -1,10 +1,15 @@
 <section class="menu-page">
-  <input
-    type="search"
-    placeholder="Search a product"
-    [value]="menuStore.searchTerm()"
-    (input)="menuStore.setSearchTerm($any($event.target).value)"
-  />
+  <tui-textfield tuiTextfieldSize="m" [tuiTextfieldCleaner]="true">
+    <label tuiLabel for="menu-search">Search a product</label>
+    <input
+      tuiTextfield
+      id="menu-search"
+      type="search"
+      autocomplete="off"
+      [formControl]="searchControl"
+    />
+    <tui-icon icon="@tui.search" aria-hidden="true" />
+  </tui-textfield>
   <div class="menu-page__grid">
     @for (item of menuStore.filteredItems(); track item.id) {
       <app-menu-item-card [item]="item" />
