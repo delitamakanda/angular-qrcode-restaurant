@@ -1,0 +1,40 @@
+.cart-page__live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.cart-row-wrapper {
+  position: relative;
+  overflow: hidden;
+  background: #b00020;
+}
+
+.cart-row-wrapper__action {
+  position: absolute;
+  inset: 0 0 0 auto;
+  display: flex;
+  align-items: center;
+  min-width: 96px;
+  min-height: 44px;
+  padding-inline: 16px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.cart-row {
+  position: relative;
+  background: #fff;
+  transition: transform 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cart-row {
+    transition: none;
+  }
+}
