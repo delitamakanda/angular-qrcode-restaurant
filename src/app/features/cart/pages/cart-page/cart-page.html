@@ -1,20 +1,25 @@
 <section class="cart-page">
   <h1>Panier</h1>
 
-  @for (item of cartStore.items(); track item.id) {
-    <div class="cart-row">
-      <div>
-        <strong>{{ item.name }}</strong>
-        <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
-        <div>Total: {{ item.total_price | currencyFormat }}</div>
+  <p class="cart-page__live" role="status" aria-live="polite">{{ announcement() }}</p>
 
-        <button
-          type="button"
-          [attr.aria-label]="'Remove ' + item.name + ' from cart'"
-          (click)="cartStore.removeFromCart(item.id)"
-        >
-          Remove
-        </button>
+  @for (item of cartStore.items(); track item.id) {
+    <div class="cart-row-wrapper">
+      <span class="cart-row-wrapper__action" aria-hidden="true">Remove</span>
+      <div class="cart-row" appSwipeAction (swiped)="onSwiped(item.id, item.name)">
+        <div>
+          <strong>{{ item.name }}</strong>
+          <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
+          <div>Total: {{ item.total_price | currencyFormat }}</div>
+
+          <button
+            type="button"
+            [attr.aria-label]="'Remove ' + item.name + ' from cart'"
+            (click)="cartStore.removeFromCart(item.id)"
+          >
+            Remove
+          </button>
+        </div>
       </div>
     </div>
   }
