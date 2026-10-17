@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
 import { CartStore } from '../../../../state/cart.store';
 import { CurrencyFormatPipe } from '../../../pipes/currency-format.pipe';
 import { TuiButton } from '@taiga-ui/core';
@@ -14,13 +13,12 @@ import { TuiButton } from '@taiga-ui/core';
 })
 export class BottomCartBar {
   private readonly cartStore = inject(CartStore);
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
   readonly count = this.cartStore.count;
   readonly total = this.cartStore.total;
   readonly isVisible = computed(() => this.count() > 0);
+  readonly openCart = output();
 
   goToCart(): void {
-    void this.router.navigate(['./cart'], { relativeTo: this.route });
+    this.openCart.emit();
   }
 }

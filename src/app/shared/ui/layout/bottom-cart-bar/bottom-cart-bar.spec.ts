@@ -32,4 +32,31 @@ describe('BottomCartBar accessibility', () => {
     expect(label).toContain((button?.querySelector('strong')?.textContent ?? '').trim());
     expect(label).toContain('view cart');
   });
+
+  it('emits openCart on click instead of navigating', () => {
+    TestBed.configureTestingModule({
+      imports: [BottomCartBar],
+      providers: [provideTaiga(), provideRouter([])],
+    });
+    TestBed.inject(CartStore).items.set([
+      {
+        id: '1',
+        menu_item_id: 'm1',
+        quantity: 1,
+        name: 'Burger',
+        note: '',
+        unit_base_price: 5,
+        selected_options: [],
+        total_price: 5,
+      },
+    ]);
+    const fixture = TestBed.createComponent(BottomCartBar);
+    const opened = vi.fn();
+    fixture.componentInstance.openCart.subscribe(opened);
+    fixture.detectChanges();
+
+    (fixture.nativeElement as HTMLElement).querySelector('button')?.click();
+
+    expect(opened).toHaveBeenCalledTimes(1);
+  });
 });
