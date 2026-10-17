@@ -6,11 +6,7 @@
   @if (item().is_sold_out) {
     <span>Sold out</span>
   } @else {
-    <button
-      type="button"
-      [attr.aria-label]="'Add ' + item().name + ' to cart'"
-      (click)="addToCart()"
-    >
+    <button type="button" [attr.aria-label]="'Add to cart: ' + item().name" (click)="addToCart()">
       Add to cart
     </button>
   }
