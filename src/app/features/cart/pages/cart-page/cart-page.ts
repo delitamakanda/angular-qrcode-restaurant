@@ -3,6 +3,7 @@ import { CartStore } from '../../../../state/cart.store';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pipe';
 import { SwipeActionDirective } from '@shared/directives/swipe-action.directive';
+import { TuiButton } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-cart-page',
@@ -10,7 +11,7 @@ import { SwipeActionDirective } from '@shared/directives/swipe-action.directive'
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.css',
-  imports: [CurrencyFormatPipe, SwipeActionDirective],
+  imports: [CurrencyFormatPipe, SwipeActionDirective, TuiButton],
 })
 export class CartPage {
   protected readonly cartStore = inject(CartStore);

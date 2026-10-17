@@ -38,6 +38,14 @@ describe('CartPage accessibility', () => {
 
     expect(button?.getAttribute('aria-label')).toBe('Remove Burger from cart');
   });
+
+  it('renders Remove and Checkout as Taiga buttons', () => {
+    const { el } = setup();
+    const buttons = Array.from(el.querySelectorAll('button'));
+
+    expect(buttons.length).toBe(2);
+    expect(buttons.every((b) => b.hasAttribute('tuiButton'))).toBe(true);
+  });
 });
 
 describe('CartPage swipe to remove', () => {

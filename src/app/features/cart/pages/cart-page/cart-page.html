@@ -13,7 +13,10 @@
           <div>Total: {{ item.total_price | currencyFormat }}</div>
 
           <button
+            tuiButton
             type="button"
+            appearance="secondary"
+            size="s"
             [attr.aria-label]="'Remove ' + item.name + ' from cart'"
             (click)="cartStore.removeFromCart(item.id)"
           >
@@ -26,6 +29,6 @@
 
   <footer class="cart-page__footer">
     <strong>Total: {{ cartStore.total() | currencyFormat }}</strong>
-    <button type="button" (click)="goToCheckout()">Checkout</button>
+    <button tuiButton type="button" size="l" (click)="goToCheckout()">Checkout</button>
   </footer>
 </section>
