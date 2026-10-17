@@ -26,11 +26,13 @@
       <tui-error formControlName="phone" />
     </div>
 
-    <label for="payment-method">Payment method</label>
-    <select id="payment-method" formControlName="paymentMethod" required>
-      <option value="cash">Cash</option>
-      <option value="card">Visa/Mastercard</option>
-    </select>
+    <div class="checkout-page__field">
+      <tui-textfield tuiChevron>
+        <label tuiLabel for="payment-method">Payment method</label>
+        <input tuiSelect id="payment-method" formControlName="paymentMethod" required />
+        <tui-data-list-wrapper *tuiDropdown [items]="paymentOptions" />
+      </tui-textfield>
+    </div>
 
     <div class="checkout-page__field">
       <tui-textfield>
