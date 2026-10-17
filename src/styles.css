@@ -19,3 +19,23 @@ body {
   background-color: var(--app-bg-color);
   color: var(--app-text-color);
 }
+
+/* Cart bottom sheet: Taiga dialog anchored to the bottom of the viewport */
+tui-dialog[data-appearance='bottom-sheet'] {
+  position: fixed;
+  inset: auto 0 0 0;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 30rem;
+  max-height: 85dvh;
+  overflow: hidden;
+  border-radius: 1rem 1rem 0 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  tui-dialog[data-appearance='bottom-sheet'] {
+    animation: none !important;
+    transition: none !important;
+  }
+}

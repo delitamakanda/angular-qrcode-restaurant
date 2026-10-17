@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { TuiDialogService } from '@taiga-ui/core';
+import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
+import {
+  CartBottomSheet,
+  type CartSheetResult,
+} from '../cart/sheets/cart-bottom-sheet/cart-bottom-sheet';
 import { AppHeader } from '../../shared/ui/layout/app-header/app-header';
 import { BottomCartBar } from '../../shared/ui/layout/bottom-cart-bar/bottom-cart-bar';
 
@@ -11,4 +18,32 @@ import { BottomCartBar } from '../../shared/ui/layout/bottom-cart-bar/bottom-car
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShopShell {}
+export class ShopShell {
+  private readonly dialogs = inject(TuiDialogService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly document = inject(DOCUMENT);
+
+  openCart(): void {
+    const trigger = this.document.activeElement as HTMLElement | null;
+
+    this.dialogs
+      .open<CartSheetResult>(new PolymorpheusComponent(CartBottomSheet), {
+        label: 'Panier',
+        appearance: 'bottom-sheet',
+        size: 'l',
+      })
+      .subscribe({
+        next: (result) => {
+          if (result === 'checkout') {
+            void this.router.navigate(['checkout'], { relativeTo: this.route });
+          }
+        },
+        complete: () => {
+          if (trigger?.isConnected) {
+            trigger.focus();
+          }
+        },
+      });
+  }
+}
