@@ -32,4 +32,13 @@ describe('App', () => {
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
   });
+
+  it('should render tui-root wrapping the router outlet', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const host = fixture.nativeElement as HTMLElement;
+    const root = host.querySelector('tui-root');
+    expect(root).not.toBeNull();
+    expect(root?.querySelector('router-outlet')).not.toBeNull();
+  });
 });

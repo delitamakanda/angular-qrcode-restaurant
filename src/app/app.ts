@@ -5,7 +5,6 @@ import { SplashScreen } from '@app/features/splash-screen/splash-screen';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [RouterOutlet, TuiRoot, SplashScreen],
   templateUrl: './app.html',
   styleUrl: './app.css',
