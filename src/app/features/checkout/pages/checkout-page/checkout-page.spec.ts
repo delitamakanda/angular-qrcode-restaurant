@@ -62,7 +62,9 @@ describe('CheckoutPage', () => {
   it('uses Taiga textfields with the expected autocomplete attributes', () => {
     const el = render().nativeElement as HTMLElement;
 
-    expect(el.querySelectorAll('tui-textfield').length).toBe(3);
+    expect(el.querySelectorAll('tui-textfield').length).toBe(4);
+    expect(el.querySelector('select')).toBeNull();
+    expect(el.querySelector('input#payment-method')).not.toBeNull();
     expect(el.querySelector('#name')?.getAttribute('autocomplete')).toBe('name');
     expect(el.querySelector('#phone')?.getAttribute('autocomplete')).toBe('tel');
     expect(el.querySelector('#phone')?.getAttribute('inputmode')).toBe('tel');
@@ -112,5 +114,25 @@ describe('CheckoutPage', () => {
       items: [],
     });
     expect(navigate).toHaveBeenCalled();
+  });
+
+  it('defaults the payment method to cash and displays its label', () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(fixture.componentInstance.checkoutForm.controls.paymentMethod.value).toBe('cash');
+    expect(el.querySelector<HTMLInputElement>('#payment-method')?.value).toBe('Cash');
+  });
+
+  it('sends payment_mode card when card is selected', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+    fixture.componentInstance.checkoutForm.controls.paymentMethod.setValue('card');
+
+    await fixture.componentInstance.submitForm();
+
+    expect(createOrder).toHaveBeenCalledWith(expect.objectContaining({ payment_mode: 'card' }));
   });
 });

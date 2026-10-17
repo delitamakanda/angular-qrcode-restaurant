@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CartStore } from '../../../../state/cart.store';
 import { CheckoutStore } from '../../../../state/checkout.store';
@@ -8,16 +8,36 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import {
   TuiButton,
+  TuiDropdown,
   TuiError,
   TuiLabel,
   TuiTextfield,
   TuiInput,
+  tuiItemsHandlersProvider,
   tuiValidationErrorsProvider,
 } from '@taiga-ui/core';
+import { TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
+import { PaymentMode } from '../../../../core/models/checkout.model';
+
+const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
+  cash: 'Cash',
+  card: 'Visa/Mastercard',
+};
 
 @Component({
   selector: 'app-checkout-page',
-  imports: [ReactiveFormsModule, TuiButton, TuiTextfield, TuiLabel, TuiError, TuiInput],
+  imports: [
+    ReactiveFormsModule,
+    TuiButton,
+    TuiTextfield,
+    TuiLabel,
+    TuiError,
+    TuiInput,
+    TuiSelect,
+    TuiChevron,
+    TuiDataListWrapper,
+    TuiDropdown,
+  ],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +45,9 @@ import {
     tuiValidationErrorsProvider({
       required: 'Required field',
       pattern: 'Expected format: +33612345678',
+    }),
+    tuiItemsHandlersProvider<PaymentMode>({
+      stringify: signal((mode: PaymentMode) => PAYMENT_LABELS[mode] ?? mode),
     }),
   ],
 })
@@ -37,10 +60,12 @@ export class CheckoutPage {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
+  protected readonly paymentOptions: readonly PaymentMode[] = ['cash', 'card'];
+
   readonly checkoutForm = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
     phone: ['', [Validators.required, Validators.pattern(/^\+[1-9]\d{1,14}$/)]],
-    paymentMethod: ['cash' as const, [Validators.required]],
+    paymentMethod: ['cash' as PaymentMode, [Validators.required]],
     couponCode: [''],
   });
 
