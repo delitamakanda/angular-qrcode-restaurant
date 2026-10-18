@@ -7,6 +7,8 @@ export interface MenuCategory {
   sort_order: number;
 }
 
+export type ProductBadgeType = 'popular' | 'new' | 'sold-out';
+
 export interface MenuItem {
   id: string;
   name: string;

@@ -1,11 +1,12 @@
 <article class="menu-item-card">
+  @if (badge(); as badgeType) {
+    <app-product-badge [type]="badgeType" />
+  }
   <h3>{{ item().name }}</h3>
   <p>{{ item().description }}</p>
   <p>Price: {{ item().base_price | currencyFormat }}</p>
 
-  @if (item().is_sold_out) {
-    <span>Sold out</span>
-  } @else {
+  @if (!item().is_sold_out) {
     <button
       tuiButton
       type="button"

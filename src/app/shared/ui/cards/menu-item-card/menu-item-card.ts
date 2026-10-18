@@ -1,13 +1,14 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { MenuItem } from '@app/core/models/menu-item.model';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { MenuItem, ProductBadgeType } from '@app/core/models/menu-item.model';
 import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
 import { CurrencyFormatPipe } from '@app/shared/pipes/currency-format.pipe';
+import { ProductBadge } from '@shared/ui/chips/product-badge/product-badge';
 import { TuiButton } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-menu-item-card',
-  imports: [CurrencyFormatPipe, TuiButton],
+  imports: [CurrencyFormatPipe, ProductBadge, TuiButton],
   standalone: true,
   templateUrl: './menu-item-card.html',
   styleUrls: ['./menu-item-card.css'],
@@ -15,6 +16,17 @@ import { TuiButton } from '@taiga-ui/core';
 })
 export class MenuItemCard {
   readonly item = input.required<MenuItem>();
+  protected readonly badge = computed<ProductBadgeType | null>(() => {
+    const product = this.item();
+
+    if (product.is_sold_out) {
+      return 'sold-out';
+    }
+    if (product.tags?.includes('new')) {
+      return 'new';
+    }
+    return product.tags?.includes('popular') ? 'popular' : null;
+  });
   private readonly cartStore = inject(CartStore);
   private readonly notifications = inject(NotificationService);
 

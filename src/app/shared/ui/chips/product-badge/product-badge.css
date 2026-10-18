@@ -1,0 +1,26 @@
+.product-badge {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+/* Text/background contrast is >= 7:1 for each variant. */
+.product-badge--popular {
+  background: #fff3e0;
+  color: #7a3b00;
+}
+
+.product-badge--new {
+  background: #e3f2fd;
+  color: #0b3d75;
+}
+
+.product-badge--sold-out {
+  background: #424242;
+  color: #ffffff;
+  border-style: dashed;
+}
