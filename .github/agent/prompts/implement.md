@@ -46,7 +46,8 @@ lisible et entièrement vérifié.
    - `npm run e2e`
    - `npm run format` puis `npm run format:check`
 6. Rédige les deux fichiers de sortie ci-dessous. Dans `## Comment tester` de
-   `pr-body.md`, liste les captures prises et ce que chacune prouve.
+   `pr-body.md`, liste les captures prises et ce que chacune prouve, sous la
+   forme `captures/<n>-<critere>.png` (leur emplacement dans l'artifact de la PR).
 
 ## Fichiers de sortie (obligatoires)
 

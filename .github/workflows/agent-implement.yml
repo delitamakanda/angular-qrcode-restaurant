@@ -234,16 +234,27 @@ jobs:
           git push -u origin "$BRANCH"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
+      # Le zip doit avoir `captures/` et `playwright-report/` à la racine : sous
+      # `.agent-out/` (dossier caché), Finder et l'Explorateur masquent les images.
+      - name: Rassembler captures et rapport e2e
+        if: always() && steps.guard.outputs.skip == 'false'
+        run: |
+          set -uo pipefail
+          dest=.agent-out/artifact
+          rm -rf "$dest" && mkdir -p "$dest/captures"
+          find .agent-out/playwright -maxdepth 1 -type f \( -name '*.png' -o -name '*.jpeg' -o -name '*.jpg' \) \
+            -exec cp {} "$dest/captures/" \; 2>/dev/null || true
+          [ -d playwright-report ] && cp -R playwright-report "$dest/"
+          ls -R "$dest"
+
       - name: Publier captures et rapport e2e
         id: artifact
         if: always() && steps.guard.outputs.skip == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: agent-ui-issue-${{ env.ISSUE }}
-          path: |
-            .agent-out/playwright/
-            playwright-report/
-          include-hidden-files: true # .agent-out est un dossier caché, exclu sinon
+          path: .agent-out/artifact/
+          include-hidden-files: true # le chemin passe par .agent-out, dossier caché
           if-no-files-found: ignore
           retention-days: 14
 
