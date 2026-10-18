@@ -23,7 +23,8 @@ export default defineConfig({
   webServer: {
     command: 'npm run start:all',
     url: 'http://localhost:4200',
-    reuseExistingServer: !isCI,
+    // Les workflows agents démarrent déjà l'app (pour le MCP Playwright) : E2E_REUSE_SERVER=1.
+    reuseExistingServer: !isCI || !!process.env['E2E_REUSE_SERVER'],
     timeout: 180_000,
   },
 });
