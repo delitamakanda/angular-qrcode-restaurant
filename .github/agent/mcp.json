@@ -3,17 +3,18 @@
     "playwright": {
       "command": "npx",
       "args": [
-        "@playwright/mcp",
+        "--no-install",
+        "playwright-mcp",
+        "--headless",
         "--isolated",
         "--device",
         "iPhone 13",
         "--caps",
         "testing",
         "--allowed-origins",
-        "http://localhost:4200;http://127.0.0.1:4200;http://localhost:3000",
+        "http://localhost:4200;http://localhost:3000",
         "--output-dir",
-        "playwright-output",
-        "--headless"
+        ".agent-out/playwright"
       ]
     }
   }
