@@ -4,6 +4,21 @@
     "angular-cli": {
       "command": "npx",
       "args": ["-y", "@angular/cli", "mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp",
+        "--isolated",
+        "--device",
+        "iPhone 13",
+        "--caps",
+        "testing",
+        "--allowed-origins",
+        "http://localhost:4200,http://127.0.0.1:4200,http://localhost:5173,http://127.0.0.1:5173",
+        "--output-dir",
+        "playwright-output"
+      ]
     }
   }
 }
