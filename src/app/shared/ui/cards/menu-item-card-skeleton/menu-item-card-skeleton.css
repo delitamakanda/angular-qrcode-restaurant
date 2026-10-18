@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.menu-item-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-item-card-skeleton__block {
+  border-radius: 0.5rem;
+  background-color: #e5e7eb;
+  background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 60%), transparent);
+  background-size: 200% 100%;
+  background-repeat: no-repeat;
+  animation: menu-item-card-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.menu-item-card-skeleton__title {
+  height: 1.25rem;
+  width: 60%;
+}
+
+.menu-item-card-skeleton__description {
+  height: 2.5rem;
+  width: 100%;
+}
+
+.menu-item-card-skeleton__price {
+  height: 1rem;
+  width: 30%;
+}
+
+.menu-item-card-skeleton__button {
+  height: 2.5rem;
+  width: 8rem;
+}
+
+@keyframes menu-item-card-skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-item-card-skeleton__block {
+    animation: none;
+    background-image: none;
+  }
+}
