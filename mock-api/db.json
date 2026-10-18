@@ -320,6 +320,292 @@
         }
       ],
       "id": "qmUkFEFB_VA"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "1ad2dc48-f37c-41c8-a4dc-bc684e59d864",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "wSKcg_uEjAQ"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "210457fb-e626-4ec4-9e2e-e3f391443184",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "BS4mmsfG4iE"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "d809d968-93d7-4730-94bd-94a12841ba58",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "WS6TrLY6Bik"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "030af7c3-3f3e-4837-8bc6-057d9b38d092",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "4Voea2JT0_Q"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "0428acad-a905-4191-afc3-993cef8121e0",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "viZEhDz9Ty4"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "1f3cb501-5d2b-4afc-b2c5-be1215167c06",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "jP86jxUX6ns"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "88845cca-25db-4535-b504-b53cec2f687e",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "eN6xn3-6_yM"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "bf72cc01-0374-4519-8310-673d58020f36",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "4b1czL6Bzts"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "95b5be38-a8ea-440d-8d04-27bc002a6e9b",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "WBGDYsHjsLk"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "ddf8e1cc-ae87-47cf-bdb2-bd665717c39a",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "rR3I0_Deb9w"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "e4a60f2f-1402-4a98-b92d-b6d3c119d156",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "Xt6sHyWNCJM"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "4f8735af-0e0c-4a07-8a18-83074ccf8f09",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "z0vN17Cuwj0"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Jane Doe",
+        "phone": "+33612345678"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "409d0756-d998-4a72-9c8b-7b2b49d1e793",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [],
+          "total_price": 55
+        }
+      ],
+      "id": "AfJdR7h29S0"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
