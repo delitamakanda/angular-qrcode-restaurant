@@ -1,28 +1,29 @@
 import { expect, test } from '@playwright/test';
 
 test('customer can order a product in dine-in mode', async ({ page }) => {
-  // Avoid writing to mock-api/db.json: the order creation is stubbed.
-  await page.route('**/api/orders', async (route) => {
+  const order = {
+    id: 'e2e-order-1',
+    store_id: 'demo',
+    status: 'pending',
+    order_number: 'E2E-1',
+    created_at: '2026-01-01T12:00:00.000Z',
+    total: 450,
+    discount: 0,
+    fees: 0,
+    subtotal: 450,
+  };
+
+  // Avoid writing to mock-api/db.json: order creation and lookup are stubbed.
+  // Match on path suffix since BASE_API_URL differs per environment
+  // (http://localhost:3000 in dev, .../api in prod).
+  await page.route(/\/orders(\?.*)?$/, async (route) => {
     if (route.request().method() !== 'POST') {
       await route.fallback();
       return;
     }
-    await route.fulfill({
-      status: 201,
-      contentType: 'application/json',
-      json: {
-        id: 'e2e-order-1',
-        store_id: 'demo',
-        status: 'pending',
-        order_number: 'E2E-1',
-        created_at: '2026-01-01T12:00:00.000Z',
-        total: 450,
-        discount: 0,
-        fees: 0,
-        subtotal: 450,
-      },
-    });
+    await route.fulfill({ status: 201, json: order });
   });
+  await page.route(`**/orders/${order.id}`, (route) => route.fulfill({ json: order }));
 
   await page.goto('/');
   await expect(page).toHaveURL(/\/store\/demo\/welcome$/);
