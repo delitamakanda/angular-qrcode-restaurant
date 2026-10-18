@@ -77,6 +77,8 @@ jobs:
       GH_REPO: ${{ github.repository }}
       ISSUE: ${{ needs.pick.outputs.issue }}
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      # L'app est démarrée par le workflow (pour le MCP Playwright) : `playwright test` la réutilise.
+      E2E_REUSE_SERVER: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -149,7 +151,20 @@ jobs:
 
       - name: Installer les dépendances
         if: steps.guard.outputs.skip == 'false'
-        run: npm ci
+        run: |
+          npm ci
+          npm ci --prefix mock-api
+
+      - name: Installer les navigateurs Playwright
+        if: steps.guard.outputs.skip == 'false'
+        run: |
+          # Deux révisions de Chromium : celle de @playwright/test (e2e) et celle embarquée par @playwright/mcp.
+          npx playwright install --with-deps chromium
+          npx --no-install playwright-mcp install-browser chromium
+
+      - name: Démarrer l'app (mock API + ng serve)
+        if: steps.guard.outputs.skip == 'false'
+        run: bash scripts/agent/start-app.sh
 
       - name: Implémenter
         if: steps.guard.outputs.skip == 'false'
@@ -162,9 +177,10 @@ jobs:
             Tu es déjà sur la bonne branche ; ne fais ni commit ni push.
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'sonnet' }}
-            --max-turns 100
-            --allowedTools "Read,Glob,Grep,Write,Edit,Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npx ng lint:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(ls:*)"
-            --disallowedTools "WebFetch,WebSearch"
+            --max-turns 120
+            --mcp-config .github/agent/mcp.json
+            --allowedTools "Read,Glob,Grep,Write,Edit,Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npx ng lint:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*),Bash(npm run e2e),Bash(npm run e2e:*),Bash(npx playwright test:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(ls:*),mcp__playwright"
+            --disallowedTools "WebFetch,WebSearch,mcp__playwright__browser_run_code_unsafe,mcp__playwright__browser_evaluate,mcp__playwright__browser_file_upload"
 
       - name: Vérifications (lint, tests, build, format)
         id: checks
@@ -186,6 +202,7 @@ jobs:
           run_check lint npm run lint
           run_check test npx ng test --watch=false
           run_check build npx ng build
+          run_check e2e npm run e2e
           run_check format npm run format:check
           cat .agent-out/checks.md
           echo "ok=$ok" >> "$GITHUB_OUTPUT"
@@ -217,6 +234,19 @@ jobs:
           git push -u origin "$BRANCH"
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
+      - name: Publier captures et rapport e2e
+        id: artifact
+        if: always() && steps.guard.outputs.skip == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent-ui-issue-${{ env.ISSUE }}
+          path: |
+            .agent-out/playwright/
+            playwright-report/
+          include-hidden-files: true # .agent-out est un dossier caché, exclu sinon
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Ouvrir ou mettre à jour la pull request
         id: pr
         if: steps.push.outputs.changed == 'true'
@@ -224,6 +254,7 @@ jobs:
           BRANCH: ${{ steps.prep.outputs.branch }}
           TITLE: ${{ steps.prep.outputs.title }}
           CHECKS_OK: ${{ steps.checks.outputs.ok }}
+          ARTIFACT_URL: ${{ steps.artifact.outputs.artifact-url }}
           OWNER: ${{ github.repository_owner }}
           BASE: ${{ github.event.repository.default_branch }}
         run: |
@@ -236,6 +267,9 @@ jobs:
             echo "## Vérifications automatiques"
             echo
             cat .agent-out/checks.md
+            if [ -n "${ARTIFACT_URL:-}" ]; then
+              echo "- 📸 Captures (iPhone 13) et rapport e2e : $ARTIFACT_URL"
+            fi
             echo
             echo "---"
             echo "🤖 PR ouverte par l’agent ([run]($RUN_URL)). Commente \`@claude …\` pour demander des corrections. **Ne pas merger sans revue humaine.**"

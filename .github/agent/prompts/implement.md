@@ -20,12 +20,33 @@ lisible et entièrement vérifié.
 2. Implémente le ticket en respectant les critères d'acceptation, un par un.
 3. Ajoute ou mets à jour les tests Vitest (`*.spec.ts`) prévus dans le plan
    de test.
-4. Vérifie, et corrige jusqu'à ce que tout passe :
+4. **Vérification dans le navigateur** (si le ticket touche l'UI). L'app tourne
+   déjà sur http://localhost:4200 (API mock sur http://localhost:3000) et
+   `ng serve` recompile à chaque modification. Le navigateur émule un iPhone 13.
+   - Pour chaque critère d'acceptation visible, parcours-le avec les outils
+     `mcp__playwright__*` (`browser_navigate`, `browser_snapshot`, clics,
+     `browser_verify_*`) en partant de `http://localhost:4200/store/demo/welcome`.
+     Un splash screen s'affiche d'abord : attends le contenu attendu avec
+     `browser_wait_for` avant de vérifier. Les snapshots sont écrits dans des
+     fichiers `.agent-out/playwright/page-*.yml` : lis-les avec Read.
+   - Enregistre une capture par critère avec `browser_take_screenshot` et un
+     `filename` **toujours** de la forme `.agent-out/playwright/<n>-<critere>.png`
+     (le chemin est relatif à la racine du dépôt : sans ce préfixe, l'image
+     finirait dans le commit). Ce dossier est publié avec la PR.
+   - Si le comportement diffère de la spec, corrige le code puis revérifie.
+   - Ajoute ou complète un spec dans `e2e/` qui couvre le parcours : locators
+     par rôle et nom accessible (aide-toi de `browser_generate_locator`), appels
+     d'API qui écrivent stubbés avec `page.route` comme dans
+     `e2e/order-flow.spec.ts`.
+   - Ne navigue que vers l'app locale.
+5. Vérifie, et corrige jusqu'à ce que tout passe :
    - `npm run lint`
    - `npx ng test --watch=false`
    - `npx ng build`
+   - `npm run e2e`
    - `npm run format` puis `npm run format:check`
-5. Rédige les deux fichiers de sortie ci-dessous.
+6. Rédige les deux fichiers de sortie ci-dessous. Dans `## Comment tester` de
+   `pr-body.md`, liste les captures prises et ce que chacune prouve.
 
 ## Fichiers de sortie (obligatoires)
 

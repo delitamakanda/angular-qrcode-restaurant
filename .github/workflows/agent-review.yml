@@ -23,7 +23,10 @@ jobs:
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
     runs-on: ubuntu-latest
     environment: claude
-    timeout-minutes: 45
+    timeout-minutes: 60
+    env:
+      # L'app est démarrée par le workflow (pour le MCP Playwright) : `playwright test` la réutilise.
+      E2E_REUSE_SERVER: '1'
     concurrency:
       group: agent-review-${{ github.event.issue.number || github.event.pull_request.number }}
       cancel-in-progress: false
@@ -38,12 +41,41 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Se placer sur la branche de la PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          R: ${{ github.repository }}
+          PR: ${{ github.event.issue.number || github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          read -r head_repo head_ref < <(gh api "repos/$R/pulls/$PR" --jq '"\(.head.repo.full_name) \(.head.ref)"')
+          # Le code de la PR va être installé et exécuté avec les secrets de l'environnement `claude` :
+          # on refuse les PR venant d'un fork.
+          if [ "$head_repo" != "$R" ]; then
+            echo "::error::PR #$PR issue d'un fork ($head_repo) : agent non lancé."
+            exit 1
+          fi
+          git fetch --depth=50 origin "+refs/heads/$head_ref:refs/remotes/origin/$head_ref"
+          git checkout -B "$head_ref" "origin/$head_ref"
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
-      - run: npm ci
+      - name: Installer les dépendances
+        run: |
+          npm ci
+          npm ci --prefix mock-api
+
+      - name: Installer les navigateurs Playwright
+        run: |
+          # Deux révisions de Chromium : celle de @playwright/test (e2e) et celle embarquée par @playwright/mcp.
+          npx playwright install --with-deps chromium
+          npx --no-install playwright-mcp install-browser chromium
+
+      - name: Démarrer l'app (mock API + ng serve)
+        run: bash scripts/agent/start-app.sh
 
       - uses: anthropics/claude-code-action@v1
         with:
@@ -52,6 +84,8 @@ jobs:
             actions: read
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'sonnet' }}
-            --max-turns 60
-            --append-system-prompt "Respecte CLAUDE.md et AGENTS.md. Avant de pousser, fais passer npm run lint, npx ng test --watch=false, npx ng build et npm run format:check. Ne modifie jamais .github/. Réponds en français."
-            --allowedTools "Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*)"
+            --max-turns 80
+            --mcp-config .github/agent/mcp.json
+            --append-system-prompt "Respecte CLAUDE.md et AGENTS.md. L'app tourne déjà sur http://localhost:4200 (API mock sur :3000, ng serve recompile à chaque modification) : vérifie toute modification d'UI dans le navigateur avec les outils mcp__playwright (émulation iPhone 13), en ne naviguant que vers l'app locale. Avant de pousser, fais passer npm run lint, npx ng test --watch=false, npx ng build, npm run e2e et npm run format:check. Ne modifie jamais .github/. Réponds en français."
+            --allowedTools "Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*),Bash(npm run e2e),Bash(npm run e2e:*),Bash(npx playwright test:*),mcp__playwright"
+            --disallowedTools "mcp__playwright__browser_run_code_unsafe,mcp__playwright__browser_evaluate,mcp__playwright__browser_file_upload"
