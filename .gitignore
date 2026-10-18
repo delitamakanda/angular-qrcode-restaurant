@@ -50,3 +50,6 @@ Thumbs.db
 
 # Agent workflow scratch output (never committed)
 /.agent-out
+
+# e2e 
+/test-results
