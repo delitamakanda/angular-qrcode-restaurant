@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { MenuItemCard } from '../../../../shared/ui/cards/menu-item-card/menu-item-card';
+import { MenuItemCardSkeleton } from '@shared/ui/cards/menu-item-card-skeleton/menu-item-card-skeleton';
 import { ActivatedRoute } from '@angular/router';
 import { ShopStore } from '../../../../state/shop.store';
 import { MenuStore } from '../../../../state/menu.store';
@@ -10,7 +11,15 @@ import { TuiIcon, TuiLabel, TuiTextfield, TuiInput } from '@taiga-ui/core';
 
 @Component({
   selector: 'app-menu-page',
-  imports: [MenuItemCard, ReactiveFormsModule, TuiTextfield, TuiLabel, TuiIcon, TuiInput],
+  imports: [
+    MenuItemCard,
+    MenuItemCardSkeleton,
+    ReactiveFormsModule,
+    TuiTextfield,
+    TuiLabel,
+    TuiIcon,
+    TuiInput,
+  ],
   templateUrl: './menu-page.html',
   styleUrl: './menu-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,6 +28,8 @@ export class MenuPage {
   private readonly route = inject(ActivatedRoute);
   private readonly shopStore = inject(ShopStore);
   readonly menuStore = inject(MenuStore);
+
+  protected readonly skeletonSlots = Array.from({ length: 6 });
 
   private readonly storeId = toSignal(
     (this.route.parent?.paramMap ?? EMPTY).pipe(map((params) => params.get('storeId'))),

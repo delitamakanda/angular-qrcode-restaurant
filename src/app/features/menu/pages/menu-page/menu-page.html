@@ -10,9 +10,16 @@
     />
     <tui-icon icon="@tui.search" aria-hidden="true" />
   </tui-textfield>
-  <div class="menu-page__grid">
-    @for (item of menuStore.filteredItems(); track item.id) {
-      <app-menu-item-card [item]="item" />
+  <div class="menu-page__grid" [attr.aria-busy]="menuStore.isLoading()">
+    @if (menuStore.isLoading()) {
+      <span class="menu-page__visually-hidden" role="status">Loading menu…</span>
+      @for (slot of skeletonSlots; track $index) {
+        <app-menu-item-card-skeleton />
+      }
+    } @else {
+      @for (item of menuStore.filteredItems(); track item.id) {
+        <app-menu-item-card [item]="item" />
+      }
     }
   </div>
 </section>
