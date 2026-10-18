@@ -40,6 +40,53 @@ describe('MenuItemCard', () => {
     expect(button?.hasAttribute('tuiButton')).toBe(true);
   });
 
+  describe('badge', () => {
+    function render(overrides: Record<string, unknown>) {
+      const fixture = TestBed.createComponent(MenuItemCard);
+      fixture.componentRef.setInput('item', { ...item, ...overrides });
+      fixture.detectChanges();
+      const el = fixture.nativeElement as HTMLElement;
+      return {
+        badges: Array.from(el.querySelectorAll('app-product-badge')).map((b) =>
+          b.textContent.trim(),
+        ),
+        button: el.querySelector('button'),
+      };
+    }
+
+    it('shows Popular', () => {
+      expect(render({ tags: ['popular'] }).badges).toEqual(['Popular']);
+    });
+
+    it('shows New', () => {
+      expect(render({ tags: ['new'] }).badges).toEqual(['New']);
+    });
+
+    it('shows Sold out without the sold-out tag and hides the button', () => {
+      const { badges, button } = render({ is_sold_out: true });
+
+      expect(badges).toEqual(['Sold out']);
+      expect(button).toBeNull();
+    });
+
+    it('prioritises Sold out over New', () => {
+      expect(render({ is_sold_out: true, tags: ['new'] }).badges).toEqual(['Sold out']);
+    });
+
+    it('prioritises New over Popular', () => {
+      expect(render({ tags: ['popular', 'new'] }).badges).toEqual(['New']);
+    });
+
+    it('shows no badge for empty or missing tags', () => {
+      expect(render({ tags: [] }).badges).toEqual([]);
+      expect(render({}).badges).toEqual([]);
+    });
+
+    it('keeps the add button for available products', () => {
+      expect(render({ tags: ['popular'] }).button).not.toBeNull();
+    });
+  });
+
   it('adds to the cart and notifies the user', () => {
     (create().nativeElement as HTMLElement).querySelector('button')?.click();
 
