@@ -5,7 +5,9 @@ import { CheckoutStore } from '../../../../state/checkout.store';
 import { ShopStore } from '../../../../state/shop.store';
 import { OrderApiService } from '../../../../core/api/order-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { firstValueFrom, map } from 'rxjs';
+import { normalizePhone, phoneValidator } from '@shared/validators/phone.validator';
 import {
   TuiButton,
   TuiDropdown,
@@ -44,7 +46,6 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
   providers: [
     tuiValidationErrorsProvider({
       required: 'Required field',
-      pattern: 'Expected format: +33612345678',
     }),
     tuiItemsHandlersProvider<PaymentMode>({
       stringify: signal((mode: PaymentMode) => PAYMENT_LABELS[mode] ?? mode),
@@ -64,10 +65,28 @@ export class CheckoutPage {
 
   readonly checkoutForm = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
-    phone: ['', [Validators.required, Validators.pattern(/^\+[1-9]\d{1,14}$/)]],
+    phone: ['', [Validators.required, phoneValidator()]],
     paymentMethod: ['cash' as PaymentMode, [Validators.required]],
     couponCode: [''],
   });
+
+  protected readonly phoneError = toSignal(
+    this.checkoutForm.controls.phone.events.pipe(map(() => this.getPhoneError())),
+    { initialValue: null },
+  );
+
+  private getPhoneError(): string | null {
+    const control = this.checkoutForm.controls.phone;
+    if (!control.touched) {
+      return null;
+    }
+    if (control.hasError('required')) {
+      return 'Phone number is required';
+    }
+    return control.hasError('invalidPhone')
+      ? 'Enter a valid phone number, e.g. +33606787045'
+      : null;
+  }
 
   async submitForm(): Promise<void> {
     if (this.checkoutForm.invalid) {
@@ -90,7 +109,7 @@ export class CheckoutPage {
           mode,
           customer: {
             name: value.name,
-            phone: value.phone,
+            phone: normalizePhone(value.phone),
           },
           coupon_code: value.couponCode || undefined,
           payment_mode: value.paymentMethod,

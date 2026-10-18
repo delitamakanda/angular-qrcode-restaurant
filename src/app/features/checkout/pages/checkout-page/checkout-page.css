@@ -2,6 +2,16 @@
   margin-block: 1rem;
 }
 
+.checkout-page__error-text {
+  margin: 0.25rem 0 0;
+  color: #b3261e;
+  font-size: 0.875rem;
+}
+
+.checkout-page__error-text::before {
+  content: '⚠ ';
+}
+
 .checkout-page__field input {
   font-size: 1rem;
 }

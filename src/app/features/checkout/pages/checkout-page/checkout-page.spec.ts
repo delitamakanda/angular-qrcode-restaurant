@@ -79,8 +79,43 @@ describe('CheckoutPage', () => {
     await fixture.whenStable();
 
     expect(createOrder).not.toHaveBeenCalled();
-    expect(el.querySelectorAll('tui-error').length).toBe(2);
+    expect(el.querySelectorAll('tui-error').length).toBe(1);
     expect(el.textContent).toContain('Required field');
+    expect(el.querySelector('#phone-error')?.textContent).toContain('Phone number is required');
+    expect(el.querySelector('#phone')?.getAttribute('aria-invalid')).toBe('true');
+    expect(el.querySelector('#phone')?.getAttribute('aria-describedby')).toBe('phone-error');
+  });
+
+  it('shows no phone error before the field is touched', () => {
+    const el = render().nativeElement as HTMLElement;
+
+    expect(el.querySelector('#phone-error')).toBeNull();
+    expect(el.querySelector('#phone')?.getAttribute('aria-invalid')).toBe('false');
+  });
+
+  it('shows the phone error once the field is touched', () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#phone', '0606787045');
+    fixture.componentInstance.checkoutForm.controls.phone.markAsTouched();
+    fixture.detectChanges();
+
+    expect(el.querySelector('#phone-error')?.textContent).toContain(
+      'Enter a valid phone number, e.g. +33606787045',
+    );
+  });
+
+  it('sends the normalized phone number', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33 6 06 78 70 45');
+
+    await fixture.componentInstance.submitForm();
+
+    expect(createOrder).toHaveBeenCalledWith(
+      expect.objectContaining({ customer: { name: 'Jane', phone: '+33606787045' } }),
+    );
   });
 
   it('shows a format error for an invalid phone number', async () => {
@@ -94,7 +129,7 @@ describe('CheckoutPage', () => {
     await fixture.whenStable();
 
     expect(createOrder).not.toHaveBeenCalled();
-    expect(el.textContent).toContain('Expected format: +33612345678');
+    expect(el.textContent).toContain('Enter a valid phone number, e.g. +33606787045');
   });
 
   it('calls createOrder with the expected payload for valid values', async () => {

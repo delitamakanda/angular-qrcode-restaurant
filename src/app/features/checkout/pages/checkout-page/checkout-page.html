@@ -21,9 +21,13 @@
           autocomplete="tel"
           formControlName="phone"
           required
+          [attr.aria-invalid]="phoneError() ? 'true' : 'false'"
+          [attr.aria-describedby]="phoneError() ? 'phone-error' : null"
         />
       </tui-textfield>
-      <tui-error formControlName="phone" />
+      @if (phoneError(); as message) {
+        <p id="phone-error" class="checkout-page__error-text" role="alert">{{ message }}</p>
+      }
     </div>
 
     <div class="checkout-page__field">
