@@ -16,6 +16,8 @@ import { TuiButton } from '@taiga-ui/core';
 })
 export class MenuItemCard {
   readonly item = input.required<MenuItem>();
+  /** Above-the-fold card: its image loads eagerly instead of lazily. */
+  readonly priority = input(false);
   protected readonly placeholder = '/images/placeholder-food.svg';
   protected readonly badge = computed<ProductBadgeType | null>(() => {
     const product = this.item();

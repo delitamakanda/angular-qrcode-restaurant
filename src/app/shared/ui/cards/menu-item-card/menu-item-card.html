@@ -3,7 +3,7 @@
     <img
       class="menu-item-card__image"
       alt=""
-      loading="lazy"
+      [attr.loading]="priority() ? 'eager' : 'lazy'"
       width="400"
       height="300"
       [src]="item().image_url || placeholder"
