@@ -2,9 +2,41 @@
 
 @import 'tailwindcss';
 
+@theme {
+  /* Brand red sampled from the logo (brand-600: 4.6:1 with white) */
+  --color-brand-50: #fff1f1;
+  --color-brand-100: #ffe0e1;
+  --color-brand-200: #ffc7c9;
+  --color-brand-300: #ffa0a3;
+  --color-brand-400: #ff666b;
+  --color-brand-500: #f73a41;
+  --color-brand-600: #e8141c;
+  --color-brand-700: #c30d14;
+  --color-brand-800: #a10f15;
+  --color-brand-900: #861318;
+  --color-brand-950: #490407;
+
+  /* Surfaces and text */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8f9fa;
+  --color-ink: #212529;
+  --color-ink-muted: #4b5563;
+
+  /* Semantic colors; danger is kept distinct from the brand red */
+  --color-success: #1b7f3b;
+  --color-warning: #b45309;
+  --color-danger: #b3261e;
+}
+
 :root {
-  --app-bg-color: #f8f9fa;
-  --app-text-color: #212529;
+  --app-bg-color: var(--color-surface);
+  --app-text-color: var(--color-ink);
+
+  /* Taiga UI accent and focus follow the brand */
+  --tui-background-accent-1: var(--color-brand-600);
+  --tui-background-accent-1-hover: var(--color-brand-700);
+  --tui-background-accent-1-pressed: var(--color-brand-800);
+  --tui-border-focus: var(--color-brand-600);
 }
 
 html,
