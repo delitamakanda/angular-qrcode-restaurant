@@ -29,6 +29,24 @@
       "store_id": "demo",
       "name": "Snacks",
       "sort_order": 3
+    },
+    {
+      "id": "cat-noodles",
+      "store_id": "demo",
+      "name": "Noodles & Rice",
+      "sort_order": 4
+    },
+    {
+      "id": "cat-street-food",
+      "store_id": "demo",
+      "name": "Street Food",
+      "sort_order": 5
+    },
+    {
+      "id": "cat-desserts",
+      "store_id": "demo",
+      "name": "Desserts",
+      "sort_order": 6
     }
   ],
   "menus": [
@@ -95,6 +113,186 @@
         "take_away": true,
         "delivery": true
       }
+    },
+    {
+      "id": "item-brown-sugar-boba",
+      "store_id": "demo",
+      "category_id": "cat-milk-tea",
+      "name": "Brown Sugar Boba Milk",
+      "description": "Fresh milk, brown sugar syrup, warm boba",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 75,
+      "is_sold_out": false,
+      "tags": ["popular"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-mango-green-tea",
+      "store_id": "demo",
+      "category_id": "cat-fruit-tea",
+      "name": "Mango Green Tea",
+      "description": "Green tea with fresh mango",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 65,
+      "is_sold_out": false,
+      "tags": ["new"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-spiral-potato",
+      "store_id": "demo",
+      "category_id": "cat-snacks",
+      "name": "Spiral Potato",
+      "description": "Fried potato on a stick, seasoned",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 60,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-stinky-tofu",
+      "store_id": "demo",
+      "category_id": "cat-snacks",
+      "name": "Stinky Tofu",
+      "description": "Chòudòufu, fried with pickled cabbage",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 80,
+      "is_sold_out": false,
+      "tags": ["local-favorite"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+    },
+    {
+      "id": "item-beef-noodle-soup",
+      "store_id": "demo",
+      "category_id": "cat-noodles",
+      "name": "Beef Noodle Soup",
+      "description": "Niúròu miàn, braised beef and broth",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 120,
+      "is_sold_out": false,
+      "tags": ["popular"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-braised-pork-rice",
+      "store_id": "demo",
+      "category_id": "cat-noodles",
+      "name": "Braised Pork Rice",
+      "description": "Lǔròu fàn, soy-braised pork over rice",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 70,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-oyster-vermicelli",
+      "store_id": "demo",
+      "category_id": "cat-noodles",
+      "name": "Oyster Vermicelli",
+      "description": "Mian xian, thick broth, fresh oysters",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 85,
+      "is_sold_out": true,
+      "tags": ["sold-out"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-chiayi-turkey-rice",
+      "store_id": "demo",
+      "category_id": "cat-noodles",
+      "name": "Chiayi Turkey Rice",
+      "description": "Shredded turkey, fried shallots",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 65,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-gua-bao",
+      "store_id": "demo",
+      "category_id": "cat-street-food",
+      "name": "Gua Bao",
+      "description": "Steamed bun with pork belly, peanuts",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 75,
+      "is_sold_out": false,
+      "tags": ["popular"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-xiaolongbao",
+      "store_id": "demo",
+      "category_id": "cat-street-food",
+      "name": "Xiaolongbao",
+      "description": "Soup dumplings, 6 pieces",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 90,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-oyster-omelette",
+      "store_id": "demo",
+      "category_id": "cat-street-food",
+      "name": "Oyster Omelette",
+      "description": "Ô-á-tsian, sweet chili sauce",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 80,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+    },
+    {
+      "id": "item-egg-waffle",
+      "store_id": "demo",
+      "category_id": "cat-street-food",
+      "name": "Egg Waffle",
+      "description": "Jīdàn zǎi, crisp and fluffy",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 55,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-mango-shaved-ice",
+      "store_id": "demo",
+      "category_id": "cat-desserts",
+      "name": "Mango Shaved Ice",
+      "description": "Baobing, fresh mango, condensed milk",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 110,
+      "is_sold_out": false,
+      "tags": ["new"],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-douhua",
+      "store_id": "demo",
+      "category_id": "cat-desserts",
+      "name": "Douhua",
+      "description": "Silky sweet tofu pudding",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 50,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+    },
+    {
+      "id": "item-tang-yuan",
+      "store_id": "demo",
+      "category_id": "cat-desserts",
+      "name": "Tang Yuan",
+      "description": "Glutinous rice balls in ginger syrup",
+      "image_url": "/images/placeholder-food.svg",
+      "base_price": 60,
+      "is_sold_out": false,
+      "tags": [],
+      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
     }
   ],
   "groups": [
@@ -129,6 +327,70 @@
       "required": false,
       "min_select": 1,
       "max_select": 1
+    },
+    {
+      "id": "mg-brown-sugar-boba-size",
+      "menu_item_id": "item-brown-sugar-boba",
+      "name": "Size",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-brown-sugar-boba-sugar",
+      "menu_item_id": "item-brown-sugar-boba",
+      "name": "Sugar Level",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-mango-green-tea-size",
+      "menu_item_id": "item-mango-green-tea",
+      "name": "Size",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-spiral-potato-spice",
+      "menu_item_id": "item-spiral-potato",
+      "name": "Spice Level",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-beef-noodle-soup-size",
+      "menu_item_id": "item-beef-noodle-soup",
+      "name": "Portion",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-beef-noodle-soup-extras",
+      "menu_item_id": "item-beef-noodle-soup",
+      "name": "Extras",
+      "required": false,
+      "min_select": 0,
+      "max_select": 2
+    },
+    {
+      "id": "mg-gua-bao-spice",
+      "menu_item_id": "item-gua-bao",
+      "name": "Spice Level",
+      "required": true,
+      "min_select": 1,
+      "max_select": 1
+    },
+    {
+      "id": "mg-mango-shaved-ice-toppings",
+      "menu_item_id": "item-mango-shaved-ice",
+      "name": "Toppings",
+      "required": false,
+      "min_select": 0,
+      "max_select": 2
     }
   ],
   "options": [
@@ -207,6 +469,146 @@
       "group_id": "mg-toppings",
       "name": "Jelly",
       "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-brown-sugar-boba-size-m",
+      "group_id": "mg-brown-sugar-boba-size",
+      "name": "Medium",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-brown-sugar-boba-size-l",
+      "group_id": "mg-brown-sugar-boba-size",
+      "name": "Large",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-brown-sugar-boba-sugar-100",
+      "group_id": "mg-brown-sugar-boba-sugar",
+      "name": "100%",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-brown-sugar-boba-sugar-50",
+      "group_id": "mg-brown-sugar-boba-sugar",
+      "name": "50%",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-brown-sugar-boba-sugar-0",
+      "group_id": "mg-brown-sugar-boba-sugar",
+      "name": "0%",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-mango-green-tea-size-m",
+      "group_id": "mg-mango-green-tea-size",
+      "name": "Medium",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-mango-green-tea-size-l",
+      "group_id": "mg-mango-green-tea-size",
+      "name": "Large",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-spiral-potato-spice-none",
+      "group_id": "mg-spiral-potato-spice",
+      "name": "Not spicy",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-spiral-potato-spice-mild",
+      "group_id": "mg-spiral-potato-spice",
+      "name": "Mild",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-spiral-potato-spice-hot",
+      "group_id": "mg-spiral-potato-spice",
+      "name": "Hot",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-beef-noodle-soup-size-reg",
+      "group_id": "mg-beef-noodle-soup-size",
+      "name": "Regular",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-beef-noodle-soup-size-large",
+      "group_id": "mg-beef-noodle-soup-size",
+      "name": "Large",
+      "price_delta": 20,
+      "is_available": true
+    },
+    {
+      "id": "opt-beef-noodle-soup-extras-egg",
+      "group_id": "mg-beef-noodle-soup-extras",
+      "name": "Braised egg",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-beef-noodle-soup-extras-greens",
+      "group_id": "mg-beef-noodle-soup-extras",
+      "name": "Extra greens",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-beef-noodle-soup-extras-noodles",
+      "group_id": "mg-beef-noodle-soup-extras",
+      "name": "Extra noodles",
+      "price_delta": 15,
+      "is_available": true
+    },
+    {
+      "id": "opt-gua-bao-spice-none",
+      "group_id": "mg-gua-bao-spice",
+      "name": "Not spicy",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-gua-bao-spice-mild",
+      "group_id": "mg-gua-bao-spice",
+      "name": "Mild",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-gua-bao-spice-hot",
+      "group_id": "mg-gua-bao-spice",
+      "name": "Hot",
+      "price_delta": 0,
+      "is_available": true
+    },
+    {
+      "id": "opt-mango-shaved-ice-toppings-pearls",
+      "group_id": "mg-mango-shaved-ice-toppings",
+      "name": "Tapioca pearls",
+      "price_delta": 10,
+      "is_available": true
+    },
+    {
+      "id": "opt-mango-shaved-ice-toppings-pudding",
+      "group_id": "mg-mango-shaved-ice-toppings",
+      "name": "Pudding",
+      "price_delta": 15,
       "is_available": true
     }
   ],
