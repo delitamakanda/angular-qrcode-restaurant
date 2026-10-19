@@ -1,4 +1,13 @@
-<article class="menu-item-card">
+<article class="menu-item-card" [class.menu-item-card--sold-out]="item().is_sold_out">
+  <img
+    class="menu-item-card__image"
+    alt=""
+    loading="lazy"
+    width="400"
+    height="300"
+    [src]="item().image_url || placeholder"
+    [appImgFallback]="placeholder"
+  />
   @if (badge(); as badgeType) {
     <app-product-badge [type]="badgeType" />
   }

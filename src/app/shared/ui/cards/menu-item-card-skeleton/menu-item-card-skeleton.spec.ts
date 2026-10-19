@@ -12,6 +12,10 @@ describe('MenuItemCardSkeleton', () => {
     expect(render().getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('reserves an image block', () => {
+    expect(render().querySelector('.menu-item-card-skeleton__image')).not.toBeNull();
+  });
+
   it('contains no focusable element', () => {
     const focusable = render().querySelectorAll(
       'a[href], button, input, select, textarea, [tabindex]',

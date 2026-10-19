@@ -87,6 +87,48 @@ describe('MenuItemCard', () => {
     });
   });
 
+  describe('image', () => {
+    function renderImage(overrides: Record<string, unknown>) {
+      const fixture = TestBed.createComponent(MenuItemCard);
+      fixture.componentRef.setInput('item', { ...item, ...overrides });
+      fixture.detectChanges();
+      const el = fixture.nativeElement as HTMLElement;
+      return { el, img: el.querySelectorAll('img')[0] };
+    }
+
+    it('renders the product image as a lazy decorative img', () => {
+      const { img } = renderImage({ image_url: '/images/burger.jpg' });
+
+      expect(img.getAttribute('src')).toBe('/images/burger.jpg');
+      expect(img.getAttribute('alt')).toBe('');
+      expect(img.getAttribute('loading')).toBe('lazy');
+      expect(img.getAttribute('width')).toBe('400');
+      expect(img.getAttribute('height')).toBe('300');
+    });
+
+    it('uses the placeholder without image_url', () => {
+      const { img } = renderImage({});
+
+      expect(img.getAttribute('src')).toBe('/images/placeholder-food.svg');
+    });
+
+    it('falls back to the placeholder once on error', () => {
+      const { img } = renderImage({ image_url: '/images/missing.jpg' });
+
+      img.dispatchEvent(new Event('error'));
+
+      expect(img.getAttribute('src')).toBe('/images/placeholder-food.svg');
+    });
+
+    it('dims the image of a sold-out product but keeps badge and no button', () => {
+      const { el } = renderImage({ is_sold_out: true });
+
+      expect(el.querySelector('.menu-item-card--sold-out img')).not.toBeNull();
+      expect(el.querySelector('app-product-badge')?.textContent.trim()).toBe('Sold out');
+      expect(el.querySelector('button')).toBeNull();
+    });
+  });
+
   it('adds to the cart and notifies the user', () => {
     (create().nativeElement as HTMLElement).querySelector('button')?.click();
 
