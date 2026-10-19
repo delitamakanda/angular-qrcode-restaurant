@@ -113,7 +113,24 @@ Available resources:
 - `GET /api/orders/:id`
 - `POST /api/orders`
 
+- `GET /api/<stores|categories|menus|groups|options|promotions>/:id` and the matching list endpoints
+
 > Orders created locally are kept in memory only while the mock process is running.
+
+### Local vs deployed parity
+
+The Cloudflare Function (`functions/api/_handler.ts`, wrapped by `functions/api/[[path]].ts`) bundles `db.json` at build time: **any change to `mock-api/db.json` only shows up on Cloudflare Pages after a new deployment**. The service worker may also keep `/api/categories` (24h) and `/api/menus` (1h) responses; unregister it or clear site data to rule out stale cache.
+
+To compare both environments (needs `jq`, mock API running on `:3000`):
+
+```bash
+for q in "categories?store_id=demo&_sort=sort_order" "menus?store_id=demo"; do
+  diff <(curl -s "http://localhost:3000/$q" | jq -S .) \
+       <(curl -s "https://angular-qrcode-restaurant.pages.dev/api/${q/_sort/sort}" | jq -S .) && echo "OK $q"
+done
+```
+
+`src/app/core/api/api-parity.spec.ts` checks the Function against `db.json` for every request issued by `core/api`.
 
 ## Useful commands
 
