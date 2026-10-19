@@ -26,7 +26,7 @@
 .cart-sheet__item {
   position: relative;
   overflow: hidden;
-  background: #b00020;
+  background: var(--color-danger);
   border-bottom: 1px solid var(--tui-border-normal, #ddd);
 }
 
