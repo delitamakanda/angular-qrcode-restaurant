@@ -1,9 +1,12 @@
-<div id="splash-screen" class="splash-screen">
-  <div class="splash-screen__content">
-    <h1 class="splash-screen__title">Welcome to QR Code Restaurant</h1>
-    <tui-loader />
-  </div>
-  <div class="splash-screen__logo">
-    <img src="assets/logo.png" alt="Logo" />
-  </div>
+<div id="splash-screen" class="splash-screen" role="status" aria-live="polite">
+  <img
+    class="splash-screen__logo"
+    ngSrc="assets/logo.png"
+    width="112"
+    height="109"
+    priority
+    alt="QR Code Restaurant"
+  />
+  <tui-loader class="splash-screen__loader" />
+  <span class="splash-screen__visually-hidden">Chargement</span>
 </div>

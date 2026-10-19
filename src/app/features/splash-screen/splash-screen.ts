@@ -1,4 +1,5 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, OnInit } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { ShopStore } from '@app/state/shop.store';
 import { UiStore } from '@app/state/ui.store';
@@ -8,15 +9,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-splash-screen',
-  imports: [TuiLoader],
+  imports: [NgOptimizedImage, TuiLoader],
   providers: [
     tuiLoaderOptionsProvider({
-      size: 'xl',
+      size: 'l',
     }),
   ],
   templateUrl: './splash-screen.html',
   styleUrls: ['./splash-screen.css'],
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SplashScreen implements OnInit {
   private readonly router = inject(Router);
