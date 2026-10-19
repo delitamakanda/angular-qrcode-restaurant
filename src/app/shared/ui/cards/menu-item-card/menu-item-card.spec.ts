@@ -106,6 +106,18 @@ describe('MenuItemCard', () => {
       expect(img.getAttribute('height')).toBe('300');
     });
 
+    it('loads the image eagerly for a priority card, keeping its dimensions', () => {
+      const fixture = TestBed.createComponent(MenuItemCard);
+      fixture.componentRef.setInput('item', { ...item, image_url: '/images/burger.jpg' });
+      fixture.componentRef.setInput('priority', true);
+      fixture.detectChanges();
+      const img = (fixture.nativeElement as HTMLElement).querySelector('img');
+
+      expect(img?.getAttribute('loading')).toBe('eager');
+      expect(img?.getAttribute('width')).toBe('400');
+      expect(img?.getAttribute('height')).toBe('300');
+    });
+
     it('uses the placeholder without image_url', () => {
       const { img } = renderImage({});
 

@@ -18,7 +18,7 @@
       }
     } @else {
       @for (item of menuStore.filteredItems(); track item.id) {
-        <app-menu-item-card [item]="item" />
+        <app-menu-item-card [item]="item" [priority]="$index < 2" />
       }
     }
   </div>

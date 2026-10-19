@@ -65,6 +65,17 @@ describe('MenuPage search', () => {
     expect(el.querySelector('#menu-search')).not.toBeNull();
   });
 
+  it('loads the first two card images eagerly and the rest lazily', () => {
+    const items = ['a', 'b', 'c', 'd'].map((id) => ({ id, name: id, base_price: 100 }));
+    const el = render(false, items);
+
+    expect(
+      Array.from(el.querySelectorAll('app-menu-item-card img')).map((i) =>
+        i.getAttribute('loading'),
+      ),
+    ).toEqual(['eager', 'eager', 'lazy', 'lazy']);
+  });
+
   it('shows the cards and no skeleton once loaded', () => {
     const items = [{ id: 'a', name: 'Tea', description: '', base_price: 100 }];
     const el = render(false, items);
