@@ -42,7 +42,7 @@ Regénérer le QR code localement (sans service tiers) : `npm run qrcode` (ou `n
 flowchart LR
     B[Customer browser]
     A[Angular app<br/>src/app]
-    P[Cloudflare Pages Function<br/>functions/api/#91;path&#93.ts]
+    P[Cloudflare Pages Function<br/>functions/api/#91;#91;path#93;#93;.ts]
     M[Local mock API<br/>mock-api/db.json]
 
     B -->|HTTP| A
