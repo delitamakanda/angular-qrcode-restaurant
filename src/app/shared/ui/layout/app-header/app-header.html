@@ -2,19 +2,21 @@
   class="app-header flex items-center justify-between px-4 py-2 bg-white border-gray-200 shadow-sm md:px-6"
 >
   <div class="app-header__brand flex items-center gap-3">
-    <h1 class="app-header__title text-lg font-semibold text-gray-900 md:text-xl">
+    <p class="app-header__title text-lg font-semibold text-gray-900 md:text-xl">
       {{ store()?.name || 'Store' }}
-    </h1>
-    <div
-      tuiBadge
-      tuiStatus
-      size="m"
-      appearance="positive"
-      class="app-header__status"
-      [class.closed]="!isOpen()"
-    >
-      {{ isOpen() ? 'Open' : 'Closed' }}
-    </div>
+    </p>
+    @if (store()) {
+      <div
+        tuiBadge
+        tuiStatus
+        size="m"
+        class="app-header__status"
+        [appearance]="isOpen() ? 'positive' : 'negative'"
+        [class.closed]="!isOpen()"
+      >
+        {{ isOpen() ? 'Open' : 'Closed' }}
+      </div>
+    }
   </div>
   <a routerLink="./welcome" class="app-header__link shrink-0" aria-label="Home">
     <tui-icon icon="@tui.home" aria-hidden="true"></tui-icon>
@@ -26,10 +28,10 @@
         appearance="secondary"
         size="s"
         type="button"
-        aria-label="Install this application"
+        aria-label="Install app"
         (click)="installApp()"
       >
-        Install App
+        Install app
       </button>
     }
     <button
