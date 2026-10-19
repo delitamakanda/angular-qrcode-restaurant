@@ -16,8 +16,10 @@ export function resolveVersion({ describe, pkgVersion }) {
 
 /** Contenu du fichier TypeScript généré (la valeur est échappée via JSON.stringify). */
 export function formatVersionFile(version) {
-  const escaped = JSON.stringify(version).slice(1, -1).replaceAll("'", String.raw`\'`);
-  return `// Fichier généré par scripts/git-version.mjs — ne pas modifier.\nexport const APP_VERSION: string = '${escaped}';\n`;
+  const escaped = JSON.stringify(version)
+    .slice(1, -1)
+    .replaceAll("'", String.raw`\'`);
+  return `// Fichier généré par scripts/git-version.mjs — ne pas modifier.\nexport const APP_VERSION = '${escaped}';\n`;
 }
 
 function main() {
