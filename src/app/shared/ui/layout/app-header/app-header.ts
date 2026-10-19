@@ -1,44 +1,49 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { ShopStore } from '../../../../state/shop.store';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiBadge, TuiStatus } from '@taiga-ui/kit';
-import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { filter } from 'rxjs';
-import { PlatformService } from '../../../../core/services/platform.service';
+import { PlatformService } from '@app/core/services/platform.service';
+import { ShopStore } from '@app/state/shop.store';
 
 @Component({
   selector: 'app-app-header',
   imports: [RouterLink, TuiButton, TuiBadge, TuiIcon, TuiStatus],
-  standalone: true,
   templateUrl: './app-header.html',
   styleUrl: './app-header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppHeader implements OnInit {
+export class AppHeader {
   private readonly platformService = inject(PlatformService);
   private readonly swUpdate = inject(SwUpdate);
   private readonly shopStore = inject(ShopStore);
   readonly store = this.shopStore.store;
-  readonly isOpen = computed(() => this.store()?.is_open ?? false);
+  readonly isOpen = this.shopStore.isOpen;
   readonly canInstall = this.platformService.canInstall;
-  protected isUpdateAvailable = false;
+  protected readonly isUpdateAvailable = signal(false);
 
-  ngOnInit(): void {
+  constructor() {
     if (this.swUpdate.isEnabled) {
       this.swUpdate.versionUpdates
-        .pipe(filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'))
-        .subscribe(() => (this.isUpdateAvailable = true));
+        .pipe(
+          filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
+          takeUntilDestroyed(inject(DestroyRef)),
+        )
+        .subscribe(() => {
+          this.isUpdateAvailable.set(true);
+        });
     }
   }
 
   reloadPage(): void {
-    if (this.isUpdateAvailable) {
+    if (this.isUpdateAvailable()) {
       void this.swUpdate.activateUpdate().then(() => {
-        document.location.reload();
+        this.platformService.reloadPage();
       });
     } else {
-      document.location.reload();
+      this.platformService.reloadPage();
     }
   }
 

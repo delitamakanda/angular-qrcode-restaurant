@@ -47,6 +47,11 @@ export class PlatformService implements OnDestroy {
     window.removeEventListener('appinstalled', this.appInstalledListener);
   }
 
+  /** Reloads the current page; isolated here so callers can be tested without a real reload. */
+  reloadPage(): void {
+    document.location.reload();
+  }
+
   /**
    * Opens the deferred browser install prompt when available.
    * Returns without side effects if the browser has not exposed an install prompt yet.
