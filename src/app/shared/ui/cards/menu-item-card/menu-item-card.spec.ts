@@ -129,6 +129,49 @@ describe('MenuItemCard', () => {
     });
   });
 
+  describe('content', () => {
+    function renderContent(overrides: Record<string, unknown>) {
+      const fixture = TestBed.createComponent(MenuItemCard);
+      fixture.componentRef.setInput('item', { ...item, ...overrides });
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    }
+
+    it('renders the name as an h3', () => {
+      expect(renderContent({}).querySelector('h3')?.textContent.trim()).toBe('Burger');
+    });
+
+    it('renders the formatted price without a "Price:" label', () => {
+      const el = renderContent({});
+      const price = el.querySelector('.menu-item-card__price')?.textContent.trim();
+
+      expect(price).toBeTruthy();
+      expect(price).toContain('5');
+      expect(el.textContent).not.toContain('Price:');
+    });
+
+    it('renders the description when present', () => {
+      const el = renderContent({ description: 'Juicy beef' });
+
+      expect(el.querySelector('.menu-item-card__description')?.textContent.trim()).toBe(
+        'Juicy beef',
+      );
+    });
+
+    it('renders no description paragraph when it is empty or missing', () => {
+      expect(renderContent({}).querySelector('.menu-item-card__description')).toBeNull();
+      expect(
+        renderContent({ description: '' }).querySelector('.menu-item-card__description'),
+      ).toBeNull();
+    });
+
+    it('renders the badge inside the image container', () => {
+      const el = renderContent({ tags: ['new'] });
+
+      expect(el.querySelector('.menu-item-card__media app-product-badge')).not.toBeNull();
+    });
+  });
+
   it('adds to the cart and notifies the user', () => {
     (create().nativeElement as HTMLElement).querySelector('button')?.click();
 
