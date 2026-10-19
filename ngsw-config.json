@@ -28,7 +28,7 @@
   "dataGroups": [
     {
       "name": "api-categories",
-      "urls": ["/api/categories/**"],
+      "urls": ["/api/categories**"],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 50,
@@ -38,7 +38,7 @@
     },
     {
       "name": "api-menus",
-      "urls": ["/api/menus/**"],
+      "urls": ["/api/menus**"],
       "cacheConfig": {
         "strategy": "freshness",
         "maxSize": 100,
