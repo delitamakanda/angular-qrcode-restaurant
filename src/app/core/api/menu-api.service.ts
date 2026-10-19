@@ -23,7 +23,7 @@ export class MenuApiService {
   private readonly config = inject(APP_TOKEN_CONFIG);
 
   getCategories(storeId: string): Observable<MenuCategory[]> {
-    const params = new HttpParams().set('store_id', storeId).set('sort', 'sort_order');
+    const params = new HttpParams().set('store_id', storeId).set('_sort', 'sort_order');
     return this.http.get<MenuCategory[]>(`${this.config.BASE_API_URL}/categories`, { params });
   }
 

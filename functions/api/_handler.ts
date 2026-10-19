@@ -29,15 +29,18 @@ const parsePath = (url: URL): string[] =>
     .split('/')
     .filter(Boolean);
 
+// Mirrors json-server v1: `_`-prefixed keys are reserved, every other key is a field filter.
+const RESERVED_QUERY_KEYS = new Set(['_sort', '_page', '_per_page', '_embed', '_where']);
+
 const filterByQuery = (items: Row[], query: URLSearchParams): Row[] => {
   let filtered = [...items];
   query.forEach((value, key) => {
-    if (key === 'sort' || key === '_sort') {
+    if (RESERVED_QUERY_KEYS.has(key)) {
       return;
     }
     filtered = filtered.filter((item) => String(item[key]) === value);
   });
-  const sortBy = query.get('sort') ?? query.get('_sort');
+  const sortBy = query.get('_sort');
   if (sortBy) {
     filtered.sort((a, b) => {
       const left = a[sortBy];

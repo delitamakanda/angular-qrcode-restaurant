@@ -36,9 +36,6 @@ export class MenuStore {
       const response = await firstValueFrom(this.menuApiService.getMenu(storeId, mode));
       this.categories.set([...response.categories].sort((a, b) => a.sort_order - b.sort_order));
       this.items.set(response.items);
-      if (!this.selectedCategoryId() && response.categories.length > 0) {
-        this.selectedCategoryId.set(response.categories[0].id);
-      }
     } finally {
       this.isLoading.set(false);
     }

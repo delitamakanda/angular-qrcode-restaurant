@@ -17,7 +17,7 @@ describe('Cloudflare Function parity with db.json', () => {
     const expected = db.categories
       .filter((c) => c.store_id === 'demo')
       .sort((a, b) => a.sort_order - b.sort_order);
-    expect(await get('/categories?store_id=demo&sort=sort_order')).toEqual({
+    expect(await get('/categories?store_id=demo&_sort=sort_order')).toEqual({
       status: 200,
       body: expected,
     });
