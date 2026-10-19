@@ -15,6 +15,9 @@
     "mock:api": "cd mock-api && npm run start:static",
     "prepare": "husky",
     "qrcode": "node scripts/generate-qrcode.mjs",
+    "postinstall": "node scripts/git-version.mjs",
+    "version:git": "node scripts/git-version.mjs",
+    "test:scripts": "node --test scripts/",
     "start:all": "concurrently \"npm run start\" \"npm run mock:api\"",
     "prepare:mockapi": "cd mock-api && npm install"
   },
