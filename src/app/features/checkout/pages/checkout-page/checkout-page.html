@@ -11,20 +11,14 @@
     </div>
 
     <div class="checkout-page__field">
-      <tui-textfield>
-        <label tuiLabel for="phone">Phone number</label>
-        <input
-          tuiInput
-          type="tel"
-          id="phone"
-          inputmode="tel"
-          autocomplete="tel"
-          formControlName="phone"
-          required
-          [attr.aria-invalid]="phoneError() ? 'true' : 'false'"
-          [attr.aria-describedby]="phoneError() ? 'phone-error' : null"
-        />
-      </tui-textfield>
+      <app-phone-input
+        formControlName="phone"
+        inputId="phone"
+        label="Phone number"
+        [required]="true"
+        [ariaInvalid]="phoneError() ? 'true' : 'false'"
+        [ariaDescribedby]="phoneError() ? 'phone-error' : null"
+      />
       @if (phoneError(); as message) {
         <p id="phone-error" class="checkout-page__error-text" role="alert">{{ message }}</p>
       }

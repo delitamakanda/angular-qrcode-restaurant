@@ -43,7 +43,7 @@ test('checkout validates the phone number and sends it normalized', async ({ pag
   ).toBeVisible();
   await expect(phone).toHaveAttribute('aria-invalid', 'true');
 
-  await phone.fill('0606787045');
+  await phone.fill('06 06');
   await expect(page.getByText('Enter a valid phone number, e.g. +33606787045')).toBeVisible();
 
   await phone.fill('+33 6 06 78 70 45');
