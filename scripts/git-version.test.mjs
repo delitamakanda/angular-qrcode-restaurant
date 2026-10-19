@@ -22,8 +22,8 @@ test('git en erreur : repli sur package.json', () => {
   assert.equal(resolveVersion({ describe: '  ', pkgVersion: '0.0.0' }), '0.0.0');
 });
 
-test('fichier typé et valeur échappée', () => {
-  assert.match(formatVersionFile('v1.2.0'), /export const APP_VERSION: string = 'v1\.2\.0';\n$/);
+test('fichier valeur échappée', () => {
+  assert.match(formatVersionFile('v1.2.0'), /export const APP_VERSION = 'v1\.2\.0';\n$/);
   const out = formatVersionFile(`a'b"c\\d`);
   assert.ok(out.includes(String.raw`'a\'b\"c\\d'`));
 });
