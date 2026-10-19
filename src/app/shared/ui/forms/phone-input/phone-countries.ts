@@ -1,4 +1,4 @@
-export type CountryCode = 'FR' | 'BE' | 'CH' | 'GB' | 'DE' | 'ES' | 'IT' | 'US' | 'CA';
+export type CountryCode = 'FR' | 'BE' | 'CH' | 'GB' | 'DE' | 'ES' | 'IT' | 'US' | 'CA' | 'TW';
 
 export interface PhoneCountry {
   code: CountryCode;
@@ -25,16 +25,23 @@ export const PHONE_COUNTRIES: readonly PhoneCountry[] = [
   },
   {
     code: 'BE',
-    name: 'Belgique',
+    name: 'Belgium',
     flag: '🇧🇪',
     dialCode: '32',
     mask: '### ## ## ##',
     trunkZero: true,
   },
-  { code: 'CH', name: 'Suisse', flag: '🇨🇭', dialCode: '41', mask: '## ### ## ##', trunkZero: true },
+  {
+    code: 'CH',
+    name: 'Switzerland',
+    flag: '🇨🇭',
+    dialCode: '41',
+    mask: '## ### ## ##',
+    trunkZero: true,
+  },
   {
     code: 'GB',
-    name: 'Royaume-Uni',
+    name: 'United Kingdom',
     flag: '🇬🇧',
     dialCode: '44',
     mask: '#### ######',
@@ -42,7 +49,7 @@ export const PHONE_COUNTRIES: readonly PhoneCountry[] = [
   },
   {
     code: 'DE',
-    name: 'Allemagne',
+    name: 'Germany',
     flag: '🇩🇪',
     dialCode: '49',
     mask: '### #######',
@@ -50,7 +57,7 @@ export const PHONE_COUNTRIES: readonly PhoneCountry[] = [
   },
   {
     code: 'ES',
-    name: 'Espagne',
+    name: 'Spain',
     flag: '🇪🇸',
     dialCode: '34',
     mask: '### ## ## ##',
@@ -58,7 +65,7 @@ export const PHONE_COUNTRIES: readonly PhoneCountry[] = [
   },
   {
     code: 'IT',
-    name: 'Italie',
+    name: 'Italy',
     flag: '🇮🇹',
     dialCode: '39',
     mask: '### ### ####',
@@ -66,7 +73,7 @@ export const PHONE_COUNTRIES: readonly PhoneCountry[] = [
   },
   {
     code: 'US',
-    name: 'États-Unis',
+    name: 'United States',
     flag: '🇺🇸',
     dialCode: '1',
     mask: '(###) ###-####',
@@ -78,6 +85,14 @@ export const PHONE_COUNTRIES: readonly PhoneCountry[] = [
     flag: '🇨🇦',
     dialCode: '1',
     mask: '(###) ###-####',
+    trunkZero: false,
+  },
+  {
+    code: 'TW',
+    name: 'Taiwan',
+    flag: '🇹🇼',
+    dialCode: '886',
+    mask: '## #### ####',
     trunkZero: false,
   },
 ];
