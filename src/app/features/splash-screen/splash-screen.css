@@ -4,22 +4,48 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100dvh;
+  background: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 24px;
+  overflow: hidden;
   z-index: 9999;
   transition: opacity 0.3s ease-in-out;
 }
 
-.splash-screen__content {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 20px;
+.splash-screen__logo {
+  width: 112px;
+  height: auto;
+  max-width: 50vw;
+  animation: splash-screen-fade-in 0.3s ease-out;
 }
 
-.splash-screen__logo {
-  width: 120px;
-  height: 120px;
+.splash-screen__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes splash-screen-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-screen__logo {
+    animation: none;
+  }
 }
