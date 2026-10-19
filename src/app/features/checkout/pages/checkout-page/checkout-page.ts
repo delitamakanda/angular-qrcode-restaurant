@@ -19,6 +19,7 @@ import {
   tuiValidationErrorsProvider,
 } from '@taiga-ui/core';
 import { TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
+import { PhoneInput } from '@shared/ui/forms/phone-input/phone-input';
 import { PaymentMode } from '../../../../core/models/checkout.model';
 
 const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
@@ -30,6 +31,7 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
   selector: 'app-checkout-page',
   imports: [
     ReactiveFormsModule,
+    PhoneInput,
     TuiButton,
     TuiTextfield,
     TuiLabel,

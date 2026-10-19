@@ -1,1 +1,32 @@
-<p>phone-input works!</p>
+<div class="phone-input">
+  <select
+    class="phone-input__country"
+    aria-label="Pays / indicatif"
+    [disabled]="disabled()"
+    (change)="onCountryChange($event)"
+    (blur)="onTouched()"
+  >
+    @for (option of countries; track option.code) {
+      <option [value]="option.code" [selected]="option.code === country()">
+        {{ option.flag }} {{ option.name }} (+{{ option.dialCode }})
+      </option>
+    }
+  </select>
+  <tui-textfield class="phone-input__field">
+    <label tuiLabel [for]="inputId()">{{ label() }}</label>
+    <input
+      tuiInput
+      type="tel"
+      inputmode="tel"
+      autocomplete="tel-national"
+      [id]="inputId()"
+      [value]="national() | phoneMask: country()"
+      [disabled]="disabled()"
+      [required]="required()"
+      [attr.aria-invalid]="ariaInvalid()"
+      [attr.aria-describedby]="ariaDescribedby()"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+    />
+  </tui-textfield>
+</div>

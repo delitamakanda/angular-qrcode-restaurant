@@ -63,10 +63,10 @@ describe('CheckoutPage', () => {
     const el = render().nativeElement as HTMLElement;
 
     expect(el.querySelectorAll('tui-textfield').length).toBe(4);
-    expect(el.querySelector('select')).toBeNull();
+    expect(el.querySelectorAll('select').length).toBe(1);
     expect(el.querySelector('input#payment-method')).not.toBeNull();
     expect(el.querySelector('#name')?.getAttribute('autocomplete')).toBe('name');
-    expect(el.querySelector('#phone')?.getAttribute('autocomplete')).toBe('tel');
+    expect(el.querySelector('#phone')?.getAttribute('autocomplete')).toBe('tel-national');
     expect(el.querySelector('#phone')?.getAttribute('inputmode')).toBe('tel');
   });
 
@@ -96,7 +96,7 @@ describe('CheckoutPage', () => {
   it('shows the phone error once the field is touched', () => {
     const fixture = render();
     const el = fixture.nativeElement as HTMLElement;
-    setValue(el, '#phone', '0606787045');
+    setValue(el, '#phone', '06 06');
     fixture.componentInstance.checkoutForm.controls.phone.markAsTouched();
     fixture.detectChanges();
 
@@ -122,7 +122,7 @@ describe('CheckoutPage', () => {
     const fixture = render();
     const el = fixture.nativeElement as HTMLElement;
     setValue(el, '#name', 'Jane');
-    setValue(el, '#phone', '0612345678');
+    setValue(el, '#phone', '06123');
 
     await fixture.componentInstance.submitForm();
     fixture.detectChanges();
