@@ -10,7 +10,6 @@ import { TuiButton } from '@taiga-ui/core';
 @Component({
   selector: 'app-menu-item-card',
   imports: [CurrencyFormatPipe, ImgFallbackDirective, ProductBadge, TuiButton],
-  standalone: true,
   templateUrl: './menu-item-card.html',
   styleUrls: ['./menu-item-card.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

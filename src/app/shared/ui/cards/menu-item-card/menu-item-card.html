@@ -1,29 +1,37 @@
 <article class="menu-item-card" [class.menu-item-card--sold-out]="item().is_sold_out">
-  <img
-    class="menu-item-card__image"
-    alt=""
-    loading="lazy"
-    width="400"
-    height="300"
-    [src]="item().image_url || placeholder"
-    [appImgFallback]="placeholder"
-  />
-  @if (badge(); as badgeType) {
-    <app-product-badge [type]="badgeType" />
-  }
-  <h3>{{ item().name }}</h3>
-  <p>{{ item().description }}</p>
-  <p>Price: {{ item().base_price | currencyFormat }}</p>
-
-  @if (!item().is_sold_out) {
-    <button
-      tuiButton
-      type="button"
-      size="m"
-      [attr.aria-label]="'Add to cart: ' + item().name"
-      (click)="addToCart()"
-    >
-      Add to cart
-    </button>
-  }
+  <div class="menu-item-card__media">
+    <img
+      class="menu-item-card__image"
+      alt=""
+      loading="lazy"
+      width="400"
+      height="300"
+      [src]="item().image_url || placeholder"
+      [appImgFallback]="placeholder"
+    />
+    @if (badge(); as badgeType) {
+      <app-product-badge class="menu-item-card__badge" [type]="badgeType" />
+    }
+  </div>
+  <div class="menu-item-card__body">
+    <h3 class="menu-item-card__name">{{ item().name }}</h3>
+    @if (item().description) {
+      <p class="menu-item-card__description">{{ item().description }}</p>
+    }
+  </div>
+  <div class="menu-item-card__footer">
+    <span class="menu-item-card__price">{{ item().base_price | currencyFormat }}</span>
+    @if (!item().is_sold_out) {
+      <button
+        tuiButton
+        type="button"
+        size="m"
+        class="menu-item-card__button"
+        [attr.aria-label]="'Add to cart: ' + item().name"
+        (click)="addToCart()"
+      >
+        Add to cart
+      </button>
+    }
+  </div>
 </article>
