@@ -33,7 +33,7 @@ test('customer can order a product in dine-in mode', async ({ page }) => {
 
   await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
 
-  await page.getByRole('button', { name: /view cart/ }).click();
+  await page.getByRole('button', { name: /View cart/ }).click();
   const cart = page.getByRole('dialog', { name: 'Panier' });
   await expect(cart.getByText('Classic Milk Tea')).toBeVisible();
   await cart.getByRole('button', { name: 'Checkout' }).click();

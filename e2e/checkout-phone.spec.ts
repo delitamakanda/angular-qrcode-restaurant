@@ -27,7 +27,7 @@ test('checkout validates the phone number and sends it normalized', async ({ pag
   await page.goto('/');
   await page.getByRole('button', { name: 'Dine in' }).click();
   await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
-  await page.getByRole('button', { name: /view cart/ }).click();
+  await page.getByRole('button', { name: /View cart/ }).click();
   await page
     .getByRole('dialog', { name: 'Panier' })
     .getByRole('button', { name: 'Checkout' })
