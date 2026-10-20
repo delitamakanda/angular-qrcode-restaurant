@@ -8,9 +8,12 @@ import { MenuPage } from './menu-page';
 
 describe('MenuPage search', () => {
   const setSearchTerm = vi.fn();
+  const setSelectedCategory = vi.fn();
 
   function render(isLoading = false, items: unknown[] = []) {
     setSearchTerm.mockReset();
+    setSelectedCategory.mockReset();
+    Element.prototype.scrollIntoView = vi.fn();
     TestBed.configureTestingModule({
       imports: [MenuPage],
       providers: [
@@ -23,7 +26,10 @@ describe('MenuPage search', () => {
             searchTerm: signal(''),
             filteredItems: signal(items),
             isLoading: signal(isLoading),
+            categories: signal([{ id: 'tea', name: 'Tea', sort_order: 1 }]),
+            selectedCategoryId: signal<string | null>(null),
             setSearchTerm,
+            setSelectedCategory,
           },
         },
       ],
@@ -84,6 +90,16 @@ describe('MenuPage search', () => {
         i.getAttribute('loading'),
       ),
     ).toEqual(['eager', 'eager', 'lazy', 'lazy']);
+  });
+
+  it('renders the category selection and forwards the chosen category to the store', () => {
+    const el = render();
+    const buttons = el.querySelectorAll<HTMLButtonElement>('app-menu-category-selection button');
+
+    expect(buttons.length).toBe(2);
+    buttons[1].click();
+
+    expect(setSelectedCategory).toHaveBeenCalledWith('tea');
   });
 
   it('shows the cards and no skeleton once loaded', () => {

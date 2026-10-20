@@ -7,6 +7,7 @@ import { MenuStore } from '../../../../state/menu.store';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map, EMPTY } from 'rxjs';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { MenuCategorySelection } from '@app/features/menu/components/menu-category-selection/menu-category-selection';
 import { TuiIcon, TuiLabel, TuiTextfield, TuiInput } from '@taiga-ui/core';
 
 @Component({
@@ -14,6 +15,7 @@ import { TuiIcon, TuiLabel, TuiTextfield, TuiInput } from '@taiga-ui/core';
   imports: [
     MenuItemCard,
     MenuItemCardSkeleton,
+    MenuCategorySelection,
     ReactiveFormsModule,
     TuiTextfield,
     TuiLabel,
