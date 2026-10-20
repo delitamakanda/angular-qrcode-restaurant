@@ -15,12 +15,12 @@ test('menu shows skeleton cards while loading, then the products', async ({ page
 
   await expect(page.getByRole('searchbox', { name: 'Search a product' })).toBeVisible();
   await expect(page.locator('app-menu-item-card-skeleton')).toHaveCount(6);
-  await expect(page.locator('.menu-page__grid')).toHaveAttribute('aria-busy', 'true');
+  await expect(page.locator('.menu-page__sections')).toHaveAttribute('aria-busy', 'true');
   await expect(page.getByRole('button', { name: /^Add to cart/ })).toHaveCount(0);
 
   release();
 
   await expect(page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' })).toBeVisible();
   await expect(page.locator('app-menu-item-card-skeleton')).toHaveCount(0);
-  await expect(page.locator('.menu-page__grid')).toHaveAttribute('aria-busy', 'false');
+  await expect(page.locator('.menu-page__sections')).toHaveAttribute('aria-busy', 'false');
 });

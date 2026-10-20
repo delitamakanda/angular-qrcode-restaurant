@@ -1,6 +1,8 @@
 :host {
   display: block;
   max-width: 100%;
+  /* The chips scroll horizontally: they must not widen their flex/grid ancestors. */
+  contain: inline-size;
 }
 
 .menu-category-selection {

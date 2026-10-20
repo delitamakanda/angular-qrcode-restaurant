@@ -14,10 +14,10 @@ describe('MenuCategorySelection', () => {
     Element.prototype.scrollIntoView = scrollIntoView;
   });
 
-  async function render(selectedId: string | null = null) {
+  async function render(activeId: string | null = null) {
     const fixture = TestBed.createComponent(MenuCategorySelection);
     fixture.componentRef.setInput('categories', categories);
-    fixture.componentRef.setInput('selectedId', selectedId);
+    fixture.componentRef.setInput('activeId', activeId);
     fixture.detectChanges();
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
@@ -28,43 +28,41 @@ describe('MenuCategorySelection', () => {
     };
   }
 
-  it('renders "Tout" followed by the categories in order inside a named group', async () => {
+  it('renders one chip per category in order inside a named nav', async () => {
     const { el, buttons } = await render();
 
-    expect(buttons.map((b) => b.textContent.trim())).toEqual(['All', 'Tea', 'Snacks']);
-    expect(el.querySelector('[role="group"]')?.getAttribute('aria-label')).toBe(
-      'Catégories du menu',
-    );
+    expect(buttons.map((b) => b.textContent.trim())).toEqual(['Tea', 'Snacks']);
+    expect(el.querySelector('nav')?.getAttribute('aria-label')).toBe('Catégories du menu');
   });
 
-  it('marks "Tout" as the only pressed entry when nothing is selected', async () => {
-    const { buttons } = await render(null);
-
-    expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['true', 'false', 'false']);
-  });
-
-  it('marks the selected category as the only pressed entry', async () => {
+  it('sets aria-current only on the active chip', async () => {
     const { buttons } = await render('snack');
 
-    expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['false', 'false', 'true']);
+    expect(buttons.map((b) => b.getAttribute('aria-current'))).toEqual([null, 'true']);
   });
 
-  it('emits null for "All" and the id for a category', async () => {
+  it('marks no chip as current when nothing is active', async () => {
+    const { buttons } = await render(null);
+
+    expect(buttons.map((b) => b.getAttribute('aria-current'))).toEqual([null, null]);
+  });
+
+  it('emits the category id on click', async () => {
     const { fixture, buttons } = await render('tea');
-    const emitted: (string | null)[] = [];
-    fixture.componentInstance.selectionChange.subscribe((id) => emitted.push(id));
+    const emitted: string[] = [];
+    fixture.componentInstance.categorySelected.subscribe((id) => emitted.push(id));
 
+    buttons[1].click();
     buttons[0].click();
-    buttons[2].click();
 
-    expect(emitted).toEqual([null, 'snack']);
+    expect(emitted).toEqual(['snack', 'tea']);
   });
 
-  it('scrolls the active entry into view', async () => {
+  it('scrolls the active chip into view', async () => {
     const { buttons } = await render('snack');
 
     expect(scrollIntoView).toHaveBeenCalled();
-    expect(scrollIntoView.mock.contexts.at(-1)).toBe(buttons[2]);
+    expect(scrollIntoView.mock.contexts.at(-1)).toBe(buttons[1]);
     expect(scrollIntoView).toHaveBeenLastCalledWith(
       expect.objectContaining({ inline: 'center', block: 'nearest' }),
     );
