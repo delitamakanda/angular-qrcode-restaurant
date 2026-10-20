@@ -1,1 +1,26 @@
-<p>menu-category-selection works!</p>
+<div class="menu-category-selection" role="group" aria-label="Catégories du menu">
+  <button
+    #chip
+    type="button"
+    class="menu-category-selection__chip"
+    data-id=""
+    [class.menu-category-selection__chip--active]="selectedId() === null"
+    [attr.aria-pressed]="selectedId() === null"
+    (click)="selectionChange.emit(null)"
+  >
+    Tout
+  </button>
+  @for (category of categories(); track category.id) {
+    <button
+      #chip
+      type="button"
+      class="menu-category-selection__chip"
+      [attr.data-id]="category.id"
+      [class.menu-category-selection__chip--active]="selectedId() === category.id"
+      [attr.aria-pressed]="selectedId() === category.id"
+      (click)="selectionChange.emit(category.id)"
+    >
+      {{ category.name }}
+    </button>
+  }
+</div>
