@@ -18,9 +18,15 @@
   padding-top: 1rem;
 }
 
-/* Keep focused cards clear of the sticky nav (WCAG 2.4.11). */
+.menu-page__section-title {
+  margin: 1.5rem 0 0;
+  font: var(--tui-font-heading-5, 600 1.25rem/1.75rem sans-serif);
+}
+
+/* Keep section titles and focused cards clear of the sticky nav: search + chips (WCAG 2.4.11). */
+.menu-page__section,
 .menu-page__grid > * {
-  scroll-margin-top: calc(5rem + env(safe-area-inset-top, 0px));
+  scroll-margin-top: calc(8.5rem + env(safe-area-inset-top, 0px));
 }
 
 @media (min-width: 768px) {

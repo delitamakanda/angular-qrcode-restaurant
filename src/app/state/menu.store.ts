@@ -14,6 +14,7 @@ export class MenuStore {
   readonly items = signal<MenuItem[]>([]);
   readonly searchTerm = signal<string>('');
   readonly selectedCategoryId = signal<string | null>(null);
+  readonly activeCategoryId = signal<string | null>(null);
   readonly isLoading = signal<boolean>(false);
 
   readonly filteredItems = computed(() => {
@@ -28,6 +29,16 @@ export class MenuStore {
       const matchesCategoryId = !categoryId || item.category_id === categoryId;
       return matchesSearchTerm && matchesCategoryId;
     });
+  });
+
+  readonly itemsByCategory = computed(() => {
+    const items = this.filteredItems();
+    return this.categories()
+      .map((category) => ({
+        category,
+        items: items.filter((item) => item.category_id === category.id),
+      }))
+      .filter((section) => section.items.length > 0);
   });
 
   async loadMenu(storeId: string, mode: OrderMode): Promise<void> {

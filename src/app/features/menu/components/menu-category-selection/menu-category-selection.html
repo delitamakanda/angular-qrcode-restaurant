@@ -1,26 +1,15 @@
-<div class="menu-category-selection" role="group" aria-label="Catégories du menu">
-  <button
-    #chip
-    type="button"
-    class="menu-category-selection__chip"
-    data-id=""
-    [class.menu-category-selection__chip--active]="selectedId() === null"
-    [attr.aria-pressed]="selectedId() === null"
-    (click)="selectionChange.emit(null)"
-  >
-    All
-  </button>
+<nav class="menu-category-selection" aria-label="Catégories du menu">
   @for (category of categories(); track category.id) {
     <button
       #chip
       type="button"
       class="menu-category-selection__chip"
       [attr.data-id]="category.id"
-      [class.menu-category-selection__chip--active]="selectedId() === category.id"
-      [attr.aria-pressed]="selectedId() === category.id"
-      (click)="selectionChange.emit(category.id)"
+      [class.menu-category-selection__chip--active]="activeId() === category.id"
+      [attr.aria-current]="activeId() === category.id ? 'true' : null"
+      (click)="categorySelected.emit(category.id)"
     >
       {{ category.name }}
     </button>
   }
-</div>
+</nav>
