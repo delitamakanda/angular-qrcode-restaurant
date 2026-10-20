@@ -6,15 +6,15 @@
     />
     <app-menu-category-selection
       class="menu-page__categories"
-      [categories]="menuStore.categories()"
-      [selectedId]="menuStore.selectedCategoryId()"
-      (selectionChange)="menuStore.setSelectedCategory($event)"
+      [categories]="navCategories()"
+      [activeId]="menuStore.activeCategoryId()"
+      (categorySelected)="scrollToCategory($event)"
     />
   </div>
   <p class="menu-page__visually-hidden" role="status" aria-live="polite">
     {{ resultsAnnouncement() }}
   </p>
-  <div class="menu-page__grid" [attr.aria-busy]="menuStore.isLoading()">
+  <div class="menu-page__sections" [attr.aria-busy]="menuStore.isLoading()">
     @if (menuStore.isLoading()) {
       <span class="menu-page__visually-hidden" role="status">Loading menu…</span>
       @for (slot of skeletonSlots; track $index) {
@@ -25,11 +25,17 @@
         <p class="menu-page__empty-title">No results for “{{ menuStore.searchTerm() }}”</p>
         <button type="button" class="menu-page__empty-action" (click)="clearSearch()">
           Clear search
-        </button>
-      </div>
+        </button>    
     } @else {
-      @for (item of menuStore.filteredItems(); track item.id) {
-        <app-menu-item-card [item]="item" [priority]="$index < 2" />
+      @for (section of menuStore.itemsByCategory(); track section.category.id) {
+        <section class="menu-page__section" [id]="'category-' + section.category.id">
+          <h2 class="menu-page__section-title">{{ section.category.name }}</h2>
+          <div class="menu-page__grid">
+            @for (item of section.items; track item.id) {
+              <app-menu-item-card [item]="item" [priority]="priorityIds().has(item.id)" />
+            }
+          </div>
+        </section>
       }
     }
   </div>
