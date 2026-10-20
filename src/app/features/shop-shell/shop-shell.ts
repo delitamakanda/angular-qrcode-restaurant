@@ -7,12 +7,13 @@ import {
   CartBottomSheet,
   type CartSheetResult,
 } from '../cart/sheets/cart-bottom-sheet/cart-bottom-sheet';
+import { MobileOrderLayout } from '@app/layouts/mobile-order-layout/mobile-order-layout';
 import { AppHeader } from '@shared/ui/layout/app-header/app-header';
 import { BottomCartBar } from '@shared/ui/layout/bottom-cart-bar/bottom-cart-bar';
 
 @Component({
   selector: 'app-shop-shell',
-  imports: [RouterOutlet, AppHeader, BottomCartBar],
+  imports: [RouterOutlet, AppHeader, BottomCartBar, MobileOrderLayout],
   templateUrl: './shop-shell.html',
   styleUrl: './shop-shell.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

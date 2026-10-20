@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { TuiDialogService, provideTaiga } from '@taiga-ui/core';
@@ -39,10 +40,8 @@ describe('ShopShell', () => {
     const fixture = TestBed.createComponent(ShopShell);
     fixture.detectChanges();
 
-    const bar = fixture.debugElement.children
-      .flatMap((c) => c.children)
-      .find((d) => d.componentInstance instanceof BottomCartBar);
-    (bar?.componentInstance as BottomCartBar).openCart.emit();
+    const bar = fixture.debugElement.query(By.directive(BottomCartBar));
+    (bar.componentInstance as BottomCartBar).openCart.emit();
 
     expect(open).toHaveBeenCalledTimes(1);
   });

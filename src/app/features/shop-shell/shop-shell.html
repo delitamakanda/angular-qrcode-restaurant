@@ -1,7 +1,5 @@
-<div class="shop-shell">
-  <app-app-header />
-  <main class="shop-shell__content px-2">
-    <router-outlet />
-  </main>
-  <app-bottom-cart-bar (openCart)="openCart()" />
-</div>
+<app-mobile-order-layout>
+  <app-app-header layout-header />
+  <router-outlet />
+  <app-bottom-cart-bar layout-footer (openCart)="openCart()" />
+</app-mobile-order-layout>
