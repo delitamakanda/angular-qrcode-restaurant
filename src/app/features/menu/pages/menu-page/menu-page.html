@@ -1,16 +1,9 @@
 <section class="menu-page">
   <div class="menu-page__nav">
-    <tui-textfield tuiTextfieldSize="m" [tuiTextfieldCleaner]="true">
-      <label tuiLabel for="menu-search">Search a product</label>
-      <input
-        tuiInput
-        id="menu-search"
-        type="search"
-        autocomplete="off"
-        [formControl]="searchControl"
-      />
-      <tui-icon icon="@tui.search" aria-hidden="true" />
-    </tui-textfield>
+    <app-product-search
+      [value]="menuStore.searchTerm()"
+      (searchChange)="menuStore.setSearchTerm($event)"
+    />
     <app-menu-category-selection
       class="menu-page__categories"
       [categories]="menuStore.categories()"
@@ -18,12 +11,22 @@
       (selectionChange)="menuStore.setSelectedCategory($event)"
     />
   </div>
+  <p class="menu-page__visually-hidden" role="status" aria-live="polite">
+    {{ resultsAnnouncement() }}
+  </p>
   <div class="menu-page__grid" [attr.aria-busy]="menuStore.isLoading()">
     @if (menuStore.isLoading()) {
       <span class="menu-page__visually-hidden" role="status">Loading menu…</span>
       @for (slot of skeletonSlots; track $index) {
         <app-menu-item-card-skeleton />
       }
+    } @else if (showNoResults()) {
+      <div class="menu-page__empty">
+        <p class="menu-page__empty-title">No results for “{{ menuStore.searchTerm() }}”</p>
+        <button type="button" class="menu-page__empty-action" (click)="clearSearch()">
+          Clear search
+        </button>
+      </div>
     } @else {
       @for (item of menuStore.filteredItems(); track item.id) {
         <app-menu-item-card [item]="item" [priority]="$index < 2" />

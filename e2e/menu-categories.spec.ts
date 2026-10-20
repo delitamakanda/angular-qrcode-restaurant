@@ -6,7 +6,7 @@ test('category row filters the menu and marks the active entry', async ({ page }
   await expect(page).toHaveURL(/\/store\/demo\/menu$/);
 
   const group = page.getByRole('group', { name: 'Catégories du menu' });
-  const all = group.getByRole('button', { name: 'Tout' });
+  const all = group.getByRole('button', { name: 'All' });
   await expect(all).toHaveAttribute('aria-pressed', 'true');
 
   const addButtons = page.getByRole('button', { name: /^Add to cart/ });

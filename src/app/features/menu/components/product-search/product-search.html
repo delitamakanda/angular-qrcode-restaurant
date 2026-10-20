@@ -1,1 +1,12 @@
-<p>product-search works!</p>
+<tui-textfield tuiTextfieldSize="m" [tuiTextfieldCleaner]="true">
+  <label tuiLabel for="menu-search">Search a product</label>
+  <input
+    #field
+    tuiInput
+    id="menu-search"
+    type="search"
+    autocomplete="off"
+    [formControl]="searchControl"
+  />
+  <tui-icon icon="@tui.search" aria-hidden="true" />
+</tui-textfield>
