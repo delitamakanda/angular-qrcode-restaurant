@@ -41,6 +41,16 @@ describe('MenuPage search', () => {
     expect(el.querySelector('tui-icon')?.getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('wraps the search field in a nav container placed before the grid', () => {
+    const el = render();
+    const nav = el.querySelector('.menu-page__nav');
+    const grid = el.querySelector('.menu-page__grid');
+
+    expect(nav?.querySelector('#menu-search')).not.toBeNull();
+    expect(grid).not.toBeNull();
+    expect(nav?.compareDocumentPosition(grid as Node)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+  });
+
   it('forwards typed text to the menu store', () => {
     const el = render();
     const input = el.querySelector<HTMLInputElement>('#menu-search');

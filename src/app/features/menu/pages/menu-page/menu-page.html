@@ -1,15 +1,17 @@
 <section class="menu-page">
-  <tui-textfield tuiTextfieldSize="m" [tuiTextfieldCleaner]="true">
-    <label tuiLabel for="menu-search">Search a product</label>
-    <input
-      tuiInput
-      id="menu-search"
-      type="search"
-      autocomplete="off"
-      [formControl]="searchControl"
-    />
-    <tui-icon icon="@tui.search" aria-hidden="true" />
-  </tui-textfield>
+  <div class="menu-page__nav">
+    <tui-textfield tuiTextfieldSize="m" [tuiTextfieldCleaner]="true">
+      <label tuiLabel for="menu-search">Search a product</label>
+      <input
+        tuiInput
+        id="menu-search"
+        type="search"
+        autocomplete="off"
+        [formControl]="searchControl"
+      />
+      <tui-icon icon="@tui.search" aria-hidden="true" />
+    </tui-textfield>
+  </div>
   <div class="menu-page__grid" [attr.aria-busy]="menuStore.isLoading()">
     @if (menuStore.isLoading()) {
       <span class="menu-page__visually-hidden" role="status">Loading menu…</span>
