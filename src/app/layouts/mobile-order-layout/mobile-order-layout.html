@@ -1,1 +1,7 @@
-<p>mobile-order-layout works!</p>
+<ng-content select="[layout-header]" />
+<main class="mobile-order-layout__main px-2">
+  <ng-content />
+</main>
+<div class="mobile-order-layout__footer">
+  <ng-content select="[layout-footer]" />
+</div>

@@ -1,0 +1,23 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 30rem;
+  min-height: 100dvh;
+  margin-inline: auto;
+}
+
+.mobile-order-layout__main {
+  flex: 1 1 auto;
+  /* Without min-width: 0 the nowrap category chips widen the column and the page overflows. */
+  min-width: 0;
+}
+
+.mobile-order-layout__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  background: var(--tui-background-base, #fff);
+}
