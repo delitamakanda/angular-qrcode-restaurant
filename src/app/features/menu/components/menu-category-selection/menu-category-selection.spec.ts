@@ -31,7 +31,7 @@ describe('MenuCategorySelection', () => {
   it('renders "Tout" followed by the categories in order inside a named group', async () => {
     const { el, buttons } = await render();
 
-    expect(buttons.map((b) => b.textContent.trim())).toEqual(['Tout', 'Tea', 'Snacks']);
+    expect(buttons.map((b) => b.textContent.trim())).toEqual(['All', 'Tea', 'Snacks']);
     expect(el.querySelector('[role="group"]')?.getAttribute('aria-label')).toBe(
       'Catégories du menu',
     );
@@ -49,7 +49,7 @@ describe('MenuCategorySelection', () => {
     expect(buttons.map((b) => b.getAttribute('aria-pressed'))).toEqual(['false', 'false', 'true']);
   });
 
-  it('emits null for "Tout" and the id for a category', async () => {
+  it('emits null for "All" and the id for a category', async () => {
     const { fixture, buttons } = await render('tea');
     const emitted: (string | null)[] = [];
     fixture.componentInstance.selectionChange.subscribe((id) => emitted.push(id));
