@@ -62,11 +62,11 @@ describe('MenuItemCard', () => {
       expect(render({ tags: ['new'] }).badges).toEqual(['New']);
     });
 
-    it('shows Sold out without the sold-out tag and hides the button', () => {
+    it('shows Sold out without the sold-out tag and disables the button', () => {
       const { badges, button } = render({ is_sold_out: true });
 
       expect(badges).toEqual(['Sold out']);
-      expect(button).toBeNull();
+      expect(button?.hasAttribute('disabled')).toBe(true);
     });
 
     it('prioritises Sold out over New', () => {
@@ -132,12 +132,12 @@ describe('MenuItemCard', () => {
       expect(img.getAttribute('src')).toBe('/images/placeholder-food.svg');
     });
 
-    it('dims the image of a sold-out product but keeps badge and no button', () => {
+    it('dims the image of a sold-out product but keeps badge and button disabled', () => {
       const { el } = renderImage({ is_sold_out: true });
 
       expect(el.querySelector('.menu-item-card--sold-out img')).not.toBeNull();
       expect(el.querySelector('app-product-badge')?.textContent.trim()).toBe('Sold out');
-      expect(el.querySelector('button')).toBeNull();
+      expect(el.querySelector('button')?.hasAttribute('disabled')).toBe(true);
     });
   });
 

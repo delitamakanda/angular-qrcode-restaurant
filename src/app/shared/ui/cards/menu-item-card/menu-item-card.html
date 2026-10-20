@@ -21,17 +21,16 @@
   </div>
   <div class="menu-item-card__footer">
     <span class="menu-item-card__price">{{ item().base_price | currencyFormat }}</span>
-    @if (!item().is_sold_out) {
-      <button
-        tuiButton
-        type="button"
-        size="m"
-        class="menu-item-card__button"
-        [attr.aria-label]="'Add to cart: ' + item().name"
-        (click)="addToCart()"
-      >
-        Add to cart
-      </button>
-    }
+    <button
+      tuiButton
+      type="button"
+      size="m"
+      class="menu-item-card__button"
+      [attr.aria-label]="'Add to cart: ' + item().name"
+      (click)="addToCart()"
+      [disabled]="item().is_sold_out"
+    >
+      Add to cart
+    </button>
   </div>
 </article>
