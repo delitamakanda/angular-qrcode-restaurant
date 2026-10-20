@@ -7,6 +7,10 @@
   border-bottom: 1px solid var(--tui-border-normal);
 }
 
+.menu-page__categories {
+  margin-top: 0.5rem;
+}
+
 .menu-page__grid {
   display: grid;
   grid-template-columns: 1fr;

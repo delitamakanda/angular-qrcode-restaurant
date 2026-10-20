@@ -12,11 +12,11 @@
       <tui-icon icon="@tui.search" aria-hidden="true" />
     </tui-textfield>
     <app-menu-category-selection
-    class="menu-page__categories"
-    [categories]="menuStore.categories()"
-    [selectedId]="menuStore.selectedCategoryId()"
-    (selectionChange)="menuStore.setSelectedCategory($event)"
-  />
+      class="menu-page__categories"
+      [categories]="menuStore.categories()"
+      [selectedId]="menuStore.selectedCategoryId()"
+      (selectionChange)="menuStore.setSelectedCategory($event)"
+    />
   </div>
   <div class="menu-page__grid" [attr.aria-busy]="menuStore.isLoading()">
     @if (menuStore.isLoading()) {
