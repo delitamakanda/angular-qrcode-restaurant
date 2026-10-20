@@ -3,54 +3,43 @@ import { MenuApiService } from '@app/core/api/menu-api.service';
 import { MenuItem } from '@app/core/models/menu-item.model';
 import { MenuStore } from './menu.store';
 
-describe('MenuStore filteredItems', () => {
-  const item = (id: string, name: string, category_id: string): MenuItem => ({
-    id,
-    name,
-    category_id,
-    base_price: 100,
-    is_sold_out: false,
-  });
+const item = (id: string, extra: Partial<MenuItem>): MenuItem =>
+  ({ id, name: id, base_price: 100, category_id: 'c1', ...extra }) as MenuItem;
 
-  function setup() {
+describe('MenuStore filteredItems', () => {
+  let store: MenuStore;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [{ provide: MenuApiService, useValue: {} }],
     });
-    const store = TestBed.inject(MenuStore);
+    store = TestBed.inject(MenuStore);
     store.items.set([
-      item('1', 'Milk Tea', 'tea'),
-      item('2', 'Green Tea', 'tea'),
-      item('3', 'Tea Egg', 'snack'),
-      item('4', 'Fries', 'snack'),
+      item('Pizza', { description: 'Cheesy', tags: ['italian'] }),
+      item('Latte', { description: 'Milky coffee', category_id: 'c2' }),
+      item('Soup', { tags: ['Vegan'], category_id: 'c2' }),
     ]);
-    return store;
-  }
-
-  it('returns everything when no category is selected', () => {
-    expect(setup().filteredItems().length).toBe(4);
   });
 
-  it('filters by category alone', () => {
-    const store = setup();
-    store.setSelectedCategory('snack');
+  const names = () => store.filteredItems().map((i) => i.id);
 
-    expect(store.filteredItems().map((i) => i.id)).toEqual(['3', '4']);
+  it('returns every item for an empty term', () => {
+    expect(names()).toEqual(['Pizza', 'Latte', 'Soup']);
   });
 
-  it('combines category and search', () => {
-    const store = setup();
-    store.setSelectedCategory('snack');
-    store.setSearchTerm('tea');
-
-    expect(store.filteredItems().map((i) => i.id)).toEqual(['3']);
+  it('matches name, description and tags case-insensitively', () => {
+    store.setSearchTerm('PIZ');
+    expect(names()).toEqual(['Pizza']);
+    store.setSearchTerm('coffee');
+    expect(names()).toEqual(['Latte']);
+    store.setSearchTerm('vegan');
+    expect(names()).toEqual(['Soup']);
   });
 
-  it('returns to the full list when the category is reset to null', () => {
-    const store = setup();
-    store.setSelectedCategory('tea');
-    store.setSelectedCategory(null);
-
-    expect(store.filteredItems().length).toBe(4);
+  it('combines the search with the selected category', () => {
+    store.setSearchTerm('i');
+    store.setSelectedCategory('c2');
+    expect(names()).toEqual(['Latte']);
   });
 });
 

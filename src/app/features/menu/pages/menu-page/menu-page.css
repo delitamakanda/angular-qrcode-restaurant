@@ -35,6 +35,33 @@
   }
 }
 
+.menu-page__empty {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.menu-page__empty-title {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.menu-page__empty-action {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border: 1px solid var(--tui-border-normal);
+  border-radius: 999px;
+  background: var(--tui-background-base);
+  color: var(--tui-text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
 .menu-page__visually-hidden {
   position: absolute;
   width: 1px;

@@ -1,6 +1,8 @@
 .shop-shell {
   min-height: 100dvh;
   display: grid;
+  /* Without minmax(0, …) the column grows with the nowrap category chips and the page overflows. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto 1fr auto;
 }
 
