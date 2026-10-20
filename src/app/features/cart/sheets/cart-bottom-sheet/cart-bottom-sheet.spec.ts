@@ -78,12 +78,12 @@ describe('CartBottomSheet', () => {
   it('shows the empty state without Checkout and closes with the menu result', () => {
     const { completeWith, el } = setup(true);
 
-    expect(el.querySelector('app-empty-state')?.textContent).toContain('Votre panier est vide');
+    expect(el.querySelector('app-empty-state')?.textContent).toContain('Your cart is empty');
     expect(el.querySelector('footer')).toBeNull();
     expect(el.textContent).not.toContain('Checkout');
 
     const menu = Array.from(el.querySelectorAll('button')).find(
-      (b) => b.textContent.trim() === 'Voir le menu',
+      (b) => b.textContent.trim() === 'View menu',
     );
     menu?.click();
 

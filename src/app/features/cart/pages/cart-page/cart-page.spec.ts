@@ -57,10 +57,10 @@ describe('CartPage empty state', () => {
   it('shows the empty state without total nor Checkout when the cart is empty', () => {
     const { el } = setup(true);
 
-    expect(el.querySelector('app-empty-state')?.textContent).toContain('Votre panier est vide');
+    expect(el.querySelector('app-empty-state')?.textContent).toContain('Your cart is empty');
     expect(el.querySelector('footer')).toBeNull();
     expect(el.textContent).not.toContain('Checkout');
-    expect(el.textContent).toContain('Voir le menu');
+    expect(el.textContent).toContain('View menu');
   });
 
   it('does not show the empty state when the cart has items', () => {
