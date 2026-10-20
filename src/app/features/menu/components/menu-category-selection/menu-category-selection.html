@@ -8,7 +8,7 @@
     [attr.aria-pressed]="selectedId() === null"
     (click)="selectionChange.emit(null)"
   >
-    Tout
+    All
   </button>
   @for (category of categories(); track category.id) {
     <button
