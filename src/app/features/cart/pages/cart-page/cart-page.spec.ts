@@ -1,23 +1,28 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideTaiga } from '@taiga-ui/core';
 import { CartStore } from '@app/state/cart.store';
 import { CartPage } from './cart-page';
 
-function setup() {
-  TestBed.configureTestingModule({ providers: [provideRouter([])] });
+function setup(empty = false) {
+  TestBed.configureTestingModule({ providers: [provideRouter([]), provideTaiga()] });
   const store = TestBed.inject(CartStore);
-  store.items.set([
-    {
-      id: '1',
-      menu_item_id: 'm1',
-      quantity: 1,
-      name: 'Burger',
-      note: '',
-      unit_base_price: 5,
-      selected_options: [],
-      total_price: 5,
-    },
-  ]);
+  store.items.set(
+    empty
+      ? []
+      : [
+          {
+            id: '1',
+            menu_item_id: 'm1',
+            quantity: 1,
+            name: 'Burger',
+            note: '',
+            unit_base_price: 5,
+            selected_options: [],
+            total_price: 5,
+          },
+        ],
+  );
   const fixture = TestBed.createComponent(CartPage);
   fixture.detectChanges();
   return { store, fixture, el: fixture.nativeElement as HTMLElement };
@@ -45,6 +50,24 @@ describe('CartPage accessibility', () => {
 
     expect(buttons.length).toBe(2);
     expect(buttons.every((b) => b.hasAttribute('tuiButton'))).toBe(true);
+  });
+});
+
+describe('CartPage empty state', () => {
+  it('shows the empty state without total nor Checkout when the cart is empty', () => {
+    const { el } = setup(true);
+
+    expect(el.querySelector('app-empty-state')?.textContent).toContain('Votre panier est vide');
+    expect(el.querySelector('footer')).toBeNull();
+    expect(el.textContent).not.toContain('Checkout');
+    expect(el.textContent).toContain('Voir le menu');
+  });
+
+  it('does not show the empty state when the cart has items', () => {
+    const { el } = setup();
+
+    expect(el.querySelector('app-empty-state')).toBeNull();
+    expect(el.textContent).toContain('Checkout');
   });
 });
 

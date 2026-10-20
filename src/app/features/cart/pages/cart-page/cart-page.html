@@ -3,6 +3,16 @@
 
   <p class="cart-page__live" role="status" aria-live="polite">{{ announcement() }}</p>
 
+  @if (cartStore.items().length === 0) {
+    <app-empty-state
+      icon="@tui.shopping-cart"
+      title="Votre panier est vide"
+      description="Ajoutez des produits depuis le menu."
+    >
+      <button tuiButton type="button" (click)="goToMenu()">Voir le menu</button>
+    </app-empty-state>
+  }
+
   @for (item of cartStore.items(); track item.id) {
     <div class="cart-row-wrapper">
       <span class="cart-row-wrapper__action" aria-hidden="true">Remove</span>
@@ -27,8 +37,10 @@
     </div>
   }
 
-  <footer class="cart-page__footer">
-    <strong>Total: {{ cartStore.total() | currencyFormat }}</strong>
-    <button tuiButton type="button" size="l" (click)="goToCheckout()">Checkout</button>
-  </footer>
+  @if (cartStore.items().length > 0) {
+    <footer class="cart-page__footer">
+      <strong>Total: {{ cartStore.total() | currencyFormat }}</strong>
+      <button tuiButton type="button" size="l" (click)="goToCheckout()">Checkout</button>
+    </footer>
+  }
 </section>

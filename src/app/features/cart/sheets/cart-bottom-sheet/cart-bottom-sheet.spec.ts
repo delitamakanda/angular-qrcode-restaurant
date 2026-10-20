@@ -15,13 +15,13 @@ const item = {
   total_price: 10,
 };
 
-function setup() {
+function setup(empty = false) {
   const completeWith = vi.fn();
   TestBed.configureTestingModule({
     providers: [provideTaiga(), { provide: POLYMORPHEUS_CONTEXT, useValue: { completeWith } }],
   });
   const cart = TestBed.inject(CartStore);
-  cart.items.set([item]);
+  cart.items.set(empty ? [] : [item]);
   const fixture = TestBed.createComponent(CartBottomSheet);
   fixture.detectChanges();
   return { fixture, cart, completeWith, el: fixture.nativeElement as HTMLElement };
@@ -73,6 +73,21 @@ describe('CartBottomSheet', () => {
     fixture.detectChanges();
 
     expect(cart.items()[0].quantity).toBe(3);
+  });
+
+  it('shows the empty state without Checkout and closes with the menu result', () => {
+    const { completeWith, el } = setup(true);
+
+    expect(el.querySelector('app-empty-state')?.textContent).toContain('Votre panier est vide');
+    expect(el.querySelector('footer')).toBeNull();
+    expect(el.textContent).not.toContain('Checkout');
+
+    const menu = Array.from(el.querySelectorAll('button')).find(
+      (b) => b.textContent.trim() === 'Voir le menu',
+    );
+    menu?.click();
+
+    expect(completeWith).toHaveBeenCalledWith('menu');
   });
 
   it('closes with the checkout result', () => {
