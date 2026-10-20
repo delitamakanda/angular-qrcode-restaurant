@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pipe';
 import { SwipeActionDirective } from '@shared/directives/swipe-action.directive';
 import { TuiButton } from '@taiga-ui/core';
+import { EmptyState } from '@shared/ui/layout/empty-state/empty-state';
 
 @Component({
   selector: 'app-cart-page',
@@ -11,7 +12,7 @@ import { TuiButton } from '@taiga-ui/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.css',
-  imports: [CurrencyFormatPipe, SwipeActionDirective, TuiButton],
+  imports: [CurrencyFormatPipe, SwipeActionDirective, TuiButton, EmptyState],
 })
 export class CartPage {
   protected readonly cartStore = inject(CartStore);
@@ -23,6 +24,10 @@ export class CartPage {
   protected onSwiped(itemId: string, name: string): void {
     this.cartStore.removeFromCart(itemId);
     this.announcement.set(`${name} retiré du panier`);
+  }
+
+  goToMenu(): void {
+    void this.router.navigate(['../menu'], { relativeTo: this.route });
   }
 
   goToCheckout(): void {

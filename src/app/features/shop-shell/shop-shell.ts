@@ -37,6 +37,8 @@ export class ShopShell {
         next: (result) => {
           if (result === 'checkout') {
             void this.router.navigate(['checkout'], { relativeTo: this.route });
+          } else if (result === 'menu') {
+            void this.router.navigate(['menu'], { relativeTo: this.route });
           }
         },
         complete: () => {
