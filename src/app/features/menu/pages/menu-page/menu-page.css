@@ -1,8 +1,22 @@
+.menu-page__nav {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
+  padding: 0.5rem 0;
+  background: var(--tui-background-base);
+  border-bottom: 1px solid var(--tui-border-normal);
+}
+
 .menu-page__grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  margin-top: 1rem;
+  padding-top: 1rem;
+}
+
+/* Keep focused cards clear of the sticky nav (WCAG 2.4.11). */
+.menu-page__grid > * {
+  scroll-margin-top: calc(5rem + env(safe-area-inset-top, 0px));
 }
 
 @media (min-width: 768px) {
