@@ -6,10 +6,10 @@
   @if (cartStore.items().length === 0) {
     <app-empty-state
       icon="@tui.shopping-cart"
-      title="Votre panier est vide"
-      description="Ajoutez des produits depuis le menu."
+      title="Your cart is empty"
+      description="Add products from the menu."
     >
-      <button tuiButton type="button" (click)="goToMenu()">Voir le menu</button>
+      <button tuiButton type="button" (click)="goToMenu()">View menu</button>
     </app-empty-state>
   }
 
