@@ -25,7 +25,8 @@
         <p class="menu-page__empty-title">No results for “{{ menuStore.searchTerm() }}”</p>
         <button type="button" class="menu-page__empty-action" (click)="clearSearch()">
           Clear search
-        </button>    
+        </button>
+      </div>
     } @else {
       @for (section of menuStore.itemsByCategory(); track section.category.id) {
         <section class="menu-page__section" [id]="'category-' + section.category.id">

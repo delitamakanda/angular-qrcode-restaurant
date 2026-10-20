@@ -8,13 +8,14 @@ import {
   computed,
   effect,
   inject,
+  viewChild,
 } from '@angular/core';
 import { MenuItemCard } from '@shared/ui/cards/menu-item-card/menu-item-card';
 import { MenuItemCardSkeleton } from '@shared/ui/cards/menu-item-card-skeleton/menu-item-card-skeleton';
 import { ActivatedRoute } from '@angular/router';
 import { ShopStore } from '@app/state/shop.store';
 import { MenuStore } from '@app/state/menu.store';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { map, EMPTY } from 'rxjs';
 import { MenuCategorySelection } from '@app/features/menu/components/menu-category-selection/menu-category-selection';
 import { ProductSearch } from '@app/features/menu/components/product-search/product-search';

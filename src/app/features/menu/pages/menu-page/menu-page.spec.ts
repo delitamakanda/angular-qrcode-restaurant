@@ -34,7 +34,12 @@ describe('MenuPage', () => {
       .filter((s) => s.items.length > 0);
   }
 
-  async function render(isLoading = false, items: TestItem[] = []) {
+  async function render(
+    isLoading = false,
+    items: TestItem[] = [],
+    allItems: TestItem[] = items,
+    term = '',
+  ) {
     setSearchTerm.mockReset();
     scrollIntoView.mockReset();
     Element.prototype.scrollIntoView = scrollIntoView;
@@ -48,7 +53,9 @@ describe('MenuPage', () => {
         {
           provide: MenuStore,
           useValue: {
-            searchTerm: signal(''),
+            searchTerm: signal(term),
+            items: signal(allItems),
+            filteredItems: signal(items),
             itemsByCategory: signal(sectionsOf(items)),
             isLoading: signal(isLoading),
             activeCategoryId,
@@ -85,17 +92,27 @@ describe('MenuPage', () => {
     expect(nav?.compareDocumentPosition(sections as Node)).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
   });
 
-  it('forwards typed text to the menu store', async () => {
+  it('forwards typed text to the menu store after the debounce', async () => {
     const { el } = await render();
     const input = el.querySelector<HTMLInputElement>('#menu-search');
     if (!input) {
       throw new Error('Missing search input');
     }
+    vi.useFakeTimers();
+    try {
+      input.value = 'pizza';
+      input.dispatchEvent(new Event('input'));
+      expect(setSearchTerm).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(250);
+
+      expect(setSearchTerm).toHaveBeenCalledWith('pizza');
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
-  it('shows the no-results state when a loaded menu has no match, and clears the search', () => {
-    const all = [{ id: 'a', name: 'Tea', base_price: 100 }];
-    const el = render(false, [], all, 'xyz');
+  it('shows the no-results state when a loaded menu has no match, and clears the search', async () => {
+    const { el } = await render(false, [], [item('a', 'tea')], 'xyz');
     const empty = el.querySelector('.menu-page__empty');
 
     expect(empty?.textContent).toContain('No results for “xyz”');
@@ -106,15 +123,16 @@ describe('MenuPage', () => {
     expect(document.activeElement?.id).toBe('menu-search');
   });
 
-  it('does not show the no-results state while loading or when the menu is empty', () => {
-    expect(render(true, [], [{ id: 'a' }], 'xyz').querySelector('.menu-page__empty')).toBeNull();
+  it('does not show the no-results state while loading or when the menu is empty', async () => {
+    const loading = await render(true, [], [item('a', 'tea')], 'xyz');
+    expect(loading.el.querySelector('.menu-page__empty')).toBeNull();
     TestBed.resetTestingModule();
-    expect(render(false, [], [], 'xyz').querySelector('.menu-page__empty')).toBeNull();
+    const empty = await render(false, [], [], 'xyz');
+    expect(empty.el.querySelector('.menu-page__empty')).toBeNull();
   });
 
-  it('announces the number of results when a term is set', () => {
-    const items = [{ id: 'a', name: 'Tea', description: '', base_price: 100 }];
-    const el = render(false, items, items, 'tea');
+  it('announces the number of results when a term is set', async () => {
+    const { el } = await render(false, [item('a', 'tea')], undefined, 'tea');
 
     expect(el.querySelector('[aria-live="polite"]')?.textContent).toContain('1 result');
   });
