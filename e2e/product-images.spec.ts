@@ -22,7 +22,7 @@ test('menu cards show product images with a placeholder fallback', async ({ page
     .filter({ has: page.getByRole('heading', { name: 'Fried Chicken', exact: true }) });
   await expect(soldOut.locator('img')).toBeVisible();
   await expect(soldOut.getByText('Sold out', { exact: true })).toBeVisible();
-  await expect(soldOut.getByRole('button')).toHaveCount(0);
+  await expect(soldOut.getByRole('button', { name: /^Add to cart/ })).toBeDisabled();
 });
 
 test('only the first two menu images load eagerly', async ({ page }) => {

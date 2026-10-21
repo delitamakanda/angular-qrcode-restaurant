@@ -13,7 +13,7 @@ test('menu cards show popular, new and sold out badges', async ({ page }) => {
 
   const soldOut = card('Fried Chicken');
   await expect(soldOut.getByText('Sold out', { exact: true })).toBeVisible();
-  await expect(soldOut.getByRole('button')).toHaveCount(0);
+  await expect(soldOut.getByRole('button', { name: /^Add to cart/ })).toBeDisabled();
 
   const plain = card('Passion Fruit Green Tea');
   await expect(plain.locator('app-product-badge')).toHaveCount(0);
