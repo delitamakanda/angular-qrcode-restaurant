@@ -1,0 +1,49 @@
+.settings-page {
+  width: 100%;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.settings-page__back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  align-self: flex-start;
+  text-decoration: underline;
+  border-radius: 0.5rem;
+}
+
+.settings-page__back:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.settings-page__title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.settings-page__section {
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+}
+
+.settings-page__section h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.settings-page__soon {
+  color: #4b5563;
+}
+
+.settings-page__about dt {
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+.settings-page__about div + div {
+  margin-top: 0.5rem;
+}

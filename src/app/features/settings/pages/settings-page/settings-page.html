@@ -1,0 +1,29 @@
+<div class="settings-page flex flex-col gap-4 px-4 py-4">
+  <a routerLink="../welcome" class="settings-page__back">Retour à l'accueil</a>
+
+  <h1 class="settings-page__title">Paramètres</h1>
+
+  <section class="settings-page__section" aria-labelledby="settings-language-title">
+    <h2 id="settings-language-title">Langue</h2>
+    <p class="settings-page__soon">Bientôt disponible</p>
+  </section>
+
+  <section class="settings-page__section" aria-labelledby="settings-appearance-title">
+    <h2 id="settings-appearance-title">Apparence</h2>
+    <p class="settings-page__soon">Bientôt disponible</p>
+  </section>
+
+  <section class="settings-page__section" aria-labelledby="settings-about-title">
+    <h2 id="settings-about-title">À propos</h2>
+    <dl class="settings-page__about">
+      <div>
+        <dt>Version</dt>
+        <dd class="settings-page__version">{{ appVersion }}</dd>
+      </div>
+      <div>
+        <dt>Restaurant</dt>
+        <dd class="settings-page__store">{{ store()?.name }}</dd>
+      </div>
+    </dl>
+  </section>
+</div>
