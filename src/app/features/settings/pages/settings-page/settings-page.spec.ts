@@ -25,7 +25,7 @@ describe('SettingsPage', () => {
   it('renders the page title and a back link to welcome', () => {
     const el = render();
 
-    expect(el.querySelector('h1')?.textContent.trim()).toBe('Paramètres');
+    expect(el.querySelector('h1')?.textContent.trim()).toBe('Settings');
     expect(el.querySelector('a.settings-page__back')?.getAttribute('href')).toMatch(/welcome$/);
   });
 
@@ -54,8 +54,8 @@ describe('SettingsPage', () => {
     const [language, appearance] = Array.from(render().querySelectorAll('section'));
     const enabled = 'button:not([disabled]), a, input:not([disabled])';
 
-    expect(language.textContent).toContain('Bientôt disponible');
-    expect(appearance.textContent).toContain('Bientôt disponible');
+    expect(language.textContent).toContain('Coming soon');
+    expect(appearance.textContent).toContain('Coming soon');
     expect(language.querySelectorAll(enabled)).toHaveLength(0);
     expect(appearance.querySelectorAll(enabled)).toHaveLength(0);
   });
