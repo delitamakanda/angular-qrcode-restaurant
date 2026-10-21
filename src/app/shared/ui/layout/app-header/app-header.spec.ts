@@ -72,6 +72,13 @@ describe('AppHeader', () => {
       expect(link?.getAttribute('href')).toMatch(/welcome$/);
     });
 
+    it('renders the settings icon as a named link to settings', () => {
+      const link = render().querySelector('a[aria-label="Paramètres"]');
+
+      expect(link?.getAttribute('href')).toMatch(/settings$/);
+      expect(link?.querySelector('tui-icon')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
     it('does not render a heading', () => {
       expect(render().querySelector('h1')).toBeNull();
     });
