@@ -33,9 +33,9 @@ describe('SettingsPage', () => {
     const sections = Array.from(render().querySelectorAll('section'));
 
     expect(sections.map((s) => s.querySelector('h2')?.textContent.trim())).toEqual([
-      'Langue',
-      'Apparence',
-      'À propos',
+      'Language',
+      'Appearance',
+      'About',
     ]);
     for (const section of sections) {
       const heading = section.querySelector('h2');
