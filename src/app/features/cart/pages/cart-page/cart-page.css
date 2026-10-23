@@ -29,7 +29,7 @@
 
 .cart-row {
   position: relative;
-  background: #fff;
+  background: var(--color-surface);
   transition: transform 0.2s ease;
 }
 

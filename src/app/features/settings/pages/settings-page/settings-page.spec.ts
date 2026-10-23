@@ -1,9 +1,10 @@
-import { signal } from '@angular/core';
+import { ApplicationRef, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideTaiga } from '@taiga-ui/core';
 import { routes } from '@app/app.routes';
 import { ShopStore } from '@app/state/shop.store';
+import { ThemeStore } from '@app/state/theme.store';
 import { APP_VERSION } from '@environments/version';
 import { SettingsPage } from './settings-page';
 
@@ -50,14 +51,36 @@ describe('SettingsPage', () => {
     expect(el.querySelector('.settings-page__store')?.textContent.trim()).toBe('Chez Test');
   });
 
-  it('marks language and appearance as coming soon without enabled controls', () => {
-    const [language, appearance] = Array.from(render().querySelectorAll('section'));
+  it('marks language as coming soon without enabled controls', () => {
+    const [language] = Array.from(render().querySelectorAll('section'));
     const enabled = 'button:not([disabled]), a, input:not([disabled])';
 
     expect(language.textContent).toContain('Coming soon');
-    expect(appearance.textContent).toContain('Coming soon');
     expect(language.querySelectorAll(enabled)).toHaveLength(0);
-    expect(appearance.querySelectorAll(enabled)).toHaveLength(0);
+  });
+
+  it('offers three theme options with System checked by default', () => {
+    const appearance = Array.from(render().querySelectorAll('section'))[1];
+    const radios = Array.from(appearance.querySelectorAll<HTMLInputElement>('input[type=radio]'));
+
+    expect(appearance.textContent).not.toContain('Coming soon');
+    expect(appearance.querySelector('[role=radiogroup]')).not.toBeNull();
+    expect(radios.map((r) => r.value)).toEqual(['system', 'light', 'dark']);
+    expect(radios.map((r) => r.checked)).toEqual([true, false, false]);
+  });
+
+  it('updates the preference and checked state when an option is chosen', () => {
+    const el = render();
+    const store = TestBed.inject(ThemeStore);
+    const setPreference = vi.spyOn(store, 'setPreference');
+    const dark = el.querySelector<HTMLInputElement>('input[value=dark]');
+
+    dark?.click();
+    TestBed.inject(ApplicationRef).tick();
+
+    expect(setPreference).toHaveBeenCalledWith('dark');
+    expect(store.preference()).toBe('dark');
+    expect(dark?.checked).toBe(true);
   });
 
   it('is registered as a lazy child route of store/:storeId', async () => {

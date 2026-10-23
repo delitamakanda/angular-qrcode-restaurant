@@ -32,8 +32,13 @@
 
 .menu-item-card-skeleton__block {
   border-radius: 0.5rem;
-  background-color: #e5e7eb;
-  background-image: linear-gradient(90deg, transparent, rgb(255 255 255 / 60%), transparent);
+  background-color: var(--color-surface-muted);
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-ink) 10%, transparent),
+    transparent
+  );
   background-size: 200% 100%;
   background-repeat: no-repeat;
   animation: menu-item-card-skeleton-shimmer 1.4s ease-in-out infinite;

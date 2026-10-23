@@ -6,7 +6,7 @@
 
 .empty-state__icon {
   font-size: 3rem;
-  color: #4b5563;
+  color: var(--color-ink-muted);
 }
 
 .empty-state__title,
@@ -17,7 +17,7 @@
 }
 
 .empty-state__description {
-  color: #4b5563;
+  color: var(--color-ink-muted);
 }
 
 .empty-state__action:empty {
