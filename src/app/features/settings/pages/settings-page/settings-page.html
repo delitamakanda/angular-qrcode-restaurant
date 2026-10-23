@@ -10,7 +10,20 @@
 
   <section class="settings-page__section" aria-labelledby="settings-appearance-title">
     <h2 id="settings-appearance-title">Appearance</h2>
-    <p class="settings-page__soon">Coming soon</p>
+    <div class="settings-page__theme" role="radiogroup" aria-labelledby="settings-appearance-title">
+      @for (option of themeOptions; track option.value) {
+        <label class="settings-page__theme-option">
+          <input
+            type="radio"
+            name="theme"
+            [value]="option.value"
+            [checked]="theme.preference() === option.value"
+            (change)="theme.setPreference(option.value)"
+          />
+          {{ option.label }}
+        </label>
+      }
+    </div>
   </section>
 
   <section class="settings-page__section" aria-labelledby="settings-about-title">
