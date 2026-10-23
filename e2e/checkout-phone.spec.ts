@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { addClassicMilkTea } from './helpers/add-classic-milk-tea';
 
 test('checkout validates the phone number and sends it normalized', async ({ page }) => {
   const order = {
@@ -26,7 +27,7 @@ test('checkout validates the phone number and sends it normalized', async ({ pag
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Dine in' }).click();
-  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+  await addClassicMilkTea(page);
   await page.getByRole('button', { name: /View cart/ }).click();
   await page
     .getByRole('dialog', { name: 'Panier' })

@@ -1,0 +1,22 @@
+.product-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.product-note__label {
+  font-weight: 600;
+}
+
+.product-note__input {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--tui-border-normal, #767676);
+  border-radius: 0.5rem;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  resize: vertical;
+}

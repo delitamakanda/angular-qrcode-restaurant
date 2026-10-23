@@ -184,10 +184,26 @@ describe('MenuItemCard', () => {
     });
   });
 
-  it('adds to the cart and notifies the user', () => {
-    (create().nativeElement as HTMLElement).querySelector('button')?.click();
+  it('emits customize with the product and does not touch the cart itself', () => {
+    const fixture = create();
+    const emitted: unknown[] = [];
+    fixture.componentInstance.customize.subscribe((value) => emitted.push(value));
 
-    expect(addToCart).toHaveBeenCalledTimes(1);
-    expect(success).toHaveBeenCalledWith('Burger added to cart');
+    (fixture.nativeElement as HTMLElement).querySelector('button')?.click();
+
+    expect(emitted).toEqual([item]);
+    expect(addToCart).not.toHaveBeenCalled();
+  });
+
+  it('does not emit customize for a sold-out product', () => {
+    const fixture = TestBed.createComponent(MenuItemCard);
+    fixture.componentRef.setInput('item', { ...item, is_sold_out: true });
+    fixture.detectChanges();
+    const emitted: unknown[] = [];
+    fixture.componentInstance.customize.subscribe((value) => emitted.push(value));
+
+    fixture.componentInstance.addToCart();
+
+    expect(emitted).toEqual([]);
   });
 });

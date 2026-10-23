@@ -1,0 +1,79 @@
+.customization {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(85dvh - 5rem);
+}
+
+.customization__status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 1rem 0;
+}
+
+.customization__scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.customization__image {
+  inline-size: 100%;
+  max-block-size: 10rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.customization__description,
+.customization__base-price {
+  margin: 0;
+}
+
+.customization__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.customization__error {
+  margin: 0;
+  color: var(--color-danger-text, #b91c1c);
+  font-weight: 600;
+}
+
+.customization__error:empty {
+  display: none;
+}
+
+.customization__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.customization__quantity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.customization__quantity button,
+.customization__add {
+  min-block-size: 2.75rem;
+  min-inline-size: 2.75rem;
+}
+
+.customization__add {
+  flex: 1;
+}
+
+.customization__add[aria-disabled='true'] {
+  opacity: 0.6;
+}

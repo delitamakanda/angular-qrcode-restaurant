@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { addClassicMilkTea } from './helpers/add-classic-milk-tea';
 
 test('bottom cart bar is sticky once the cart has an item and opens the cart', async ({ page }) => {
   await page.goto('/store/demo/welcome');
@@ -8,7 +9,7 @@ test('bottom cart bar is sticky once the cart has an item and opens the cart', a
   const bar = page.getByRole('button', { name: /View cart/ });
   await expect(bar).toHaveCount(0);
 
-  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+  await addClassicMilkTea(page);
 
   await expect(bar).toHaveCount(1);
   await expect(bar).toContainText('1 item');

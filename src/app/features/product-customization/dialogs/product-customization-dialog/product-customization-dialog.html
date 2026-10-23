@@ -1,1 +1,84 @@
-<p>product-customization-dialog works!</p>
+<div class="customization">
+  @switch (state()) {
+    @case ('loading') {
+      <p class="customization__status" role="status">Loading options…</p>
+    }
+    @case ('error') {
+      <div class="customization__status" role="alert">
+        <p>We could not load the options for this product.</p>
+        <button tuiButton type="button" size="m" (click)="load()">Retry</button>
+      </div>
+    }
+    @case ('ready') {
+      <div class="customization__scroll">
+        <img
+          class="customization__image"
+          alt=""
+          width="400"
+          height="300"
+          [src]="product().image_url || placeholder"
+          [appImgFallback]="placeholder"
+        />
+        @if (product().description) {
+          <p class="customization__description">{{ product().description }}</p>
+        }
+        <p class="customization__base-price">
+          Base price: {{ product().base_price | currencyFormat }}
+        </p>
+
+        @for (group of groups(); track group.id) {
+          <app-modifier-group
+            [group]="group"
+            [selected]="selection()[group.id] ?? []"
+            [invalid]="isMissing(group.id)"
+            (optionToggled)="onToggle(group.id, $event)"
+            (cleared)="onClear(group.id)"
+          />
+        }
+
+        <app-product-note [control]="form.controls.note" />
+      </div>
+
+      <footer class="customization__footer">
+        <p class="customization__error" role="status" aria-live="polite">{{ errorMessage() }}</p>
+        <div class="customization__row">
+          <div class="customization__quantity" role="group" aria-label="Quantity">
+            <button
+              tuiButton
+              type="button"
+              appearance="secondary"
+              size="m"
+              aria-label="Decrease quantity"
+              [disabled]="quantity() <= minQuantity"
+              (click)="changeQuantity(-1)"
+            >
+              −
+            </button>
+            <span aria-live="polite">{{ quantity() }}</span>
+            <button
+              tuiButton
+              type="button"
+              appearance="secondary"
+              size="m"
+              aria-label="Increase quantity"
+              [disabled]="quantity() >= maxQuantity"
+              (click)="changeQuantity(1)"
+            >
+              +
+            </button>
+          </div>
+          <button
+            tuiButton
+            type="button"
+            size="l"
+            class="customization__add"
+            [disabled]="!canAdd()"
+            (click)="submit()"
+          >
+            Add · {{ total() | currencyFormat }}
+          </button>
+        </div>
+      </footer>
+    }
+  }
+</div>

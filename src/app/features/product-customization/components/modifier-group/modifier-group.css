@@ -1,0 +1,67 @@
+.modifier-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
+.modifier-group__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0;
+  margin-bottom: 0.25rem;
+}
+
+.modifier-group__name {
+  font-weight: 600;
+}
+
+.modifier-group__badge,
+.modifier-group__hint {
+  font-size: 0.8125rem;
+  color: var(--tui-text-secondary, #4b5563);
+}
+
+.modifier-group__option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+
+.modifier-group__option--disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.modifier-group__input {
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  accent-color: var(--tui-background-accent-1, #1d4ed8);
+}
+
+.modifier-group__label {
+  flex: 1;
+}
+
+.modifier-group__unavailable {
+  font-size: 0.8125rem;
+}
+
+.modifier-group__delta {
+  white-space: nowrap;
+}
+
+.modifier-group__clear {
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
