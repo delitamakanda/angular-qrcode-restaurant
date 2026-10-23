@@ -177,7 +177,7 @@ jobs:
             Tu es déjà sur la bonne branche ; ne fais ni commit ni push.
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'sonnet' }}
-            --max-turns 120
+            --max-turns 130
             --mcp-config .github/agent/mcp.json
             --allowedTools "Read,Glob,Grep,Write,Edit,Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npx ng lint:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*),Bash(npm run e2e),Bash(npm run e2e:*),Bash(npx playwright test:*),Bash(git status:*),Bash(git diff:*),Bash(git log:*),Bash(ls:*),mcp__playwright"
             --disallowedTools "WebFetch,WebSearch,mcp__playwright__browser_run_code_unsafe,mcp__playwright__browser_evaluate,mcp__playwright__browser_file_upload"
