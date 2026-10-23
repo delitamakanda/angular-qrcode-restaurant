@@ -19,6 +19,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map, EMPTY } from 'rxjs';
 import { MenuCategorySelection } from '@app/features/menu/components/menu-category-selection/menu-category-selection';
 import { ProductSearch } from '@app/features/menu/components/product-search/product-search';
+import { ProductCustomizationService } from '@app/features/product-customization/services/product-customization.service';
 
 const ANCHOR_PREFIX = 'category-';
 
@@ -36,6 +37,7 @@ export class MenuPage {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly destroyRef = inject(DestroyRef);
   readonly menuStore = inject(MenuStore);
+  protected readonly customization = inject(ProductCustomizationService);
 
   protected readonly skeletonSlots = Array.from({ length: 6 });
 
