@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { addClassicMilkTea } from './helpers/add-classic-milk-tea';
 
 test('customer can order a product in dine-in mode', async ({ page }) => {
   const order = {
@@ -31,7 +32,7 @@ test('customer can order a product in dine-in mode', async ({ page }) => {
   await page.getByRole('button', { name: 'Dine in' }).click();
   await expect(page).toHaveURL(/\/store\/demo\/menu$/);
 
-  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+  await addClassicMilkTea(page);
 
   await page.getByRole('button', { name: /View cart/ }).click();
   const cart = page.getByRole('dialog', { name: 'Panier' });

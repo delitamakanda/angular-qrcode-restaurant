@@ -33,7 +33,11 @@
           <h2 class="menu-page__section-title">{{ section.category.name }}</h2>
           <div class="menu-page__grid">
             @for (item of section.items; track item.id) {
-              <app-menu-item-card [item]="item" [priority]="priorityIds().has(item.id)" />
+              <app-menu-item-card
+                [item]="item"
+                [priority]="priorityIds().has(item.id)"
+                (customize)="customization.open($event)"
+              />
             }
           </div>
         </section>

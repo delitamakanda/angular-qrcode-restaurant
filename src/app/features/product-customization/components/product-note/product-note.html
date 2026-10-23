@@ -1,1 +1,10 @@
-<p>product-note works!</p>
+<label class="product-note">
+  <span class="product-note__label">Note (optional)</span>
+  <textarea
+    class="product-note__input"
+    rows="2"
+    [maxlength]="maxLength()"
+    [formControl]="control()"
+    placeholder="E.g. no straw"
+  ></textarea>
+</label>
