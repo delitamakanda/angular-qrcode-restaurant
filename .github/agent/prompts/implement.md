@@ -65,7 +65,9 @@ lisible et entièrement vérifié.
   dépendance), les secrets ou la configuration CI.
 - Ne fais ni commit ni push : le workflow s'en charge après tes vérifications.
 - Pas de nouvelle dépendance npm sans que la spec le demande.
-- Si l'API change, mets à jour `mock-api/db.json`, le service
-  `src/app/core/api/*.service.ts` ET `functions/api/[[path]].ts`.
+- Si le ticket touche l'API ou `mock-api/db.json`, suis la skill
+  `mock-api-parity` (`.claude/skills/mock-api-parity/SKILL.md`) : json-server
+  en local et la Cloudflare Function (`functions/api/_handler.ts`) en
+  production doivent rester identiques, test de parité compris.
 - Si tu ne peux pas satisfaire un critère, n'invente pas : laisse la case non
   cochée et explique pourquoi dans `pr-body.md`.

@@ -37,7 +37,9 @@ Ce que l'utilisateur voit / ce que le code fait une fois le ticket terminé.
 ## Impact technique
 
 - Fichiers / composants / stores / services concernés (chemins réels du dépôt)
-- Changements d'API : si oui, `mock-api/db.json` ET `functions/api/[[path]].ts`
+- Changements d'API : si oui, lis la skill `mock-api-parity`
+  (`.claude/skills/mock-api-parity/SKILL.md`) et liste les fichiers concernés
+  (`db.json`, `functions/api/_handler.ts`, service `core/api`, test de parité)
 - Accessibilité (WCAG AA) et responsive mobile à prendre en compte
 
 ## Plan de test

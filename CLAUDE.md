@@ -57,10 +57,7 @@ TypeScript paths (`tsconfig.json`): `@app/*` → `src/app/*`, `@shared/*` → `s
 
 ### Mock API / Cloudflare Function parity
 
-`mock-api/db.json` is the single source of demo data, consumed two ways:
-
-1. Locally, `json-server` serves it directly on `:3000` (proxied through `/api`).
-2. In deployment, `functions/api/[[path]].ts` re-implements the same REST surface (stores, categories, menus, groups, options, orders — including `POST /api/orders`) by reading the same `db.json` and hand-rolling filtering/sorting/routing, since Cloudflare Pages Functions don't run `json-server`. Orders created against the Cloudflare function are in-memory only (reset on redeploy/restart). When changing an API shape or adding an endpoint, update both `mock-api/db.json`-consumers in parallel: the `core/api/*.service.ts` client and the `functions/api/[[path]].ts` handler.
+`mock-api/db.json` is served by `json-server` locally and by a hand-written Cloudflare Pages Function (`functions/api/_handler.ts`) in deployment. Both must answer every request from `core/api` identically. **Before any API change** (data, fields, collections, query params, endpoints), use the `mock-api-parity` skill (`.claude/skills/mock-api-parity/SKILL.md`): it lists what the Function supports, a checklist per type of change and how to verify parity.
 
 ## Coding conventions (enforced by lint/review, not just style)
 
