@@ -87,5 +87,5 @@ jobs:
             --max-turns 80
             --mcp-config .github/agent/mcp.json
             --append-system-prompt "Respecte CLAUDE.md et AGENTS.md. L'app tourne déjà sur http://localhost:4200 (API mock sur :3000, ng serve recompile à chaque modification) : vérifie toute modification d'UI dans le navigateur avec les outils mcp__playwright (émulation iPhone 13), en ne naviguant que vers l'app locale. Avant de pousser, fais passer npm run lint, npx ng test --watch=false, npx ng build, npm run e2e et npm run format:check. Ne modifie jamais .github/. Réponds en français."
-            --allowedTools "Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*),Bash(npm run e2e),Bash(npm run e2e:*),Bash(npx playwright test:*),mcp__playwright"
+            --allowedTools "Skill,Bash(npm run lint),Bash(npm run lint:*),Bash(npx ng test:*),Bash(npx ng build:*),Bash(npm run format),Bash(npm run format:check),Bash(npx prettier:*),Bash(npm run e2e),Bash(npm run e2e:*),Bash(npx playwright test:*),mcp__playwright"
             --disallowedTools "mcp__playwright__browser_run_code_unsafe,mcp__playwright__browser_evaluate,mcp__playwright__browser_file_upload"

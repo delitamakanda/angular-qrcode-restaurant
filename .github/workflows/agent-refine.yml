@@ -97,7 +97,7 @@ jobs:
           claude_args: |
             --model ${{ vars.AGENT_MODEL || 'sonnet' }}
             --max-turns 40
-            --allowedTools "Read,Glob,Grep,Write"
+            --allowedTools "Read,Glob,Grep,Write,Skill"
             --disallowedTools "Bash,Edit,WebFetch,WebSearch"
 
       - name: Publier la spec sur l’issue
