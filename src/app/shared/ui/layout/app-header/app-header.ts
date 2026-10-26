@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
@@ -10,7 +11,7 @@ import { ShopStore } from '@app/state/shop.store';
 
 @Component({
   selector: 'app-app-header',
-  imports: [RouterLink, TuiButton, TuiBadge, TuiIcon, TuiStatus],
+  imports: [NgOptimizedImage, RouterLink, TuiButton, TuiBadge, TuiIcon, TuiStatus],
   templateUrl: './app-header.html',
   styleUrl: './app-header.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,7 @@ export class AppHeader {
   readonly store = this.shopStore.store;
   readonly isOpen = this.shopStore.isOpen;
   readonly canInstall = this.platformService.canInstall;
+  protected readonly logoFailed = signal(false);
   protected readonly isUpdateAvailable = signal(false);
 
   constructor() {
