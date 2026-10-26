@@ -16,6 +16,19 @@
   outline-offset: 2px;
 }
 
+.app-header__logo {
+  flex-shrink: 0;
+  width: auto;
+  height: 2rem;
+  object-fit: contain;
+}
+
+@media (min-width: 768px) {
+  .app-header__logo {
+    height: 2.5rem;
+  }
+}
+
 .app-header__title {
   min-width: 0;
   overflow-wrap: anywhere;

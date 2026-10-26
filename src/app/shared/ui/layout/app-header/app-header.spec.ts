@@ -84,6 +84,34 @@ describe('AppHeader', () => {
     });
   });
 
+  describe('logo', () => {
+    it('renders a decorative logo before the store title', () => {
+      const brand = render({ store: { name: 'Chez Test', is_open: true } }).querySelector(
+        '.app-header__brand',
+      );
+      const img = brand?.querySelector('img');
+
+      expect(img).not.toBeNull();
+      expect(img?.getAttribute('alt')).toBe('');
+      expect(img?.getAttribute('src')).toContain('assets/logo.png');
+      expect(brand?.firstElementChild).toBe(img);
+    });
+
+    it('keeps the logo when the store is not loaded', () => {
+      expect(render({ store: null }).querySelector('.app-header__brand img')).not.toBeNull();
+    });
+
+    it('hides the logo when it fails to load', () => {
+      const el = render();
+
+      el.querySelector('.app-header__brand img')?.dispatchEvent(new Event('error'));
+      TestBed.tick();
+
+      expect(el.querySelector('.app-header__brand img')).toBeNull();
+      expect(el.querySelector('.app-header__title')).not.toBeNull();
+    });
+  });
+
   describe('store state', () => {
     it('shows the store name and an Open badge', () => {
       const el = render({ store: { name: 'Chez Test', is_open: true } });
