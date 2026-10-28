@@ -1,1 +1,5 @@
-<p>cart-summary works!</p>
+<div class="cart-summary__info">
+  <span>{{ count() }} {{ count() === 1 ? 'item' : 'items' }}</span>
+  <strong>Total: {{ total() | currencyFormat }}</strong>
+</div>
+<ng-content />

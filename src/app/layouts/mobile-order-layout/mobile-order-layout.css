@@ -10,6 +10,9 @@
 
 .mobile-order-layout__main {
   flex: 1 1 auto;
+  /* Lets pages stretch so their sticky summary bar sits at the bottom of short pages. */
+  display: flex;
+  flex-direction: column;
   /* Without min-width: 0 the nowrap category chips widen the column and the page overflows. */
   min-width: 0;
 }
