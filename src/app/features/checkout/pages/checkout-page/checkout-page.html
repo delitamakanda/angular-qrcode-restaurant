@@ -1,7 +1,7 @@
 <section class="checkout-page">
   <h1>Checkout</h1>
 
-  <form [formGroup]="checkoutForm" (ngSubmit)="submitForm()">
+  <form id="checkout-form" [formGroup]="checkoutForm" (ngSubmit)="submitForm()">
     <div class="checkout-page__field">
       <tui-textfield>
         <label tuiLabel for="name">Name</label>
@@ -44,7 +44,17 @@
         />
       </tui-textfield>
     </div>
-
-    <button tuiButton type="submit" size="l" [disabled]="checkoutStore.submitting()">Submit</button>
   </form>
+
+  <app-cart-summary [count]="cartStore.count()" [total]="cartStore.total()">
+    <button
+      tuiButton
+      type="submit"
+      form="checkout-form"
+      size="l"
+      [disabled]="checkoutStore.submitting()"
+    >
+      Submit
+    </button>
+  </app-cart-summary>
 </section>

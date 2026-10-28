@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideTaiga } from '@taiga-ui/core';
 import { CartStore } from '@app/state/cart.store';
 import { CartPage } from './cart-page';
@@ -58,7 +58,7 @@ describe('CartPage empty state', () => {
     const { el } = setup(true);
 
     expect(el.querySelector('app-empty-state')?.textContent).toContain('Your cart is empty');
-    expect(el.querySelector('footer')).toBeNull();
+    expect(el.querySelector('app-cart-summary')).toBeNull();
     expect(el.textContent).not.toContain('Checkout');
     expect(el.textContent).toContain('View menu');
   });
@@ -68,6 +68,31 @@ describe('CartPage empty state', () => {
 
     expect(el.querySelector('app-empty-state')).toBeNull();
     expect(el.textContent).toContain('Checkout');
+  });
+});
+
+describe('CartPage summary', () => {
+  it('shows the item count and total, and updates after a removal', () => {
+    const { fixture, el } = setup();
+    const summary = el.querySelector('app-cart-summary');
+
+    expect(summary?.textContent).toContain('1 item');
+    expect(summary?.textContent).toContain('$5.00');
+
+    el.querySelectorAll<HTMLButtonElement>('.cart-row button').item(0).click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('app-cart-summary')).toBeNull();
+  });
+
+  it('navigates to checkout from the Checkout button', () => {
+    const { fixture, el } = setup();
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+
+    el.querySelector<HTMLButtonElement>('app-cart-summary button')?.click();
+    fixture.detectChanges();
+
+    expect(navigate).toHaveBeenCalledWith(['../checkout'], expect.anything());
   });
 });
 

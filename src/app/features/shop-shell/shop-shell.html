@@ -1,5 +1,7 @@
 <app-mobile-order-layout>
   <app-app-header layout-header />
   <router-outlet />
-  <app-bottom-cart-bar layout-footer (openCart)="openCart()" />
+  @if (showCartBar()) {
+    <app-bottom-cart-bar layout-footer (openCart)="openCart()" />
+  }
 </app-mobile-order-layout>

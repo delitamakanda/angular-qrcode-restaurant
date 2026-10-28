@@ -1,0 +1,22 @@
+:host {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  padding-bottom: calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+  background: var(--tui-background-base, #fff);
+  border-top: 1px solid var(--tui-border-normal, rgba(0, 0, 0, 0.12));
+}
+
+.cart-summary__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}

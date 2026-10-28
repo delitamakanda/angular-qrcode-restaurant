@@ -27,7 +27,15 @@ describe('CheckoutPage', () => {
           provide: ShopStore,
           useValue: { store: signal({ id: 'demo' }), selectedMode: signal('dine_in') },
         },
-        { provide: CartStore, useValue: { items: signal([]), clearCart: vi.fn() } },
+        {
+          provide: CartStore,
+          useValue: {
+            items: signal([]),
+            count: signal(3),
+            total: signal(12.5),
+            clearCart: vi.fn(),
+          },
+        },
       ],
     });
     const fixture = TestBed.createComponent(CheckoutPage);
@@ -48,6 +56,30 @@ describe('CheckoutPage', () => {
     fixture.detectChanges();
 
     expect(button?.disabled).toBe(true);
+  });
+
+  it('shows the cart total and item count in the summary bar', () => {
+    const el = render().nativeElement as HTMLElement;
+    const summary = el.querySelector('app-cart-summary');
+
+    expect(summary?.textContent).toContain('3 items');
+    expect(summary?.textContent).toContain('$12.50');
+    expect(summary?.querySelector('button[type="submit"]')?.getAttribute('form')).toBe(
+      'checkout-form',
+    );
+  });
+
+  it('submits the form from the summary bar button, without calling createOrder when invalid', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+
+    el.querySelector<HTMLButtonElement>('app-cart-summary button[type="submit"]')?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(el.querySelector('form')?.id).toBe('checkout-form');
+    expect(createOrder).not.toHaveBeenCalled();
+    expect(el.querySelector('#phone-error')?.textContent).toContain('Phone number is required');
   });
 
   function setValue(el: HTMLElement, selector: string, value: string): void {

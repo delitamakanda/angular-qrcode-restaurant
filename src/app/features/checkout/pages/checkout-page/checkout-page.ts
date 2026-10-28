@@ -19,6 +19,7 @@ import {
   tuiValidationErrorsProvider,
 } from '@taiga-ui/core';
 import { TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
+import { CartSummary } from '../../../cart/components/cart-summary/cart-summary';
 import { PhoneInput } from '@shared/ui/forms/phone-input/phone-input';
 import { PaymentMode } from '../../../../core/models/checkout.model';
 
@@ -32,6 +33,7 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
   imports: [
     ReactiveFormsModule,
     PhoneInput,
+    CartSummary,
     TuiButton,
     TuiTextfield,
     TuiLabel,
@@ -56,7 +58,7 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
 })
 export class CheckoutPage {
   private readonly fb = inject(FormBuilder);
-  private readonly cartStore = inject(CartStore);
+  protected readonly cartStore = inject(CartStore);
   protected readonly checkoutStore = inject(CheckoutStore);
   private readonly shopStore = inject(ShopStore);
   private readonly orderApiService = inject(OrderApiService);

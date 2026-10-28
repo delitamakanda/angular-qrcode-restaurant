@@ -38,9 +38,8 @@
   }
 
   @if (cartStore.items().length > 0) {
-    <footer class="cart-page__footer">
-      <strong>Total: {{ cartStore.total() | currencyFormat }}</strong>
+    <app-cart-summary [count]="cartStore.count()" [total]="cartStore.total()">
       <button tuiButton type="button" size="l" (click)="goToCheckout()">Checkout</button>
-    </footer>
+    </app-cart-summary>
   }
 </section>
