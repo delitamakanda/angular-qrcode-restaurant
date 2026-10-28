@@ -1,0 +1,22 @@
+.order-confirmation-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+h1:focus {
+  outline: none;
+}
+
+.order-confirmation-page__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.order-confirmation-page__actions a,
+.order-confirmation-page > a {
+  inline-size: 100%;
+  min-block-size: 2.75rem;
+}
