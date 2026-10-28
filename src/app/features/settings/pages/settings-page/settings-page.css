@@ -10,7 +10,7 @@
   min-height: 2.75rem;
   align-self: flex-start;
   text-decoration: underline;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-control);
 }
 
 .settings-page__back:focus-visible {
@@ -26,7 +26,7 @@
 .settings-page__section {
   padding: 1rem;
   border: 1px solid var(--tui-border-normal, #d1d5db);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-panel);
 }
 
 .settings-page__section h2 {
@@ -61,7 +61,7 @@
 .settings-page__theme-option:has(input:focus-visible) {
   outline: 2px solid var(--tui-border-focus, currentColor);
   outline-offset: 2px;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-control);
 }
 
 .settings-page__about dt {

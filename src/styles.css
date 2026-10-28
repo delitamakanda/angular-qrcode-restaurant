@@ -26,6 +26,15 @@
   --color-success: #1b7f3b;
   --color-warning: #b45309;
   --color-danger: #b3261e;
+
+  /* Spacing base unit (4px); Tailwind derives the whole scale from it */
+  --spacing: 0.25rem;
+
+  /* Border radii: controls (buttons, fields), panels, cards and pills */
+  --radius-control: 0.5rem;
+  --radius-panel: 0.75rem;
+  --radius-card: 1rem;
+  --radius-pill: 999px;
 }
 
 :root {
@@ -76,7 +85,7 @@ tui-dialog[data-appearance='bottom-sheet'] {
   max-width: 30rem;
   max-height: 85dvh;
   overflow: hidden;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
   padding-bottom: env(safe-area-inset-bottom);
 }
 

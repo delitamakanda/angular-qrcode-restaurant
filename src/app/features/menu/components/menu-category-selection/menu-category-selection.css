@@ -24,7 +24,7 @@
   min-height: 2.75rem;
   padding: 0 1rem;
   border: 1px solid var(--tui-border-normal, #d1d5db);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--tui-background-base, #fff);
   color: var(--tui-text-primary, #1a1a1a);
   font: var(--tui-font-text-m, 1rem/1.5rem sans-serif);

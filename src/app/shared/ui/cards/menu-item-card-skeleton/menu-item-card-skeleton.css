@@ -9,7 +9,7 @@
   height: 100%;
   overflow: hidden;
   border: 1px solid var(--tui-border-normal, #e5e7eb);
-  border-radius: 1rem;
+  border-radius: var(--radius-card);
 }
 
 .menu-item-card-skeleton__body {
@@ -31,7 +31,7 @@
 }
 
 .menu-item-card-skeleton__block {
-  border-radius: 0.5rem;
+  border-radius: var(--radius-control);
   background-color: var(--color-surface-muted);
   background-image: linear-gradient(
     90deg,
