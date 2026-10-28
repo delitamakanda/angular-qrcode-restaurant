@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+.order-mode-selector {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 2);
+}
+
+.order-mode-selector__option {
+  min-height: 2.75rem;
+}

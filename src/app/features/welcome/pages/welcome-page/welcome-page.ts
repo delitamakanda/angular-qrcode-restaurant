@@ -1,27 +1,31 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ShopStore } from '../../../../state/shop.store';
-import { ActivatedRoute, Router } from '@angular/router';
-import { OrderMode } from '../../../../core/models/store.model';
-import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { Router } from '@angular/router';
+import { OrderMode } from '@app/core/models/store.model';
+import { ShopStore } from '@app/state/shop.store';
+import { OrderModeSelector } from '../../components/order-mode-selector/order-mode-selector';
+import { StoreHero } from '../../components/store-hero/store-hero';
 
 @Component({
   selector: 'app-welcome-page',
-  imports: [TuiButton, TuiIcon],
+  imports: [StoreHero, OrderModeSelector],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   templateUrl: './welcome-page.html',
   styleUrl: './welcome-page.css',
 })
 export class WelcomePage {
   private readonly shopStore = inject(ShopStore);
   private readonly router = inject(Router);
-  private route = inject(ActivatedRoute);
 
   readonly store = this.shopStore.store;
+  readonly selectedMode = this.shopStore.selectedMode;
+  readonly isOpen = this.shopStore.isOpen;
 
   selectMode(mode: OrderMode): void {
-    this.shopStore.selectedMode.set(mode);
-    const storeId = this.route.parent?.snapshot.paramMap.get('storeId');
-    void this.router.navigate(['/store', storeId, 'menu']);
+    const store = this.store();
+    if (!store?.is_open) {
+      return;
+    }
+    this.shopStore.setMode(mode);
+    void this.router.navigate(['/store', store.id, 'menu']);
   }
 }
