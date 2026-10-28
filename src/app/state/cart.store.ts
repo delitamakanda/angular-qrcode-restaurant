@@ -21,7 +21,7 @@ export class CartStore {
     this.restoreCart();
 
     effect(() => {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items()));
+      this.persistCart();
     });
   }
 
@@ -59,16 +59,42 @@ export class CartStore {
     this.fees.set(0);
   }
 
-  restoreCart(): void {
-    const storedCart = localStorage.getItem(CART_STORAGE_KEY);
-    if (!storedCart) {
-      return;
-    }
+  private restoreCart(): void {
     try {
-      const cartItems = JSON.parse(storedCart) as CartItem[];
-      this.items.set(cartItems);
+      const stored = localStorage.getItem(CART_STORAGE_KEY);
+      if (!stored) {
+        return;
+      }
+      const parsed: unknown = JSON.parse(stored);
+      if (Array.isArray(parsed)) {
+        this.items.set(parsed.filter(isCartItem));
+      }
     } catch {
       this.items.set([]);
     }
   }
+
+  private persistCart(): void {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items()));
+    } catch {
+      // Storage unavailable or quota exceeded: the cart simply stays in memory.
+    }
+  }
+}
+
+function isCartItem(value: unknown): value is CartItem {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item['id'] === 'string' &&
+    typeof item['menu_item_id'] === 'string' &&
+    typeof item['name'] === 'string' &&
+    Number.isInteger(item['quantity']) &&
+    (item['quantity'] as number) > 0 &&
+    Number.isFinite(item['unit_base_price']) &&
+    Number.isFinite(item['total_price'])
+  );
 }
