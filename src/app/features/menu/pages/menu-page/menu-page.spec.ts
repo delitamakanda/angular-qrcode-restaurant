@@ -2,6 +2,7 @@ import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { provideTaiga } from '@taiga-ui/core';
+import { MenuApiService } from '@app/core/api/menu-api.service';
 import { MenuStore } from '@app/state/menu.store';
 import { ShopStore } from '@app/state/shop.store';
 import { MenuPage } from './menu-page';
@@ -49,6 +50,7 @@ describe('MenuPage', () => {
       providers: [
         provideTaiga(),
         { provide: ActivatedRoute, useValue: {} },
+        { provide: MenuApiService, useValue: {} },
         { provide: ShopStore, useValue: { selectedMode: signal(null) } },
         {
           provide: MenuStore,

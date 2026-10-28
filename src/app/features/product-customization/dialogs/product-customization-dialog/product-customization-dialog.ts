@@ -27,6 +27,7 @@ import {
   MAX_QUANTITY,
   MIN_QUANTITY,
   Selection,
+  buildCartItem,
   clampQuantity,
   minSelect,
   missingGroups,
@@ -66,7 +67,10 @@ export class ProductCustomizationDialog {
   protected readonly maxQuantity = MAX_QUANTITY;
 
   protected readonly product = signal<MenuItem>(this.context.data);
-  protected readonly state = signal<LoadState>('loading');
+  // Groups already fetched by the opener: show them right away, no loading flash.
+  protected readonly state = signal<LoadState>(
+    this.context.data.modifierGroups?.length ? 'ready' : 'loading',
+  );
   protected readonly selection = signal<Selection>({});
   protected readonly quantity = signal(MIN_QUANTITY);
 
@@ -95,7 +99,9 @@ export class ProductCustomizationDialog {
   });
 
   constructor() {
-    this.load();
+    if (this.state() === 'loading') {
+      this.load();
+    }
   }
 
   protected load(): void {
@@ -155,16 +161,9 @@ export class ProductCustomizationDialog {
     const options = this.selectedOptions();
     const quantity = this.quantity();
 
-    this.cartStore.addToCart({
-      id: crypto.randomUUID(),
-      menu_item_id: product.id,
-      quantity,
-      name: product.name,
-      note: this.form.controls.note.value.trim(),
-      unit_base_price: product.base_price,
-      selected_options: options,
-      total_price: totalPrice(product.base_price, options, quantity),
-    });
+    this.cartStore.addToCart(
+      buildCartItem(product, options, quantity, this.form.controls.note.value),
+    );
     this.notifications.success(`${product.name} added to cart`);
     this.context.completeWith('added');
   }

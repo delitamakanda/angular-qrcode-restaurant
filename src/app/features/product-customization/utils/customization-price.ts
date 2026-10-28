@@ -1,4 +1,5 @@
-import { CartSelectedOption } from '@app/core/models/cart.model';
+import { CartItem, CartSelectedOption } from '@app/core/models/cart.model';
+import { MenuItem } from '@app/core/models/menu-item.model';
 import { ModifierGroup } from '@app/core/models/modifier.model';
 
 /** Selected option ids, keyed by modifier group id. */
@@ -65,4 +66,23 @@ export function totalPrice(
 
 export function clampQuantity(quantity: number): number {
   return Math.min(MAX_QUANTITY, Math.max(MIN_QUANTITY, quantity));
+}
+
+/** Builds a complete cart line (unique id, options, note, quantity and total). */
+export function buildCartItem(
+  product: MenuItem,
+  options: CartSelectedOption[],
+  quantity: number,
+  note = '',
+): CartItem {
+  return {
+    id: crypto.randomUUID(),
+    menu_item_id: product.id,
+    quantity,
+    name: product.name,
+    note: note.trim(),
+    unit_base_price: product.base_price,
+    selected_options: options,
+    total_price: totalPrice(product.base_price, options, quantity),
+  };
 }
