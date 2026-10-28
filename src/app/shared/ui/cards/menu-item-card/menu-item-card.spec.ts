@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
+import { FavoritesStore } from '@app/state/favorites.store';
 import { MenuItemCard } from './menu-item-card';
 
 const item = {
@@ -18,6 +19,7 @@ describe('MenuItemCard', () => {
   beforeEach(() => {
     addToCart.mockClear();
     success.mockClear();
+    localStorage.clear();
     TestBed.configureTestingModule({
       providers: [
         { provide: CartStore, useValue: { addToCart } },
@@ -34,7 +36,9 @@ describe('MenuItemCard', () => {
   }
 
   it('includes the product name in the add button accessible name', () => {
-    const button = (create().nativeElement as HTMLElement).querySelector('button');
+    const button = (create().nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      '.menu-item-card__button',
+    );
 
     expect(button?.getAttribute('aria-label')).toBe('Add to cart: Burger');
     expect(button?.hasAttribute('tuiButton')).toBe(true);
@@ -50,7 +54,7 @@ describe('MenuItemCard', () => {
         badges: Array.from(el.querySelectorAll('app-product-badge')).map((b) =>
           b.textContent.trim(),
         ),
-        button: el.querySelector('button'),
+        button: el.querySelector<HTMLButtonElement>('.menu-item-card__button'),
       };
     }
 
@@ -137,7 +141,9 @@ describe('MenuItemCard', () => {
 
       expect(el.querySelector('.menu-item-card--sold-out img')).not.toBeNull();
       expect(el.querySelector('app-product-badge')?.textContent.trim()).toBe('Sold out');
-      expect(el.querySelector('button')?.hasAttribute('disabled')).toBe(true);
+      expect(
+        el.querySelector<HTMLButtonElement>('.menu-item-card__button')?.hasAttribute('disabled'),
+      ).toBe(true);
     });
   });
 
@@ -189,10 +195,73 @@ describe('MenuItemCard', () => {
     const emitted: unknown[] = [];
     fixture.componentInstance.customize.subscribe((value) => emitted.push(value));
 
-    (fixture.nativeElement as HTMLElement).querySelector('button')?.click();
+    (fixture.nativeElement as HTMLElement)
+      .querySelector<HTMLButtonElement>('.menu-item-card__button')
+      ?.click();
 
     expect(emitted).toEqual([item]);
     expect(addToCart).not.toHaveBeenCalled();
+  });
+
+  describe('favorite button', () => {
+    function favoriteButton(el: HTMLElement) {
+      return el.querySelector<HTMLButtonElement>('.menu-item-card__favorite');
+    }
+
+    it('is a distinct button, unpressed by default, labelled with the product name', () => {
+      const el = create().nativeElement as HTMLElement;
+      const button = favoriteButton(el);
+
+      expect(button).not.toBeNull();
+      expect(button).not.toBe(el.querySelector('.menu-item-card__button'));
+      expect(button?.getAttribute('type')).toBe('button');
+      expect(button?.getAttribute('aria-pressed')).toBe('false');
+      expect(button?.getAttribute('aria-label')).toBe('Add to favorites: Burger');
+      expect(button?.querySelector('tui-icon')?.getAttribute('aria-hidden')).toBe('true');
+    });
+
+    it('toggles pressed state and label on click without customizing', () => {
+      const fixture = create();
+      const el = fixture.nativeElement as HTMLElement;
+      const emitted: unknown[] = [];
+      fixture.componentInstance.customize.subscribe((value) => emitted.push(value));
+
+      favoriteButton(el)?.click();
+      fixture.detectChanges();
+
+      expect(favoriteButton(el)?.getAttribute('aria-pressed')).toBe('true');
+      expect(favoriteButton(el)?.getAttribute('aria-label')).toBe('Remove from favorites: Burger');
+      expect(TestBed.inject(FavoritesStore).isFavorite('m1')).toBe(true);
+
+      favoriteButton(el)?.click();
+      fixture.detectChanges();
+
+      expect(favoriteButton(el)?.getAttribute('aria-pressed')).toBe('false');
+      expect(emitted).toEqual([]);
+      expect(addToCart).not.toHaveBeenCalled();
+    });
+
+    it('is shared between cards of the same product', () => {
+      const first = create();
+      const second = create();
+
+      favoriteButton(first.nativeElement as HTMLElement)?.click();
+      second.detectChanges();
+
+      expect(
+        favoriteButton(second.nativeElement as HTMLElement)?.getAttribute('aria-pressed'),
+      ).toBe('true');
+    });
+
+    it('is available on a sold-out product, which has no add button state change', () => {
+      const fixture = TestBed.createComponent(MenuItemCard);
+      fixture.componentRef.setInput('item', { ...item, is_sold_out: true });
+      fixture.detectChanges();
+      const button = favoriteButton(fixture.nativeElement as HTMLElement);
+
+      expect(button).not.toBeNull();
+      expect(button?.hasAttribute('disabled')).toBe(false);
+    });
   });
 
   it('does not emit customize for a sold-out product', () => {

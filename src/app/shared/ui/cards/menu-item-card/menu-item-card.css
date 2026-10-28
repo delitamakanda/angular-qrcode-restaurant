@@ -41,6 +41,50 @@
   left: 0.5rem;
 }
 
+.menu-item-card__favorite {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1a1a1a;
+  cursor: pointer;
+}
+
+/* White disc keeps the icon at >= 3:1 on any image, placeholder included. */
+.menu-item-card__favorite::before {
+  content: '';
+  position: absolute;
+  inset: 0.25rem;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 92%);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+}
+
+.menu-item-card__favorite tui-icon {
+  position: relative;
+}
+
+.menu-item-card__favorite[aria-pressed='true'] {
+  color: #b91c1c;
+}
+
+.menu-item-card__heart--filled {
+  fill: currentcolor;
+}
+
+.menu-item-card__favorite:focus-visible {
+  outline: 2px solid var(--tui-border-focus, #1d4ed8);
+  outline-offset: -2px;
+  border-radius: 50%;
+}
+
 .menu-item-card--sold-out .menu-item-card__image {
   opacity: 0.5;
 }
