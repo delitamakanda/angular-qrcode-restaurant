@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Subject, of, throwError } from 'rxjs';
 import { MenuApiService, MenuItemWithModifiers } from '@app/core/api/menu-api.service';
+import { MenuItem } from '@app/core/models/menu-item.model';
 import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
@@ -44,6 +45,7 @@ describe('ProductCustomizationDialog', () => {
   const success = vi.fn();
   const completeWith = vi.fn();
   let response: unknown;
+  let data: MenuItem;
 
   function render() {
     TestBed.configureTestingModule({
@@ -51,7 +53,7 @@ describe('ProductCustomizationDialog', () => {
         { provide: CartStore, useValue: { addToCart } },
         { provide: NotificationService, useValue: { success } },
         { provide: MenuApiService, useValue: { getItemWithModifiers: () => response } },
-        { provide: POLYMORPHEUS_CONTEXT, useValue: { data: product, completeWith } },
+        { provide: POLYMORPHEUS_CONTEXT, useValue: { data, completeWith } },
       ],
     });
     const fixture = TestBed.createComponent(ProductCustomizationDialog);
@@ -68,6 +70,7 @@ describe('ProductCustomizationDialog', () => {
   }
 
   beforeEach(() => {
+    data = { ...product, modifierGroups: undefined };
     addToCart.mockClear();
     success.mockClear();
     completeWith.mockClear();
@@ -170,6 +173,15 @@ describe('ProductCustomizationDialog', () => {
     expect(addToCart).toHaveBeenCalledTimes(1);
     expect(addToCart.mock.calls[0][0]).toMatchObject({ selected_options: [], total_price: 50 });
     expect(completeWith).toHaveBeenCalledWith('added');
+  });
+
+  it('shows the groups immediately, without fetching, when the opener already loaded them', () => {
+    data = product;
+    response = new Subject<MenuItemWithModifiers>();
+    const { el } = render();
+
+    expect(el.textContent).not.toContain('Loading options');
+    expect(el.querySelectorAll('fieldset').length).toBe(2);
   });
 
   it('adds nothing on its own when it is not validated', () => {
