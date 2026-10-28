@@ -1,19 +1,20 @@
-<section class="welcome-page">
-  <h1>{{ store()?.name }}</h1>
-  <p>Select your order mode</p>
+@if (store(); as store) {
+  <section class="welcome-page">
+    <app-store-hero [store]="store" />
 
-  <div class="welcome-page__actions flex flex-col gap-2">
-    <button tuiButton type="button" (click)="selectMode('dine_in')">
-      <tui-icon icon="@tui.hand-platter"></tui-icon>
-      Dine in
-    </button>
-    <button tuiButton type="button" (click)="selectMode('take_away')">
-      <tui-icon icon="@tui.hamburger"></tui-icon>
-      Take away
-    </button>
-    <button tuiButton type="button" (click)="selectMode('delivery')">
-      <tui-icon icon="@tui.motorbike"></tui-icon>
-      Delivery
-    </button>
-  </div>
-</section>
+    <div class="welcome-page__content">
+      @if (!isOpen()) {
+        <p class="welcome-page__closed" role="status">
+          This restaurant is currently closed. Ordering is unavailable for now.
+        </p>
+      }
+      <h2 class="welcome-page__title">Select your order mode</h2>
+      <app-order-mode-selector
+        [modes]="store.supported_modes"
+        [selected]="selectedMode()"
+        [disabled]="!isOpen()"
+        (modeSelected)="selectMode($event)"
+      />
+    </div>
+  </section>
+}

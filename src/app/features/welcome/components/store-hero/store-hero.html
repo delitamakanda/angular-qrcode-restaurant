@@ -1,1 +1,33 @@
-<p>store-hero works!</p>
+<header class="store-hero">
+  <div class="store-hero__cover">
+    @if (store().cover_image_url; as cover) {
+      <img class="store-hero__cover-image" [ngSrc]="cover" alt="" fill priority />
+    }
+  </div>
+  <div class="store-hero__body">
+    @if (store().logo_url; as logo) {
+      <img
+        class="store-hero__logo"
+        [ngSrc]="logo"
+        [alt]="'Logo ' + store().name"
+        width="64"
+        height="64"
+      />
+    }
+    <div class="store-hero__info">
+      <h1 class="store-hero__name">{{ store().name }}</h1>
+      <p class="store-hero__meta">
+        <span
+          class="store-hero__status"
+          [class.store-hero__status--open]="store().is_open"
+          [class.store-hero__status--closed]="!store().is_open"
+        >
+          {{ store().is_open ? 'Open' : 'Closed' }}
+        </span>
+        @if (store().estimated_wait_minutes; as wait) {
+          <span class="store-hero__wait">Estimated wait: {{ wait }} min</span>
+        }
+      </p>
+    </div>
+  </div>
+</header>

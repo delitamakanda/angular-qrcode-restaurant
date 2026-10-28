@@ -1,1 +1,17 @@
-<p>order-mode-selector works!</p>
+<div class="order-mode-selector" role="group" aria-label="Order mode">
+  @for (mode of modes(); track mode) {
+    <button
+      tuiButton
+      type="button"
+      size="l"
+      class="order-mode-selector__option"
+      [appearance]="selected() === mode ? 'primary' : 'secondary'"
+      [attr.aria-pressed]="selected() === mode"
+      [disabled]="disabled()"
+      (click)="modeSelected.emit(mode)"
+    >
+      <tui-icon [icon]="options[mode].icon" />
+      {{ options[mode].label }}
+    </button>
+  }
+</div>
