@@ -1,1 +1,53 @@
-<p>order-tracking-page works!</p>
+<section class="order-tracking-page">
+  @if (loading()) {
+    <p role="status" aria-live="polite">Loading your order…</p>
+  }
+  @if (failed()) {
+    <app-empty-state
+      title="Order not found"
+      description="We could not load this order. Check your connection and try again."
+      icon="@tui.circle-alert"
+    >
+      <div class="order-tracking-page__actions">
+        <button tuiButton type="button" appearance="primary" size="l" (click)="retry()">
+          Retry
+        </button>
+        <a tuiButton appearance="secondary" size="l" [routerLink]="['../../menu']">
+          Back to Menu
+        </a>
+      </div>
+    </app-empty-state>
+  }
+  @if (order(); as currentOrder) {
+    <h1>Order tracking</h1>
+    <dl class="order-tracking-page__details">
+      <div>
+        <dt>Order Number</dt>
+        <dd class="order-tracking-page__number">{{ displayNumber() }}</dd>
+      </div>
+      <div>
+        <dt>Status</dt>
+        <dd role="status" aria-live="polite">{{ statusLabel() }}</dd>
+      </div>
+      @if (currentOrder.created_at) {
+        <div>
+          <dt>Placed</dt>
+          <dd>{{ currentOrder.created_at | date: 'medium' }}</dd>
+        </div>
+      }
+      @if (currentOrder.estimated_delivery_time; as eta) {
+        <div>
+          <dt>Estimated Time</dt>
+          <dd>{{ eta | date: 'shortTime' }}</dd>
+        </div>
+      }
+      @if (currentOrder.total !== undefined && currentOrder.total !== null) {
+        <div>
+          <dt>Total</dt>
+          <dd>{{ currentOrder.total | currencyFormat }}</dd>
+        </div>
+      }
+    </dl>
+    <a tuiButton appearance="secondary" size="l" [routerLink]="['../../menu']">Back to Menu</a>
+  }
+</section>

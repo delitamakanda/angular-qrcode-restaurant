@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { ORDER_STATUS_LABELS } from '@app/core/constants/order.constants';
 import { OrderStatus } from '@app/core/models/order.model';
 
 @Pipe({
@@ -6,21 +7,6 @@ import { OrderStatus } from '@app/core/models/order.model';
 })
 export class OrderStatusLabelPipe implements PipeTransform {
   transform(status: OrderStatus): string {
-    switch (status) {
-      case 'pending':
-        return 'Pending';
-      case 'accepted':
-        return 'Accepted';
-      case 'preparing':
-        return 'Preparing';
-      case 'ready':
-        return 'Ready';
-      case 'cancelled':
-        return 'Cancelled';
-      case 'completed':
-        return 'Completed';
-      default:
-        return 'Unknown';
-    }
+    return ORDER_STATUS_LABELS[status];
   }
 }
