@@ -56,13 +56,13 @@ test('customer can order a product in dine-in mode', async ({ page }) => {
   await page.getByRole('button', { name: 'Submit' }).click();
 
   await expect(page).toHaveURL(/\/store\/demo\/confirmation\/e2e-order-1$/);
-  await expect(page.getByRole('heading', { name: 'Commande confirmée' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Order Confirmed' })).toBeVisible();
   await expect(page.getByText('E2E-1')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Suivre ma commande' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Track My Order' })).toHaveAttribute(
     'href',
     '/store/demo/tracking/e2e-order-1',
   );
-  await expect(page.getByRole('link', { name: 'Retour au menu' })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Back to Menu' })).toHaveAttribute(
     'href',
     '/store/demo/menu',
   );

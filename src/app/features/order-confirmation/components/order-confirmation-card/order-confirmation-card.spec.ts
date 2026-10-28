@@ -52,10 +52,10 @@ describe('OrderConfirmationCard', () => {
   });
 
   it('hides the estimated time when absent and shows it when present', () => {
-    expect(render(ORDER).textContent).not.toContain('Heure estimée');
+    expect(render(ORDER).textContent).not.toContain('Estimated Time');
 
     TestBed.resetTestingModule();
     const withEta = render({ ...ORDER, estimated_delivery_time: '2026-04-09T18:45:00.000Z' });
-    expect(withEta.textContent).toContain('Heure estimée');
+    expect(withEta.textContent).toContain('Estimated Time');
   });
 });
