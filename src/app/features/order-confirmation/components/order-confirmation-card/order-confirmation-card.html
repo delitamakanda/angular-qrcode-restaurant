@@ -1,11 +1,11 @@
-<article class="confirmation-card" aria-label="Récapitulatif de la commande">
+<article class="confirmation-card" aria-label="Order Confirmation">
   <dl class="confirmation-card__meta">
     <div>
-      <dt>Numéro de commande</dt>
+      <dt>Order Number</dt>
       <dd class="confirmation-card__number">{{ order().order_number }}</dd>
     </div>
     <div>
-      <dt>Statut</dt>
+      <dt>Status</dt>
       <dd>{{ order().status | orderStatusLabel }}</dd>
     </div>
     <div>
@@ -14,7 +14,7 @@
     </div>
     @if (order().estimated_delivery_time; as eta) {
       <div>
-        <dt>Heure estimée</dt>
+        <dt>Estimated Time</dt>
         <dd>{{ eta | date: 'shortTime' }}</dd>
       </div>
     }
@@ -36,15 +36,15 @@
 
   <dl class="confirmation-card__totals">
     <div>
-      <dt>Sous-total</dt>
+      <dt>Subtotal</dt>
       <dd>{{ order().subtotal | currencyFormat }}</dd>
     </div>
     <div>
-      <dt>Remise</dt>
+      <dt>Discount</dt>
       <dd>{{ order().discount | currencyFormat }}</dd>
     </div>
     <div>
-      <dt>Frais</dt>
+      <dt>Fees</dt>
       <dd>{{ order().fees | currencyFormat }}</dd>
     </div>
     <div class="confirmation-card__total">

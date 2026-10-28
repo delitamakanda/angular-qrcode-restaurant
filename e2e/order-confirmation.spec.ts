@@ -7,8 +7,10 @@ test('confirmation page shows an error when the order is not found', async ({ pa
 
   await page.goto('/store/demo/confirmation/unknown-order');
 
-  await expect(page.getByText('Commande introuvable')).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Retour au menu' })).toHaveAttribute(
+  await expect(
+    page.getByText('Order not found or network error. Please try again later.'),
+  ).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Back to Menu' })).toHaveAttribute(
     'href',
     '/store/demo/menu',
   );

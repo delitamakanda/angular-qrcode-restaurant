@@ -1,21 +1,19 @@
 <section class="order-confirmation-page">
   @if (loading()) {
-    <p role="status" aria-live="polite">Chargement de votre commande…</p>
+    <p role="status" aria-live="polite">Loading your order…</p>
   }
   @if (failed()) {
-    <p role="alert">Commande introuvable ou erreur réseau. Veuillez réessayer plus tard.</p>
-    <a tuiButton appearance="primary" size="l" [routerLink]="['../../menu']">Retour au menu</a>
+    <p role="alert">Order not found or network error. Please try again later.</p>
+    <a tuiButton appearance="primary" size="l" [routerLink]="['../../menu']">Back to Menu</a>
   }
   @if (order(); as currentOrder) {
-    <h1 #title tabindex="-1">Commande confirmée</h1>
+    <h1 #title tabindex="-1">Order Confirmed</h1>
     <app-order-confirmation-card [order]="currentOrder" />
     <div class="order-confirmation-page__actions">
       <a tuiButton appearance="primary" size="l" [routerLink]="['../../tracking', currentOrder.id]">
-        Suivre ma commande
+        Track My Order
       </a>
-      <a tuiButton appearance="secondary" size="l" [routerLink]="['../../menu']">
-        Retour au menu
-      </a>
+      <a tuiButton appearance="secondary" size="l" [routerLink]="['../../menu']"> Back to Menu </a>
     </div>
   }
 </section>

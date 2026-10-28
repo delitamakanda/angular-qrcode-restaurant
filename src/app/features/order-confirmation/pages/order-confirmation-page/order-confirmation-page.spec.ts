@@ -55,7 +55,7 @@ describe('OrderConfirmationPage', () => {
 
     expect(getOrder).toHaveBeenCalledWith('order-1');
     expect(el.querySelector('[role="status"]')).toBeNull();
-    expect(el.querySelector('h1')?.textContent).toContain('Commande confirmée');
+    expect(el.querySelector('h1')?.textContent).toContain('Order Confirmed');
     expect(el.textContent).toContain('A003');
     expect(el.textContent).toContain('Pending');
     expect(el.textContent).toContain('$65.00');
@@ -72,8 +72,8 @@ describe('OrderConfirmationPage', () => {
       ]),
     );
 
-    expect(hrefs.get('Suivre ma commande')).toBe('/store/demo/tracking/order-1');
-    expect(hrefs.get('Retour au menu')).toBe('/store/demo/menu');
+    expect(hrefs.get('Track My Order')).toBe('/store/demo/tracking/order-1');
+    expect(hrefs.get('Back to Menu')).toBe('/store/demo/menu');
   });
 
   it('shows an alert with a menu link when the request fails', async () => {
