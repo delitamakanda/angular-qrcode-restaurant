@@ -14,7 +14,7 @@
   min-height: 2.75rem;
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--tui-border-normal, #767676);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-control);
   font: inherit;
   color: inherit;
   background: transparent;

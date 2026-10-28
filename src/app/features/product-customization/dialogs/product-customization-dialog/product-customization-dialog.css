@@ -25,7 +25,7 @@
   inline-size: 100%;
   max-block-size: 10rem;
   object-fit: cover;
-  border-radius: 0.5rem;
+  border-radius: var(--radius-control);
 }
 
 .customization__description,

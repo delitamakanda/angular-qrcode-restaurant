@@ -55,7 +55,7 @@
   min-height: 44px;
   padding: 0 1.25rem;
   border: 1px solid var(--tui-border-normal);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--tui-background-base);
   color: var(--tui-text-primary);
   font: inherit;
