@@ -1,0 +1,57 @@
+.confirmation-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--tui-border-normal, #ddd);
+  border-radius: 1rem;
+  background: var(--tui-background-base, #fff);
+}
+
+dl,
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.confirmation-card__meta > div,
+.confirmation-card__totals > div,
+.confirmation-card__line {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+dt {
+  color: var(--tui-text-secondary, #555);
+}
+
+dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.confirmation-card__number {
+  font-size: 1.25rem;
+}
+
+.confirmation-card__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-block: 1px solid var(--tui-border-normal, #ddd);
+}
+
+.confirmation-card__options {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--tui-text-secondary, #555);
+}
+
+.confirmation-card__total {
+  font-size: 1.125rem;
+  font-weight: 700;
+}

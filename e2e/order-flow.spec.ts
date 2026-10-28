@@ -7,6 +7,17 @@ test('customer can order a product in dine-in mode', async ({ page }) => {
     store_id: 'demo',
     status: 'pending',
     order_number: 'E2E-1',
+    mode: 'dine_in',
+    items: [
+      {
+        id: 'cart-1',
+        menu_item_id: 'item-classic-milk-tea',
+        name: 'Classic Milk Tea',
+        quantity: 1,
+        unit_base_price: 450,
+        total_price: 450,
+      },
+    ],
     created_at: '2026-01-01T12:00:00.000Z',
     total: 450,
     discount: 0,
@@ -45,6 +56,14 @@ test('customer can order a product in dine-in mode', async ({ page }) => {
   await page.getByRole('button', { name: 'Submit' }).click();
 
   await expect(page).toHaveURL(/\/store\/demo\/confirmation\/e2e-order-1$/);
-  await expect(page.getByRole('heading', { name: 'Order confirmed' })).toBeVisible();
-  await expect(page.getByText('Order ID: e2e-order-1')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Commande confirmée' })).toBeVisible();
+  await expect(page.getByText('E2E-1')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Suivre ma commande' })).toHaveAttribute(
+    'href',
+    '/store/demo/tracking/e2e-order-1',
+  );
+  await expect(page.getByRole('link', { name: 'Retour au menu' })).toHaveAttribute(
+    'href',
+    '/store/demo/menu',
+  );
 });

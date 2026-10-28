@@ -1,1 +1,55 @@
-<p>order-confirmation-card works !</p>
+<article class="confirmation-card" aria-label="Récapitulatif de la commande">
+  <dl class="confirmation-card__meta">
+    <div>
+      <dt>Numéro de commande</dt>
+      <dd class="confirmation-card__number">{{ order().order_number }}</dd>
+    </div>
+    <div>
+      <dt>Statut</dt>
+      <dd>{{ order().status | orderStatusLabel }}</dd>
+    </div>
+    <div>
+      <dt>Mode</dt>
+      <dd>{{ modeLabels[order().mode] }}</dd>
+    </div>
+    @if (order().estimated_delivery_time; as eta) {
+      <div>
+        <dt>Heure estimée</dt>
+        <dd>{{ eta | date: 'shortTime' }}</dd>
+      </div>
+    }
+  </dl>
+
+  <ul class="confirmation-card__items">
+    @for (item of order().items; track item.id) {
+      <li>
+        <div class="confirmation-card__line">
+          <span>{{ item.quantity }} × {{ item.name }}</span>
+          <span>{{ item.total_price | currencyFormat }}</span>
+        </div>
+        @if (item.selected_options?.length) {
+          <p class="confirmation-card__options">{{ optionsLabel(item) }}</p>
+        }
+      </li>
+    }
+  </ul>
+
+  <dl class="confirmation-card__totals">
+    <div>
+      <dt>Sous-total</dt>
+      <dd>{{ order().subtotal | currencyFormat }}</dd>
+    </div>
+    <div>
+      <dt>Remise</dt>
+      <dd>{{ order().discount | currencyFormat }}</dd>
+    </div>
+    <div>
+      <dt>Frais</dt>
+      <dd>{{ order().fees | currencyFormat }}</dd>
+    </div>
+    <div class="confirmation-card__total">
+      <dt>Total</dt>
+      <dd>{{ order().total | currencyFormat }}</dd>
+    </div>
+  </dl>
+</article>
