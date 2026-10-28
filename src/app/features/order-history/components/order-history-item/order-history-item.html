@@ -1,0 +1,19 @@
+<a
+  class="order-history-item"
+  [routerLink]="link()"
+  [attr.aria-label]="'Order ' + order().order_number + ', ' + order().status"
+>
+  <span class="order-history-item__head">
+    <span class="order-history-item__number">{{ order().order_number }}</span>
+    <span class="order-history-item__status" [attr.data-status]="order().status">
+      <span aria-hidden="true">●</span> {{ order().status | orderStatusLabel }}
+    </span>
+  </span>
+  <span class="order-history-item__meta">
+    {{ order().created_at | date: 'medium' }} · {{ modeLabel() }}
+  </span>
+  <span class="order-history-item__meta">
+    {{ itemCount() }} {{ itemCount() === 1 ? 'item' : 'items' }} ·
+    <strong>{{ order().total | currencyFormat }}</strong>
+  </span>
+</a>

@@ -51,6 +51,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'orders',
+        loadComponent: () =>
+          import('./features/order-history/pages/order-history-page/order-history-page').then(
+            (m) => m.OrderHistoryPage,
+          ),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./features/settings/pages/settings-page/settings-page').then(

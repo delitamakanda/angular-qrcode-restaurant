@@ -3,6 +3,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CartStore } from '../../../../state/cart.store';
 import { CheckoutStore } from '../../../../state/checkout.store';
 import { ShopStore } from '../../../../state/shop.store';
+import { OrderHistoryStore } from '../../../../state/order-history.store';
 import { OrderApiService } from '../../../../core/api/order-api.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -61,6 +62,7 @@ export class CheckoutPage {
   protected readonly cartStore = inject(CartStore);
   protected readonly checkoutStore = inject(CheckoutStore);
   private readonly shopStore = inject(ShopStore);
+  private readonly orderHistoryStore = inject(OrderHistoryStore);
   private readonly orderApiService = inject(OrderApiService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
@@ -120,6 +122,11 @@ export class CheckoutPage {
           items: this.cartStore.items(),
         }),
       );
+      this.orderHistoryStore.add({
+        id: order.id,
+        store_id: store.id,
+        created_at: order.created_at,
+      });
       this.cartStore.clearCart();
       this.checkoutStore.resetForm();
 

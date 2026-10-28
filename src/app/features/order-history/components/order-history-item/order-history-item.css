@@ -1,0 +1,37 @@
+.order-history-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-height: 2.75rem;
+  padding: 1rem;
+  border: 1px solid var(--tui-border-normal, #ddd);
+  border-radius: var(--radius-panel);
+  background: var(--tui-background-base, #fff);
+  color: inherit;
+  text-decoration: none;
+}
+
+.order-history-item:focus-visible {
+  outline: 2px solid var(--tui-border-focus, currentColor);
+  outline-offset: 2px;
+}
+
+.order-history-item__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.order-history-item__number {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.order-history-item__status {
+  font-weight: 600;
+}
+
+.order-history-item__meta {
+  color: var(--color-ink-muted);
+  font-size: 0.875rem;
+}
