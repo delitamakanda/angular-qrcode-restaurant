@@ -6,6 +6,7 @@ import { provideTaiga } from '@taiga-ui/core';
 import { OrderApiService } from '@app/core/api/order-api.service';
 import { CartStore } from '@app/state/cart.store';
 import { CheckoutStore } from '@app/state/checkout.store';
+import { OrderHistoryStore } from '@app/state/order-history.store';
 import { ShopStore } from '@app/state/shop.store';
 import { CheckoutPage } from './checkout-page';
 
@@ -181,6 +182,20 @@ describe('CheckoutPage', () => {
       items: [],
     });
     expect(navigate).toHaveBeenCalled();
+  });
+
+  it('records the created order in the order history', async () => {
+    localStorage.clear();
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    const history = TestBed.inject(OrderHistoryStore);
+    const add = vi.spyOn(history, 'add');
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+
+    await fixture.componentInstance.submitForm();
+
+    expect(add).toHaveBeenCalledWith(expect.objectContaining({ id: 'order-1', store_id: 'demo' }));
   });
 
   it('defaults the payment method to cash and displays its label', () => {

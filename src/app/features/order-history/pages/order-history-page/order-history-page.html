@@ -1,0 +1,64 @@
+<section class="order-history-page" aria-labelledby="order-history-title">
+  <a routerLink="../settings" class="order-history-page__back">Back to settings</a>
+  <h1 id="order-history-title" class="order-history-page__title">My orders</h1>
+
+  <div aria-live="polite">
+    @if (loading()) {
+      <p role="status">Loading your orders…</p>
+    }
+    @if (failed()) {
+      <div role="alert" class="order-history-page__error">
+        <p>We could not load your orders. Check your connection and try again.</p>
+        <button tuiButton type="button" appearance="primary" size="l" (click)="retry()">
+          Retry
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (loaded()) {
+    @if (visibleOrders().length === 0) {
+      <app-empty-state title="No orders yet">
+        <a tuiButton appearance="primary" size="l" routerLink="../menu">Browse the menu</a>
+      </app-empty-state>
+    } @else {
+      <ul class="order-history-page__list">
+        @for (order of visibleOrders(); track order.id) {
+          <li><app-order-history-item [order]="order" /></li>
+        }
+      </ul>
+
+      @if (confirmingClear()) {
+        <div class="order-history-page__confirm" role="alertdialog" aria-labelledby="clear-title">
+          <p id="clear-title">Clear your order history on this device?</p>
+          <div class="order-history-page__confirm-actions">
+            <button
+              #cancelButton
+              tuiButton
+              type="button"
+              appearance="secondary"
+              size="l"
+              (click)="cancelClear()"
+            >
+              Cancel
+            </button>
+            <button tuiButton type="button" appearance="primary" size="l" (click)="confirmClear()">
+              Clear
+            </button>
+          </div>
+        </div>
+      } @else {
+        <button
+          #clearButton
+          tuiButton
+          type="button"
+          appearance="secondary"
+          size="l"
+          (click)="askClear()"
+        >
+          Clear history
+        </button>
+      }
+    }
+  }
+</section>
