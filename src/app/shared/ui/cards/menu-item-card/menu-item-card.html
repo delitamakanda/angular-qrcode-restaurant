@@ -9,6 +9,21 @@
       [src]="item().image_url || placeholder"
       [appImgFallback]="placeholder"
     />
+    <button
+      type="button"
+      class="menu-item-card__favorite"
+      [attr.aria-pressed]="isFavorite()"
+      [attr.aria-label]="
+        (isFavorite() ? 'Remove from favorites: ' : 'Add to favorites: ') + item().name
+      "
+      (click)="toggleFavorite()"
+    >
+      <tui-icon
+        aria-hidden="true"
+        icon="@tui.heart"
+        [class.menu-item-card__heart--filled]="isFavorite()"
+      />
+    </button>
     @if (badge(); as badgeType) {
       <app-product-badge class="menu-item-card__badge" [type]="badgeType" />
     }
