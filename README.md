@@ -126,7 +126,7 @@ The Cloudflare Function (`functions/api/_handler.ts`, wrapped by `functions/api/
 On Cloudflare, `POST /api/orders` is stored in a D1 database bound as `ORDERS_DB` (`wrangler.toml`); the seed orders from `db.json` stay readable and are merged with the persisted ones. Without the binding (tests, `wrangler pages dev` without config) the Function falls back to in-memory storage. One-time setup by a maintainer:
 
 ```bash
-npx wrangler d1 create angular-qrcode-restaurant-orders   # copy the database_id into wrangler.toml
+npx wrangler d1 create angular-qrcode-restaurant-orders   # copy the database_id into wrangler.toml and uncomment the [[d1_databases]] block
 npx wrangler d1 migrations apply angular-qrcode-restaurant-orders --remote
 npx wrangler d1 migrations apply angular-qrcode-restaurant-orders --local   # for `wrangler pages dev`
 ```

@@ -2,11 +2,14 @@ name = "angular-qrcode-restaurant"
 compatibility_date = "2026-04-13"
 pages_build_output_dir = "dist/angular-qrcode-restaurant/browser"
 
-# Orders persistence (D1). Create it with `npx wrangler d1 create angular-qrcode-restaurant-orders`,
-# replace database_id, then apply the migrations (see README, "Local vs deployed parity").
-# Without this binding the Function falls back to in-memory storage.
-[[d1_databases]]
-binding = "ORDERS_DB"
-database_name = "angular-qrcode-restaurant-orders"
-database_id = "00000000-0000-0000-0000-000000000000"
-migrations_dir = "functions/migrations"
+# Orders persistence (D1). The binding is commented out on purpose: Cloudflare rejects a
+# placeholder database_id (error 8000022) and fails the whole deployment. Without it the
+# Function falls back to in-memory storage. To enable persistence:
+#   1. npx wrangler d1 create angular-qrcode-restaurant-orders
+#   2. uncomment the block below and paste the real database_id
+#   3. apply the migrations (see README, "Local vs deployed parity")
+# [[d1_databases]]
+# binding = "ORDERS_DB"
+# database_name = "angular-qrcode-restaurant-orders"
+# database_id = "<real-database-id>"
+# migrations_dir = "functions/migrations"
