@@ -22,7 +22,7 @@ describe('mock-api/db.json integrity', () => {
       expect(item.id.startsWith('item-')).toBe(true);
       expect(categoryIds).toContain(item.category_id);
       expect(item.base_price).toBeGreaterThan(0);
-      expect(item.image_url).toBe('/images/placeholder-food.svg');
+      expect(item.image_url).toBe(`/images/bubble-house/products/${item.id}.webp`);
       expect(Object.keys(item.mode_availability).sort()).toEqual([
         'delivery',
         'dine_in',
