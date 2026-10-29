@@ -120,7 +120,7 @@ describe('OrderTrackingPage', () => {
     updates.next({ ...ORDER, status: 'preparing' });
     harness.detectChanges();
 
-    expect(root.querySelector('dd[role="status"]')?.textContent).toContain('Preparing');
+    expect(root.querySelector('span[role="status"]')?.textContent).toContain('Preparing');
     expect(root.querySelector('[aria-current="step"]')?.textContent).toContain('Preparing');
 
     TestBed.resetTestingModule();
