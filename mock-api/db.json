@@ -1195,6 +1195,243 @@
         }
       ],
       "id": "SJ3RLGSZfPk"
+    },
+    {
+      "store_id": "demo",
+      "mode": "dine_in",
+      "customer": {
+        "name": "DELITA MAKANDA",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "266480fb-29d5-459e-82a0-0891e47d559c",
+          "menu_item_id": "item-braised-pork-rice",
+          "quantity": 1,
+          "name": "Braised Pork Rice",
+          "note": "",
+          "unit_base_price": 70,
+          "selected_options": [],
+          "total_price": 70
+        },
+        {
+          "id": "34e30e60-9917-4654-a966-804f4a91e7a6",
+          "menu_item_id": "item-gua-bao",
+          "quantity": 1,
+          "name": "Gua Bao",
+          "note": "",
+          "unit_base_price": 75,
+          "selected_options": [
+            {
+              "group_id": "mg-gua-bao-spice",
+              "option_id": "opt-gua-bao-spice-none",
+              "label": "Not spicy",
+              "price_delta": 0
+            }
+          ],
+          "total_price": 75
+        },
+        {
+          "id": "297da087-6614-4871-a5bd-5789375373c4",
+          "menu_item_id": "item-tang-yuan",
+          "quantity": 1,
+          "name": "Tang Yuan",
+          "note": "",
+          "unit_base_price": 60,
+          "selected_options": [],
+          "total_price": 60
+        }
+      ],
+      "order_number": "A001",
+      "status": "pending",
+      "subtotal": 205,
+      "discount": 0,
+      "fees": 0,
+      "total": 205,
+      "created_at": "2026-10-29T20:18:07.905Z",
+      "id": "ktBo_f_8iWg"
+    },
+    {
+      "store_id": "demo",
+      "mode": "take_away",
+      "customer": {
+        "name": "DELITA MAKANDA",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "b8e0f8f1-ed9b-4086-9366-3c3406592f09",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [
+            {
+              "group_id": "mg-size",
+              "option_id": "opt-size-m",
+              "label": "Medium",
+              "price_delta": 0
+            },
+            {
+              "group_id": "mg-sugar",
+              "option_id": "opt-sugar-50",
+              "label": "50%",
+              "price_delta": 0
+            },
+            {
+              "group_id": "mg-ice",
+              "option_id": "opt-ice-less",
+              "label": "Less Ice",
+              "price_delta": 0
+            },
+            {
+              "group_id": "mg-toppings",
+              "option_id": "opt-top-boba",
+              "label": "Boba",
+              "price_delta": 10
+            }
+          ],
+          "total_price": 65
+        }
+      ],
+      "order_number": "A002",
+      "status": "pending",
+      "subtotal": 65,
+      "discount": 0,
+      "fees": 0,
+      "total": 65,
+      "created_at": "2026-10-29T20:18:47.903Z",
+      "id": "N2pfIgQ7fiM"
+    },
+    {
+      "store_id": "demo",
+      "mode": "delivery",
+      "customer": {
+        "name": "DELITA MAKANDA",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "b00c9159-6d8e-47c3-8f7b-f2d769df99b3",
+          "menu_item_id": "item-taro-milk-tea",
+          "quantity": 1,
+          "name": "Taro Milk Tea",
+          "note": "",
+          "unit_base_price": 65,
+          "selected_options": [],
+          "total_price": 65
+        },
+        {
+          "id": "fc0a8c85-828a-443e-8673-804458c525ca",
+          "menu_item_id": "item-mango-green-tea",
+          "quantity": 1,
+          "name": "Mango Green Tea",
+          "note": "",
+          "unit_base_price": 65,
+          "selected_options": [
+            {
+              "group_id": "mg-mango-green-tea-size",
+              "option_id": "opt-mango-green-tea-size-l",
+              "label": "Large",
+              "price_delta": 10
+            }
+          ],
+          "total_price": 75
+        },
+        {
+          "id": "09599bc9-cc96-4905-9a25-87b651ae085c",
+          "menu_item_id": "item-spiral-potato",
+          "quantity": 1,
+          "name": "Spiral Potato",
+          "note": "",
+          "unit_base_price": 60,
+          "selected_options": [
+            {
+              "group_id": "mg-spiral-potato-spice",
+              "option_id": "opt-spiral-potato-spice-mild",
+              "label": "Mild",
+              "price_delta": 0
+            }
+          ],
+          "total_price": 60
+        },
+        {
+          "id": "fd1a000b-6dcd-4898-a845-0a35bbb7d7ff",
+          "menu_item_id": "item-braised-pork-rice",
+          "quantity": 1,
+          "name": "Braised Pork Rice",
+          "note": "",
+          "unit_base_price": 70,
+          "selected_options": [],
+          "total_price": 70
+        }
+      ],
+      "order_number": "A003",
+      "status": "pending",
+      "subtotal": 270,
+      "discount": 0,
+      "fees": 0,
+      "total": 270,
+      "created_at": "2026-10-29T20:19:32.920Z",
+      "id": "2VKBuivF4eM"
+    },
+    {
+      "store_id": "demo",
+      "mode": "take_away",
+      "customer": {
+        "name": "DELITA MAKANDA",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "7c1de16d-a9e1-46cb-addc-15e1642e1eba",
+          "menu_item_id": "item-classic-milk-tea",
+          "quantity": 1,
+          "name": "Classic Milk Tea",
+          "note": "",
+          "unit_base_price": 55,
+          "selected_options": [
+            {
+              "group_id": "mg-size",
+              "option_id": "opt-size-l",
+              "label": "Large",
+              "price_delta": 10
+            },
+            {
+              "group_id": "mg-sugar",
+              "option_id": "opt-sugar-50",
+              "label": "50%",
+              "price_delta": 0
+            },
+            {
+              "group_id": "mg-ice",
+              "option_id": "opt-ice-less",
+              "label": "Less Ice",
+              "price_delta": 0
+            },
+            {
+              "group_id": "mg-toppings",
+              "option_id": "opt-top-boba",
+              "label": "Boba",
+              "price_delta": 10
+            }
+          ],
+          "total_price": 75
+        }
+      ],
+      "order_number": "A004",
+      "status": "pending",
+      "subtotal": 75,
+      "discount": 0,
+      "fees": 0,
+      "total": 75,
+      "created_at": "2026-10-29T20:20:38.253Z",
+      "id": "8HmqhL0kczs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

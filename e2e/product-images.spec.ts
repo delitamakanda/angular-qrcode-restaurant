@@ -12,7 +12,10 @@ test('menu cards show product images with a placeholder fallback', async ({ page
   const image = card.locator('img');
 
   await expect(image).toHaveAttribute('alt', '');
-  await expect(image).toHaveAttribute('src', '/images/placeholder-food.svg');
+  await expect(image).toHaveAttribute(
+    'src',
+    '/images/bubble-house/products/item-classic-milk-tea.webp',
+  );
   await expect
     .poll(() => image.evaluate((img: HTMLImageElement) => img.naturalWidth))
     .toBeGreaterThan(0);
