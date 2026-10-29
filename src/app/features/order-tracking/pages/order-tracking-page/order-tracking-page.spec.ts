@@ -50,6 +50,15 @@ describe('OrderTrackingPage', () => {
     expect(root.querySelector('[aria-live="polite"][role="status"]')).not.toBeNull();
   });
 
+  it('renders the status timeline with the current step', async () => {
+    getOrder.mockReturnValue(of(ORDER));
+    const root = el(await render());
+
+    expect(root.querySelectorAll('app-order-status-timeline li')).toHaveLength(5);
+    expect(root.querySelector('[aria-current="step"]')?.textContent).toContain('Accepted');
+    expect(root.querySelectorAll('[role="status"]')).toHaveLength(1);
+  });
+
   it('tolerates missing status, number, total and date', async () => {
     getOrder.mockReturnValue(of({ id: 'KKiF88EiUMA' } as Order));
     const root = el(await render());

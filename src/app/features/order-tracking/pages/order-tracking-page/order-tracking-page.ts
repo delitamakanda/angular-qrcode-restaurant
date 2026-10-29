@@ -5,13 +5,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TuiButton } from '@taiga-ui/core';
 import { ORDER_STATUS_LABELS } from '@app/core/constants/order.constants';
 import { OrderStatus } from '@app/core/models/order.model';
+import { OrderStatusTimeline } from '@app/features/order-tracking/components/order-status-timeline/order-status-timeline';
 import { OrderTrackingStore } from '@app/state/order-tracking.store';
 import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 import { EmptyState } from '@shared/ui/layout/empty-state/empty-state';
 
 @Component({
   selector: 'app-order-tracking-page',
-  imports: [RouterLink, TuiButton, DatePipe, CurrencyFormatPipe, EmptyState],
+  imports: [RouterLink, TuiButton, DatePipe, CurrencyFormatPipe, EmptyState, OrderStatusTimeline],
   templateUrl: './order-tracking-page.html',
   styleUrl: './order-tracking-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
