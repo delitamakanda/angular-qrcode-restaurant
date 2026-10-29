@@ -1,0 +1,16 @@
+<div class="order-history-unavailable">
+  <div class="order-history-unavailable__text">
+    <span class="order-history-unavailable__title">Details unavailable</span>
+    <span class="order-history-unavailable__meta">
+      Order {{ shortId() }} · {{ entry().created_at | date: 'medium' }}
+    </span>
+  </div>
+  <button
+    type="button"
+    class="order-history-unavailable__remove"
+    [attr.aria-label]="'Remove order ' + shortId() + ' from history'"
+    (click)="removed.emit(entry().id)"
+  >
+    Remove
+  </button>
+</div>

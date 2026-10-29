@@ -15,15 +15,22 @@ import { TuiButton } from '@taiga-ui/core';
 import { Observable, catchError, forkJoin, map, of, startWith, switchMap } from 'rxjs';
 import { OrderApiService } from '@app/core/api/order-api.service';
 import { Order } from '@app/core/models/order.model';
-import { OrderHistoryStore } from '@app/state/order-history.store';
+import { OrderHistoryEntry, OrderHistoryStore } from '@app/state/order-history.store';
 import { ShopStore } from '@app/state/shop.store';
 import { EmptyState } from '@shared/ui/layout/empty-state/empty-state';
 import { OrderHistoryItem } from '../../components/order-history-item/order-history-item';
+import { OrderHistoryUnavailableItem } from '../../components/order-history-unavailable-item/order-history-unavailable-item';
+
+/** A local history entry, with its order when the API still knows it. */
+interface HistoryRow {
+  readonly entry: OrderHistoryEntry;
+  readonly order: Order | null;
+}
 
 type HistoryState =
   | { readonly status: 'loading' }
   | { readonly status: 'error' }
-  | { readonly status: 'loaded'; readonly orders: readonly Order[] };
+  | { readonly status: 'loaded'; readonly rows: readonly HistoryRow[] };
 
 const LOADING: HistoryState = { status: 'loading' };
 
@@ -36,14 +43,18 @@ function isNotFound(error: unknown): boolean {
   );
 }
 
+function dateOf(row: HistoryRow): string {
+  return row.order?.created_at ?? row.entry.created_at;
+}
+
 type FetchResult =
-  | { readonly kind: 'order'; readonly order: Order }
-  | { readonly kind: 'gone'; readonly id: string }
+  | { readonly kind: 'order'; readonly entry: OrderHistoryEntry; readonly order: Order }
+  | { readonly kind: 'unavailable'; readonly entry: OrderHistoryEntry }
   | { readonly kind: 'error' };
 
 @Component({
   selector: 'app-order-history-page',
-  imports: [RouterLink, TuiButton, EmptyState, OrderHistoryItem],
+  imports: [RouterLink, TuiButton, EmptyState, OrderHistoryItem, OrderHistoryUnavailableItem],
   templateUrl: './order-history-page.html',
   styleUrl: './order-history-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,26 +73,30 @@ export class OrderHistoryPage {
     toObservable(this.attempt).pipe(
       switchMap(() => {
         const storeId = this.shopStore.store()?.id;
-        const ids = untracked(this.history.entries)
-          .filter((entry) => entry.store_id === storeId)
-          .map((entry) => entry.id);
-        if (ids.length === 0) {
-          return of<HistoryState>({ status: 'loaded', orders: [] });
+        const entries = untracked(this.history.entries).filter(
+          (entry) => entry.store_id === storeId,
+        );
+        if (entries.length === 0) {
+          return of<HistoryState>({ status: 'loaded', rows: [] });
         }
-        return forkJoin(ids.map((id) => this.fetch(id))).pipe(
+        return forkJoin(entries.map((entry) => this.fetch(entry))).pipe(
           map((results): HistoryState => {
-            for (const result of results) {
-              if (result.kind === 'gone') {
-                this.history.remove(result.id);
-              }
-            }
             if (results.some((result) => result.kind === 'error')) {
               return { status: 'error' };
             }
-            const orders = results
-              .flatMap((result) => (result.kind === 'order' ? [result.order] : []))
-              .sort((a, b) => b.created_at.localeCompare(a.created_at));
-            return { status: 'loaded', orders };
+            const rows = results
+              .flatMap((result) =>
+                result.kind === 'error'
+                  ? []
+                  : [
+                      {
+                        entry: result.entry,
+                        order: result.kind === 'order' ? result.order : null,
+                      },
+                    ],
+              )
+              .sort((a, b) => dateOf(b).localeCompare(dateOf(a)));
+            return { status: 'loaded', rows };
           }),
           startWith<HistoryState>({ status: 'loading' }),
         );
@@ -92,24 +107,29 @@ export class OrderHistoryPage {
 
   protected readonly loading = computed(() => this.state().status === 'loading');
   protected readonly failed = computed(() => this.state().status === 'error');
-  protected readonly orders = computed(() => {
+  protected readonly rows = computed(() => {
     const state = this.state();
-    return state.status === 'loaded' ? state.orders : [];
+    return state.status === 'loaded' ? state.rows : [];
   });
   protected readonly loaded = computed(() => this.state().status === 'loaded');
-  /** Orders still on screen after a clear or a purge of unknown ids. */
-  protected readonly visibleOrders = computed(() => {
+  /** Rows still on screen after a clear or an explicit removal. */
+  protected readonly visibleRows = computed(() => {
     const ids = new Set(this.history.entries().map((entry) => entry.id));
-    return this.orders().filter((order) => ids.has(order.id));
+    return this.rows().filter((row) => ids.has(row.entry.id));
   });
 
-  private fetch(id: string): Observable<FetchResult> {
-    return this.orderApi.getOrder(id).pipe(
-      map((order): FetchResult => ({ kind: 'order', order })),
+  /** A 404 is expected (the mock API may lose orders): it never purges the local entry. */
+  private fetch(entry: OrderHistoryEntry): Observable<FetchResult> {
+    return this.orderApi.getOrder(entry.id, { silent: true }).pipe(
+      map((order): FetchResult => ({ kind: 'order', entry, order })),
       catchError((error: unknown) =>
-        of<FetchResult>(isNotFound(error) ? { kind: 'gone', id } : { kind: 'error' }),
+        of<FetchResult>(isNotFound(error) ? { kind: 'unavailable', entry } : { kind: 'error' }),
       ),
     );
+  }
+
+  protected remove(id: string): void {
+    this.history.remove(id);
   }
 
   protected retry(): void {

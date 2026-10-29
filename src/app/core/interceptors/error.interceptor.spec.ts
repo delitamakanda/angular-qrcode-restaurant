@@ -1,8 +1,8 @@
-import { HttpErrorResponse, HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import { HttpContext, HttpErrorResponse, HttpRequest, HttpHandlerFn } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { NotificationService } from '@app/core/services/notification.service';
 import { firstValueFrom, throwError } from 'rxjs';
-import { errorInterceptor } from './error.interceptor';
+import { SKIP_ERROR_NOTIFICATION, errorInterceptor } from './error.interceptor';
 
 describe('errorInterceptor', () => {
   const error = vi.fn();
@@ -16,13 +16,20 @@ describe('errorInterceptor', () => {
     });
   });
 
-  function run(status: number): Promise<unknown> {
+  function run(status: number, request = req): Promise<unknown> {
     const next: HttpHandlerFn = () =>
       throwError(() => new HttpErrorResponse({ status, statusText: 'x' }));
     return TestBed.runInInjectionContext(() =>
-      firstValueFrom(errorInterceptor(req, next)).catch((e: unknown) => e),
+      firstValueFrom(errorInterceptor(request, next)).catch((e: unknown) => e),
     );
   }
+
+  it('does not notify when the request opts out, but still propagates the error', async () => {
+    const silent = req.clone({ context: new HttpContext().set(SKIP_ERROR_NOTIFICATION, true) });
+
+    expect(await run(404, silent)).toBe('Page not found');
+    expect(error).not.toHaveBeenCalled();
+  });
 
   it.each([
     [404, 'Page not found'],
