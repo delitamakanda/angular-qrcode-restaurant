@@ -203,6 +203,26 @@ describe('MenuItemCard', () => {
     expect(addToCart).not.toHaveBeenCalled();
   });
 
+  it('plays the confirmation pulse on the add button without blocking the emit', () => {
+    const fixture = create();
+    const emitted: unknown[] = [];
+    fixture.componentInstance.customize.subscribe((value) => emitted.push(value));
+    const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      '.menu-item-card__button',
+    );
+
+    button?.click();
+    fixture.detectChanges();
+
+    expect(emitted).toEqual([item]);
+    expect(button?.classList.contains('menu-item-card__button--confirm')).toBe(true);
+
+    button?.dispatchEvent(new Event('animationend'));
+    fixture.detectChanges();
+
+    expect(button?.classList.contains('menu-item-card__button--confirm')).toBe(false);
+  });
+
   describe('favorite button', () => {
     function favoriteButton(el: HTMLElement) {
       return el.querySelector<HTMLButtonElement>('.menu-item-card__favorite');

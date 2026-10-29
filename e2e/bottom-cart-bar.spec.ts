@@ -15,6 +15,8 @@ test('bottom cart bar is sticky once the cart has an item and opens the cart', a
   await expect(bar).toContainText('1 item');
   await expect(bar).toContainText('$');
 
+  // The bar slides in: measure it once the entry animation is over.
+  await bar.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
   const box = await bar.boundingBox();
   const viewport = page.viewportSize();
   expect(box?.height).toBeGreaterThanOrEqual(44);

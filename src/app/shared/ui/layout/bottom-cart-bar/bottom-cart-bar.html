@@ -7,7 +7,15 @@
     type="button"
     (click)="goToCart()"
   >
-    <span>{{ count() }} {{ count() === 1 ? 'item' : 'items' }}</span>
+    <span>
+      <span
+        class="bottom-cart-bar__count"
+        [class.bottom-cart-bar__count--pop-a]="pop() === 'a'"
+        [class.bottom-cart-bar__count--pop-b]="pop() === 'b'"
+        >{{ count() }}</span
+      >
+      {{ count() === 1 ? 'item' : 'items' }}
+    </span>
     <span>View cart</span>
     <strong>{{ total() | currencyFormat }}</strong>
   </button>
