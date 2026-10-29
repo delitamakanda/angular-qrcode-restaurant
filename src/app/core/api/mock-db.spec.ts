@@ -31,6 +31,12 @@ describe('mock-api/db.json integrity', () => {
     }
   });
 
+  it('gives every menu item its own image, never the placeholder', () => {
+    const urls = db.menus.map((m) => m.image_url);
+    expect(unique(urls)).toBe(true);
+    expect(urls).not.toContain('/images/placeholder-food.svg');
+  });
+
   it('has at least 2 items per category, a sold-out item and a non-deliverable item', () => {
     for (const id of categoryIds) {
       expect(db.menus.filter((m) => m.category_id === id).length).toBeGreaterThanOrEqual(2);
