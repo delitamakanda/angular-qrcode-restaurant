@@ -17,14 +17,20 @@
   </div>
 
   @if (loaded()) {
-    @if (visibleOrders().length === 0) {
+    @if (visibleRows().length === 0) {
       <app-empty-state title="No orders yet">
         <a tuiButton appearance="primary" size="l" routerLink="../menu">Browse the menu</a>
       </app-empty-state>
     } @else {
       <ul class="order-history-page__list">
-        @for (order of visibleOrders(); track order.id) {
-          <li><app-order-history-item [order]="order" /></li>
+        @for (row of visibleRows(); track row.entry.id) {
+          <li>
+            @if (row.order; as order) {
+              <app-order-history-item [order]="order" />
+            } @else {
+              <app-order-history-unavailable-item [entry]="row.entry" (removed)="remove($event)" />
+            }
+          </li>
         }
       </ul>
 

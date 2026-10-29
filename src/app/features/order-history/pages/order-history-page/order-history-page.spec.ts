@@ -91,16 +91,42 @@ describe('OrderHistoryPage', () => {
     expect(links[0].textContent).toContain('$12.50');
   });
 
-  it('silently removes an order that is not found', async () => {
+  it('keeps an order that is not found as an "unavailable" row', async () => {
     getOrder.mockImplementation((id: string) =>
       id === 'gone' ? notFound() : of(order(id, 'ready', '2026-01-02T10:00:00Z')),
     );
 
-    const { el, history } = await render(['gone', 'ok']);
+    const { el, history } = await render(['gone', 'ok1', 'ok2']);
 
-    expect(history.entries().map((e) => e.id)).not.toContain('gone');
-    expect(el.querySelectorAll('ul li')).toHaveLength(1);
+    expect(history.entries().map((e) => e.id)).toEqual(
+      expect.arrayContaining(['gone', 'ok1', 'ok2']),
+    );
+    expect(el.querySelectorAll('ul li')).toHaveLength(3);
+    expect(el.querySelectorAll('ul li a')).toHaveLength(2);
+    expect(el.textContent).toContain('Details unavailable');
+    expect(el.textContent).toContain('Order gone');
     expect(el.querySelector('[role=alert]')).toBeNull();
+    expect(getOrder).toHaveBeenCalledWith('gone', { silent: true });
+  });
+
+  it('lists unavailable rows instead of the empty state when every order is 404', async () => {
+    getOrder.mockImplementation(() => notFound());
+
+    const { el } = await render(['a', 'b']);
+
+    expect(el.querySelectorAll('ul li')).toHaveLength(2);
+    expect(el.textContent).not.toContain('No orders yet');
+  });
+
+  it('removes an unavailable row only on explicit request', async () => {
+    getOrder.mockImplementation(() => notFound());
+    const { fixture, el, history } = await render(['a', 'b']);
+
+    el.querySelector<HTMLButtonElement>('ul li button')?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelectorAll('ul li')).toHaveLength(1);
+    expect(history.entries().map((e) => e.id)).toHaveLength(2); // one left + "other"
   });
 
   it('shows an error and reloads on retry', async () => {

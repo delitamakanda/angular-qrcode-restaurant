@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
+import { SKIP_ERROR_NOTIFICATION } from '@app/core/interceptors/error.interceptor';
 import { CheckoutPayload } from '@app/core/models/checkout.model';
 import { Observable } from 'rxjs';
 import { Order } from '@app/core/models/order.model';
@@ -16,7 +17,9 @@ export class OrderApiService {
     return this.http.post<Order>(`${this.config.BASE_API_URL}/orders`, payload);
   }
 
-  getOrder(orderId: string): Observable<Order> {
-    return this.http.get<Order>(`${this.config.BASE_API_URL}/orders/${orderId}`);
+  /** With `silent`, a failure does not raise the global error toast (the caller handles it). */
+  getOrder(orderId: string, options: { silent?: boolean } = {}): Observable<Order> {
+    const context = new HttpContext().set(SKIP_ERROR_NOTIFICATION, options.silent === true);
+    return this.http.get<Order>(`${this.config.BASE_API_URL}/orders/${orderId}`, { context });
   }
 }

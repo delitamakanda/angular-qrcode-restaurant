@@ -40,7 +40,7 @@ async function seedHistory(page: Page, ids: string[]): Promise<void> {
   });
 }
 
-test('history lists orders newest first, purges unknown ids and links by status', async ({
+test('history lists orders newest first, keeps unknown ids as unavailable and links by status', async ({
   page,
 }) => {
   await seedHistory(page, ['hist-1', 'gone', 'hist-2']);
@@ -52,6 +52,9 @@ test('history lists orders newest first, purges unknown ids and links by status'
 
   const links = page.getByRole('list').getByRole('link');
   await expect(links).toHaveCount(2);
+  await expect(page.getByRole('listitem')).toHaveCount(3);
+  await expect(page.getByText('Details unavailable')).toBeVisible();
+  await expect(page.getByText('Page not found')).toHaveCount(0);
   await expect(links.nth(0)).toHaveAccessibleName(/H-2/);
   await expect(links.nth(1)).toHaveAccessibleName(/H-1/);
   await expect(links.nth(0)).toHaveAttribute('href', '/store/demo/tracking/hist-2');
@@ -62,7 +65,10 @@ test('history lists orders newest first, purges unknown ids and links by status'
   await page.screenshot({ path: '.agent-out/playwright/2-history-list.png' });
 
   const stored = await page.evaluate(() => localStorage.getItem('cashier-order-history'));
-  expect(stored).not.toContain('gone');
+  expect(stored).toContain('gone');
+
+  await page.reload();
+  await expect(page.getByRole('listitem')).toHaveCount(3, { timeout: 15000 });
 });
 
 test('clearing the history asks for confirmation and shows the empty state', async ({ page }) => {
