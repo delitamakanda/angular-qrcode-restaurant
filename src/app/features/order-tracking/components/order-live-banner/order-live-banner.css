@@ -1,0 +1,48 @@
+:host {
+  display: inline-flex;
+}
+
+.order-live-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  background: var(--tui-background-neutral-1, #e5e7eb);
+  color: var(--tui-text-primary, #111827);
+  font-size: 0.875rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.order-live-banner__dot {
+  flex: none;
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: 50%;
+  background: var(--tui-text-secondary, #4b5563);
+}
+
+.order-live-banner_cancelled .order-live-banner__dot {
+  background: var(--tui-status-negative, #b91c1c);
+}
+
+.order-live-banner_live .order-live-banner__dot {
+  background: var(--tui-status-positive, #15803d);
+  animation: order-live-banner-pulse 1.5s ease-out infinite;
+}
+
+@keyframes order-live-banner-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--tui-status-positive, #15803d);
+  }
+  100% {
+    box-shadow: 0 0 0 0.5rem transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .order-live-banner_live .order-live-banner__dot {
+    animation: none;
+  }
+}
