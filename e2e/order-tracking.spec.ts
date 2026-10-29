@@ -43,6 +43,21 @@ test('tracking page updates the status automatically', async ({ page }) => {
   await expect(statusText).toHaveText('Preparing');
 });
 
+test('tracking page shows a Live badge for an in-progress order only', async ({ page }) => {
+  await page.route('**/orders/order-1001', (route) =>
+    route.fulfill({ json: { id: 'order-1001', order_number: 'A001', status: 'preparing' } }),
+  );
+  await page.route('**/orders/order-1002', (route) =>
+    route.fulfill({ json: { id: 'order-1002', order_number: 'A002', status: 'completed' } }),
+  );
+
+  await page.goto('/store/demo/tracking/order-1001');
+  await expect(page.locator('app-order-live-banner')).toHaveText('Live');
+
+  await page.goto('/store/demo/tracking/order-1002');
+  await expect(page.locator('app-order-live-banner')).toHaveText('Completed');
+});
+
 test('tracking page shows an error state with retry', async ({ page }) => {
   await page.route('**/orders/unknown-order', (route) =>
     route.fulfill({ status: 404, json: { message: 'Not found' } }),

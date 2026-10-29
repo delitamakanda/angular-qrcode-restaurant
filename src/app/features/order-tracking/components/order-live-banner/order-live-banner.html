@@ -1,1 +1,8 @@
-<p>order-live-banner works!</p>
+<span
+  class="order-live-banner"
+  [class.order-live-banner_live]="isLive()"
+  [class.order-live-banner_cancelled]="status() === 'cancelled'"
+>
+  <span class="order-live-banner__dot" aria-hidden="true"></span>
+  {{ label() }}
+</span>

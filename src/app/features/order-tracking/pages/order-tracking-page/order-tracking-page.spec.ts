@@ -57,6 +57,13 @@ describe('OrderTrackingPage', () => {
     expect(root.querySelector('[aria-live="polite"][role="status"]')).not.toBeNull();
   });
 
+  it('shows the live badge next to the status', async () => {
+    getOrder.mockReturnValue(of(ORDER));
+    const root = el(await render());
+
+    expect(root.querySelector('app-order-live-banner')?.textContent).toContain('Live');
+  });
+
   it('renders the status timeline with the current step', async () => {
     getOrder.mockReturnValue(of(ORDER));
     const root = el(await render());
