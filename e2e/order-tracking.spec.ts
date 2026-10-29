@@ -26,6 +26,23 @@ test('tracking page shows the status timeline', async ({ page }) => {
   );
 });
 
+test('tracking page updates the status automatically', async ({ page }) => {
+  let status = 'accepted';
+  await page.route('**/orders/order-1001', (route) =>
+    route.fulfill({ json: { id: 'order-1001', order_number: 'A001', status } }),
+  );
+  await page.clock.install();
+
+  await page.goto('/store/demo/tracking/order-1001');
+  const statusText = page.getByRole('status').filter({ hasText: /Accepted|Preparing/ });
+  await expect(statusText).toHaveText('Accepted');
+
+  status = 'preparing';
+  await page.clock.runFor(6000);
+
+  await expect(statusText).toHaveText('Preparing');
+});
+
 test('tracking page shows an error state with retry', async ({ page }) => {
   await page.route('**/orders/unknown-order', (route) =>
     route.fulfill({ status: 404, json: { message: 'Not found' } }),

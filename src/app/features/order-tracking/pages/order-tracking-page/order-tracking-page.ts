@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TuiButton } from '@taiga-ui/core';
@@ -38,6 +45,9 @@ export class OrderTrackingPage {
   });
 
   constructor() {
+    inject(DestroyRef).onDestroy(() => {
+      this.store.stop();
+    });
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const orderId = params.get('orderId');
       this.orderId.set(orderId);
