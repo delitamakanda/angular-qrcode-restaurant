@@ -4,7 +4,7 @@
       "id": "demo",
       "name": "Bubble House",
       "logo_url": "/images/placeholder-food.svg",
-      "cover_image_url": "/images/placeholder-food.svg",
+      "cover_image_url": "/images/bubble-house/bubble-house-cover.webp",
       "currency": "EUR",
       "is_open": true,
       "estimated_wait_minutes": 18,
@@ -16,36 +16,42 @@
       "id": "cat-milk-tea",
       "store_id": "demo",
       "name": "Milk Tea",
+      "image_url": "/images/bubble-house/categories/category-milk-tea.webp",
       "sort_order": 1
     },
     {
       "id": "cat-fruit-tea",
       "store_id": "demo",
       "name": "Fruit Tea",
+      "image_url": "/images/bubble-house/categories/category-fruit-tea.webp",
       "sort_order": 2
     },
     {
       "id": "cat-snacks",
       "store_id": "demo",
       "name": "Snacks",
+      "image_url": "/images/bubble-house/categories/category-snacks.webp",
       "sort_order": 3
     },
     {
       "id": "cat-noodles",
       "store_id": "demo",
       "name": "Noodles & Rice",
+      "image_url": "/images/bubble-house/categories/category-noodles.webp",
       "sort_order": 4
     },
     {
       "id": "cat-street-food",
       "store_id": "demo",
       "name": "Street Food",
+      "image_url": "/images/bubble-house/categories/category-street-food.webp",
       "sort_order": 5
     },
     {
       "id": "cat-desserts",
       "store_id": "demo",
       "name": "Desserts",
+      "image_url": "/images/bubble-house/categories/category-desserts.webp",
       "sort_order": 6
     }
   ],
@@ -56,7 +62,7 @@
       "category_id": "cat-milk-tea",
       "name": "Classic Milk Tea",
       "description": "Black tea, milk, balanced sweetness",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-classic-milk-tea.webp",
       "base_price": 55,
       "is_sold_out": false,
       "tags": ["popular"],
@@ -72,7 +78,7 @@
       "category_id": "cat-milk-tea",
       "name": "Taro Milk Tea",
       "description": "Creamy taro flavor",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-taro-milk-tea.webp",
       "base_price": 65,
       "is_sold_out": false,
       "tags": ["new"],
@@ -88,7 +94,7 @@
       "category_id": "cat-fruit-tea",
       "name": "Passion Fruit Green Tea",
       "description": "Tangy and fresh",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-passion-fruit.webp",
       "base_price": 60,
       "is_sold_out": false,
       "tags": [],
@@ -104,7 +110,7 @@
       "category_id": "cat-snacks",
       "name": "Fried Chicken",
       "description": "Crispy Taiwanese style chicken",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-fried-chicken.webp",
       "base_price": 95,
       "is_sold_out": true,
       "tags": ["sold-out"],
@@ -120,11 +126,15 @@
       "category_id": "cat-milk-tea",
       "name": "Brown Sugar Boba Milk",
       "description": "Fresh milk, brown sugar syrup, warm boba",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-brown-sugar-boba.webp",
       "base_price": 75,
       "is_sold_out": false,
       "tags": ["popular"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-mango-green-tea",
@@ -132,11 +142,15 @@
       "category_id": "cat-fruit-tea",
       "name": "Mango Green Tea",
       "description": "Green tea with fresh mango",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-mango-green-tea.webp",
       "base_price": 65,
       "is_sold_out": false,
       "tags": ["new"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-spiral-potato",
@@ -144,11 +158,15 @@
       "category_id": "cat-snacks",
       "name": "Spiral Potato",
       "description": "Fried potato on a stick, seasoned",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-spiral-potato.webp",
       "base_price": 60,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-stinky-tofu",
@@ -156,11 +174,15 @@
       "category_id": "cat-snacks",
       "name": "Stinky Tofu",
       "description": "Chòudòufu, fried with pickled cabbage",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-stinky-tofu.webp",
       "base_price": 80,
       "is_sold_out": false,
       "tags": ["local-favorite"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
     },
     {
       "id": "item-beef-noodle-soup",
@@ -168,11 +190,15 @@
       "category_id": "cat-noodles",
       "name": "Beef Noodle Soup",
       "description": "Niúròu miàn, braised beef and broth",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-beef-noodle-soup.webp",
       "base_price": 120,
       "is_sold_out": false,
       "tags": ["popular"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-braised-pork-rice",
@@ -180,11 +206,15 @@
       "category_id": "cat-noodles",
       "name": "Braised Pork Rice",
       "description": "Lǔròu fàn, soy-braised pork over rice",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-braised-pork-rice.webp",
       "base_price": 70,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-oyster-vermicelli",
@@ -192,11 +222,15 @@
       "category_id": "cat-noodles",
       "name": "Oyster Vermicelli",
       "description": "Mian xian, thick broth, fresh oysters",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-oyster-vermicelli.webp",
       "base_price": 85,
       "is_sold_out": true,
       "tags": ["sold-out"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-chiayi-turkey-rice",
@@ -204,11 +238,15 @@
       "category_id": "cat-noodles",
       "name": "Chiayi Turkey Rice",
       "description": "Shredded turkey, fried shallots",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-chiayi-turkey-rice.webp",
       "base_price": 65,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-gua-bao",
@@ -216,11 +254,15 @@
       "category_id": "cat-street-food",
       "name": "Gua Bao",
       "description": "Steamed bun with pork belly, peanuts",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-gua-bao.webp",
       "base_price": 75,
       "is_sold_out": false,
       "tags": ["popular"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-xiaolongbao",
@@ -228,11 +270,15 @@
       "category_id": "cat-street-food",
       "name": "Xiaolongbao",
       "description": "Soup dumplings, 6 pieces",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-xiaolongbao.webp",
       "base_price": 90,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-oyster-omelette",
@@ -240,11 +286,15 @@
       "category_id": "cat-street-food",
       "name": "Oyster Omelette",
       "description": "Ô-á-tsian, sweet chili sauce",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-oyster-omelette.webp",
       "base_price": 80,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
     },
     {
       "id": "item-egg-waffle",
@@ -252,11 +302,15 @@
       "category_id": "cat-street-food",
       "name": "Egg Waffle",
       "description": "Jīdàn zǎi, crisp and fluffy",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-egg-waffle.webp",
       "base_price": 55,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-mango-shaved-ice",
@@ -264,11 +318,15 @@
       "category_id": "cat-desserts",
       "name": "Mango Shaved Ice",
       "description": "Baobing, fresh mango, condensed milk",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-mango-shaved-ice.webp",
       "base_price": 110,
       "is_sold_out": false,
       "tags": ["new"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-douhua",
@@ -276,11 +334,15 @@
       "category_id": "cat-desserts",
       "name": "Douhua",
       "description": "Silky sweet tofu pudding",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-douhua.webp",
       "base_price": 50,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     },
     {
       "id": "item-tang-yuan",
@@ -288,11 +350,15 @@
       "category_id": "cat-desserts",
       "name": "Tang Yuan",
       "description": "Glutinous rice balls in ginger syrup",
-      "image_url": "/images/placeholder-food.svg",
+      "image_url": "/images/bubble-house/products/item-tang-yuan.webp",
       "base_price": 60,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": true }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": true
+      }
     }
   ],
   "groups": [
@@ -1074,6 +1140,61 @@
         }
       ],
       "id": "Moyrb6PULlg"
+    },
+    {
+      "store_id": "demo",
+      "mode": "take_away",
+      "customer": {
+        "name": "Délita",
+        "phone": "+33606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "48e3c771-59c2-48f0-b38e-5a573b418170",
+          "menu_item_id": "item-brown-sugar-boba",
+          "quantity": 1,
+          "name": "Brown Sugar Boba Milk",
+          "note": "",
+          "unit_base_price": 75,
+          "selected_options": [
+            {
+              "group_id": "mg-brown-sugar-boba-size",
+              "option_id": "opt-brown-sugar-boba-size-l",
+              "label": "Large",
+              "price_delta": 10
+            },
+            {
+              "group_id": "mg-brown-sugar-boba-sugar",
+              "option_id": "opt-brown-sugar-boba-sugar-50",
+              "label": "50%",
+              "price_delta": 0
+            }
+          ],
+          "total_price": 85
+        },
+        {
+          "id": "82d3b355-0a3d-46f6-ba47-f61516dae80b",
+          "menu_item_id": "item-passion-fruit",
+          "quantity": 1,
+          "name": "Passion Fruit Green Tea",
+          "note": "",
+          "unit_base_price": 60,
+          "selected_options": [],
+          "total_price": 60
+        },
+        {
+          "id": "c2f1a7c5-533f-4738-99b3-fd35d335785f",
+          "menu_item_id": "item-tang-yuan",
+          "quantity": 1,
+          "name": "Tang Yuan",
+          "note": "",
+          "unit_base_price": 60,
+          "selected_options": [],
+          "total_price": 60
+        }
+      ],
+      "id": "SJ3RLGSZfPk"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
