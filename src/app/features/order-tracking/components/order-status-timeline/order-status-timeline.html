@@ -1,1 +1,22 @@
-<p>order-status-timeline works!</p>
+<ol class="order-status-timeline" aria-label="Order progress">
+  @for (step of steps(); track step.status) {
+    <li
+      class="order-status-timeline__step"
+      [class.order-status-timeline__step_done]="step.state === 'done'"
+      [class.order-status-timeline__step_current]="step.state === 'current'"
+      [class.order-status-timeline__step_upcoming]="step.state === 'upcoming'"
+      [class.order-status-timeline__step_error]="step.state === 'error'"
+      [attr.aria-current]="step.state === 'current' ? 'step' : null"
+    >
+      <span class="order-status-timeline__marker" aria-hidden="true">
+        @if (step.state === 'done') {
+          <tui-icon icon="@tui.check" />
+        } @else if (step.state === 'error') {
+          <tui-icon icon="@tui.x" />
+        }
+      </span>
+      <span class="order-status-timeline__label">{{ step.label }}</span>
+      <span class="order-status-timeline__visually-hidden">{{ step.stateLabel }}</span>
+    </li>
+  }
+</ol>

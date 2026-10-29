@@ -11,6 +11,21 @@ test('tracking page shows the order status', async ({ page }) => {
   );
 });
 
+test('tracking page shows the status timeline', async ({ page }) => {
+  await page.route('**/orders/order-1001', (route) =>
+    route.fulfill({ json: { id: 'order-1001', order_number: 'A001', status: 'preparing' } }),
+  );
+
+  await page.goto('/store/demo/tracking/order-1001');
+
+  const timeline = page.getByRole('list', { name: 'Order progress' });
+  await expect(timeline.getByRole('listitem')).toHaveCount(5);
+  await expect(timeline.getByRole('listitem').filter({ hasText: 'Preparing' })).toHaveAttribute(
+    'aria-current',
+    'step',
+  );
+});
+
 test('tracking page shows an error state with retry', async ({ page }) => {
   await page.route('**/orders/unknown-order', (route) =>
     route.fulfill({ status: 404, json: { message: 'Not found' } }),

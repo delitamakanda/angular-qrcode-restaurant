@@ -20,6 +20,7 @@
   }
   @if (order(); as currentOrder) {
     <h1>Order tracking</h1>
+    <app-order-status-timeline [status]="currentOrder.status" />
     <dl class="order-tracking-page__details">
       <div>
         <dt>Order Number</dt>
