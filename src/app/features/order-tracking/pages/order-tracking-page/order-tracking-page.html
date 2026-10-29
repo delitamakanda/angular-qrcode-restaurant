@@ -28,7 +28,10 @@
       </div>
       <div>
         <dt>Status</dt>
-        <dd role="status" aria-live="polite">{{ statusLabel() }}</dd>
+        <dd class="order-tracking-page__status">
+          <span role="status" aria-live="polite">{{ statusLabel() }}</span>
+          <app-order-live-banner [status]="currentOrder.status" />
+        </dd>
       </div>
       @if (currentOrder.created_at) {
         <div>
