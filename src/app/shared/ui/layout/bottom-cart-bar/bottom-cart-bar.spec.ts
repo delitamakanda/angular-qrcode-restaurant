@@ -86,6 +86,58 @@ describe('BottomCartBar', () => {
     expect(button()).toBeNull();
   });
 
+  describe('count pop animation', () => {
+    const popped = (el: HTMLElement) =>
+      el.querySelector('.bottom-cart-bar__count')?.className.includes('--pop-') ?? false;
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it('does not play on the initial render', () => {
+      const { el } = setup(1);
+
+      expect(popped(el)).toBe(false);
+    });
+
+    it('does not play when the bar first appears', () => {
+      const { fixture, store, el } = setup();
+
+      store.items.set([line(1)]);
+      fixture.detectChanges();
+
+      expect(el.querySelector('.bottom-cart-bar__count')).not.toBeNull();
+      expect(popped(el)).toBe(false);
+    });
+
+    it('plays when the count changes', () => {
+      const { fixture, store, el } = setup(1);
+
+      store.items.set([line(2)]);
+      fixture.detectChanges();
+
+      expect(popped(el)).toBe(true);
+    });
+
+    it('does not play when reduced motion is preferred', () => {
+      const original = window.matchMedia.bind(window);
+      vi.spyOn(window, 'matchMedia').mockImplementation((query: string) => {
+        const mql = original(query);
+        return query.includes('prefers-reduced-motion')
+          ? new Proxy(mql, {
+              get: (t, p) => (p === 'matches' ? true : (Reflect.get(t, p) as unknown)),
+            })
+          : mql;
+      });
+      const { fixture, store, el } = setup(1);
+
+      store.items.set([line(2)]);
+      fixture.detectChanges();
+
+      expect(popped(el)).toBe(false);
+    });
+  });
+
   it('emits openCart once on click instead of navigating', () => {
     const { fixture, button } = setup(1);
     const opened = vi.fn();

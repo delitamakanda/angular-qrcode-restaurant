@@ -41,6 +41,8 @@
       type="button"
       size="m"
       class="menu-item-card__button"
+      [class.menu-item-card__button--confirm]="confirming()"
+      (animationend)="endConfirm()"
       [attr.aria-label]="'Add to cart: ' + item().name"
       (click)="addToCart()"
       [disabled]="item().is_sold_out"

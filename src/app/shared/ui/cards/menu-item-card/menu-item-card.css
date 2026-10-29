@@ -142,7 +142,21 @@
   outline-offset: 2px;
 }
 
+.menu-item-card__button--confirm {
+  animation: menu-item-card-confirm var(--motion-duration-base) var(--motion-ease-out);
+}
+
+@keyframes menu-item-card-confirm {
+  50% {
+    transform: scale(1.06);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .menu-item-card__button--confirm {
+    animation: none;
+  }
+
   .menu-item-card {
     transition: none;
   }
