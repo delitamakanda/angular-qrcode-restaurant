@@ -55,7 +55,7 @@ describe('TrackingApiService', () => {
         .mockReturnValueOnce(of(order('pending')))
         .mockReturnValueOnce(of(order('preparing')))
         .mockReturnValueOnce(of(order('completed')));
-      const next = vi.fn();
+      const next = vi.fn<(order: Order) => void>();
       const complete = vi.fn();
 
       setup().watchOrder('o1').subscribe({ next, complete });
@@ -63,11 +63,7 @@ describe('TrackingApiService', () => {
       vi.advanceTimersByTime(5000);
       vi.advanceTimersByTime(5000);
 
-      expect(next.mock.calls.map(([o]: [Order]) => o.status)).toEqual([
-        'pending',
-        'preparing',
-        'completed',
-      ]);
+      expect(next.mock.calls.map(([o]) => o.status)).toEqual(['pending', 'preparing', 'completed']);
       expect(complete).toHaveBeenCalled();
       expect(getOrder).toHaveBeenCalledWith('o1', { silent: true });
       vi.advanceTimersByTime(60_000);
