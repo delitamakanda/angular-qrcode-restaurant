@@ -33,6 +33,9 @@ describe('CheckoutPage', () => {
           useValue: {
             items: signal([]),
             count: signal(3),
+            subtotal: signal(10),
+            discount: signal(1),
+            fees: signal(3.5),
             total: signal(12.5),
             clearCart: vi.fn(),
           },
@@ -180,8 +183,29 @@ describe('CheckoutPage', () => {
       coupon_code: undefined,
       payment_mode: 'cash',
       items: [],
+      order_number: expect.stringMatching(/^A\d{3}$/) as string,
+      status: 'pending',
+      subtotal: 10,
+      discount: 1,
+      fees: 3.5,
+      total: 12.5,
+      created_at: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/) as string,
     });
     expect(navigate).toHaveBeenCalled();
+  });
+
+  it('keeps a local copy of the created order in the history', async () => {
+    localStorage.clear();
+    const created = { id: 'order-1', total: 12.5, items: [] };
+    const fixture = render();
+    createOrder.mockReturnValue(of(created));
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+
+    await fixture.componentInstance.submitForm();
+
+    expect(TestBed.inject(OrderHistoryStore).entries()[0].order).toEqual(created);
   });
 
   it('records the created order in the order history', async () => {

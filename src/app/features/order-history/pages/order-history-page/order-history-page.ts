@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,6 +14,7 @@ import { TuiButton } from '@taiga-ui/core';
 import { Observable, catchError, forkJoin, map, of, startWith, switchMap } from 'rxjs';
 import { OrderApiService } from '@app/core/api/order-api.service';
 import { Order } from '@app/core/models/order.model';
+import { isNotFound } from '@app/core/utils/http-error.util';
 import { OrderHistoryEntry, OrderHistoryStore } from '@app/state/order-history.store';
 import { ShopStore } from '@app/state/shop.store';
 import { EmptyState } from '@shared/ui/layout/empty-state/empty-state';
@@ -33,15 +33,6 @@ type HistoryState =
   | { readonly status: 'loaded'; readonly rows: readonly HistoryRow[] };
 
 const LOADING: HistoryState = { status: 'loading' };
-
-/** `errorInterceptor` rewrites a 404 into this string before it reaches callers. */
-const NOT_FOUND_MESSAGE = 'Page not found';
-
-function isNotFound(error: unknown): boolean {
-  return (
-    error === NOT_FOUND_MESSAGE || (error instanceof HttpErrorResponse && error.status === 404)
-  );
-}
 
 function dateOf(row: HistoryRow): string {
   return row.order?.created_at ?? row.entry.created_at;
@@ -122,9 +113,16 @@ export class OrderHistoryPage {
   private fetch(entry: OrderHistoryEntry): Observable<FetchResult> {
     return this.orderApi.getOrder(entry.id, { silent: true }).pipe(
       map((order): FetchResult => ({ kind: 'order', entry, order })),
-      catchError((error: unknown) =>
-        of<FetchResult>(isNotFound(error) ? { kind: 'unavailable', entry } : { kind: 'error' }),
-      ),
+      catchError((error: unknown) => {
+        if (!isNotFound(error)) {
+          return of<FetchResult>({ kind: 'error' });
+        }
+        return of<FetchResult>(
+          entry.order
+            ? { kind: 'order', entry, order: entry.order }
+            : { kind: 'unavailable', entry },
+        );
+      }),
     );
   }
 

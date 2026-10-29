@@ -34,7 +34,7 @@ const networkError = () => throwError(() => new HttpErrorResponse({ status: 0 })
 describe('OrderHistoryPage', () => {
   const getOrder = vi.fn();
 
-  async function render(ids: string[]) {
+  async function render(ids: string[], withLocalCopy: string[] = []) {
     localStorage.clear();
     TestBed.configureTestingModule({
       imports: [OrderHistoryPage],
@@ -47,7 +47,14 @@ describe('OrderHistoryPage', () => {
     });
     const history = TestBed.inject(OrderHistoryStore);
     for (const id of [...ids].reverse()) {
-      history.add({ id, store_id: 'demo', created_at: '2026-01-01T00:00:00Z' });
+      history.add({
+        id,
+        store_id: 'demo',
+        created_at: '2026-01-01T00:00:00Z',
+        order: withLocalCopy.includes(id)
+          ? order(id, 'pending', '2026-01-01T00:00:00Z')
+          : undefined,
+      });
     }
     history.add({ id: 'other', store_id: 'elsewhere', created_at: '2026-01-01T00:00:00Z' });
     const fixture = TestBed.createComponent(OrderHistoryPage);
@@ -107,6 +114,15 @@ describe('OrderHistoryPage', () => {
     expect(el.textContent).toContain('Order gone');
     expect(el.querySelector('[role=alert]')).toBeNull();
     expect(getOrder).toHaveBeenCalledWith('gone', { silent: true });
+  });
+
+  it('shows the local copy of an order the API no longer knows', async () => {
+    getOrder.mockImplementation(() => notFound());
+
+    const { el } = await render(['kept'], ['kept']);
+
+    expect(el.textContent).toContain('N-kept');
+    expect(el.textContent).not.toContain('Details unavailable');
   });
 
   it('lists unavailable rows instead of the empty state when every order is 404', async () => {
