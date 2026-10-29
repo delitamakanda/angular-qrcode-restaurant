@@ -1,4 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
+import { Order } from '@app/core/models/order.model';
 
 const ORDER_HISTORY_STORAGE_KEY = 'cashier-order-history';
 export const ORDER_HISTORY_LIMIT = 50;
@@ -7,6 +8,8 @@ export interface OrderHistoryEntry {
   id: string;
   store_id: string;
   created_at: string;
+  /** Copy of the order taken at payment time, used when the API no longer knows it. */
+  order?: Order;
 }
 
 @Injectable({
@@ -68,9 +71,19 @@ function toEntry(value: unknown): OrderHistoryEntry | null {
   if (typeof value !== 'object' || value === null) {
     return null;
   }
-  const { id, store_id, created_at } = value as Record<string, unknown>;
+  const { id, store_id, created_at, order } = value as Record<string, unknown>;
   if (typeof id !== 'string' || typeof store_id !== 'string' || typeof created_at !== 'string') {
     return null;
   }
-  return { id, store_id, created_at };
+  return isOrderSnapshot(order, id)
+    ? { id, store_id, created_at, order }
+    : { id, store_id, created_at };
+}
+
+function isOrderSnapshot(value: unknown, id: string): value is Order {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  const order = value as Record<string, unknown>;
+  return order['id'] === id && Array.isArray(order['items']) && typeof order['total'] === 'number';
 }

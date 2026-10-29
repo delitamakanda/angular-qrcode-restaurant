@@ -13,6 +13,8 @@ import { TuiButton } from '@taiga-ui/core';
 import { catchError, map, of, startWith, switchMap } from 'rxjs';
 import { OrderApiService } from '@app/core/api/order-api.service';
 import { Order } from '@app/core/models/order.model';
+import { isNotFound } from '@app/core/utils/http-error.util';
+import { OrderHistoryStore } from '@app/state/order-history.store';
 import { OrderConfirmationCard } from '../../components/order-confirmation-card/order-confirmation-card';
 
 type OrderState =
@@ -30,6 +32,7 @@ type OrderState =
 export class OrderConfirmationPage {
   private readonly route = inject(ActivatedRoute);
   private readonly orderApi = inject(OrderApiService);
+  private readonly history = inject(OrderHistoryStore);
 
   private readonly title = viewChild<ElementRef<HTMLElement>>('title');
 
@@ -40,9 +43,16 @@ export class OrderConfirmationPage {
         if (!orderId) {
           return of<OrderState>({ status: 'error' });
         }
-        return this.orderApi.getOrder(orderId).pipe(
+        return this.orderApi.getOrder(orderId, { silent: true }).pipe(
           map((order): OrderState => ({ status: 'loaded', order })),
-          catchError(() => of<OrderState>({ status: 'error' })),
+          catchError((error: unknown) => {
+            const snapshot = isNotFound(error)
+              ? this.history.entries().find((entry) => entry.id === orderId)?.order
+              : undefined;
+            return of<OrderState>(
+              snapshot ? { status: 'loaded', order: snapshot } : { status: 'error' },
+            );
+          }),
           startWith<OrderState>({ status: 'loading' }),
         );
       }),

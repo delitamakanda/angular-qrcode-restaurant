@@ -92,6 +92,36 @@ describe('OrderHistoryStore', () => {
     ).toEqual(['a']);
   });
 
+  it('restores the order snapshot and tolerates old entries without one', () => {
+    const order = { id: 'a', items: [], total: 5 };
+    localStorage.setItem(
+      KEY,
+      JSON.stringify([
+        { ...entry('a'), order },
+        entry('b'),
+        { ...entry('c'), order: { id: 'other', items: [], total: 1 } },
+      ]),
+    );
+
+    const entries = create().entries();
+
+    expect(entries[0].order).toEqual(order);
+    expect(entries[1].order).toBeUndefined();
+    expect(entries[2].order).toBeUndefined();
+  });
+
+  it('drops the snapshot together with the entry on remove and clear', () => {
+    const store = create();
+    store.add({ ...entry('a'), order: { id: 'a' } as OrderHistoryEntry['order'] });
+    store.add({ ...entry('b'), order: { id: 'b' } as OrderHistoryEntry['order'] });
+
+    store.remove('a');
+    expect(store.entries().map((e) => e.order?.id)).toEqual(['b']);
+
+    store.clear();
+    expect(store.entries()).toEqual([]);
+  });
+
   it('persists changes to localStorage', () => {
     const store = create();
     store.add(entry('a'));

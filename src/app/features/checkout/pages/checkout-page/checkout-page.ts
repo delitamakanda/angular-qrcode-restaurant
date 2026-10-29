@@ -120,12 +120,20 @@ export class CheckoutPage {
           coupon_code: value.couponCode || undefined,
           payment_mode: value.paymentMethod,
           items: this.cartStore.items(),
+          order_number: `A${String(this.orderHistoryStore.entries().length + 1).padStart(3, '0')}`,
+          status: 'pending',
+          subtotal: this.cartStore.subtotal(),
+          discount: this.cartStore.discount(),
+          fees: this.cartStore.fees(),
+          total: this.cartStore.total(),
+          created_at: new Date().toISOString(),
         }),
       );
       this.orderHistoryStore.add({
         id: order.id,
         store_id: store.id,
         created_at: order.created_at,
+        order,
       });
       this.cartStore.clearCart();
       this.checkoutStore.resetForm();

@@ -87,4 +87,30 @@ describe('Cloudflare Function parity with db.json', () => {
     expect((await get(`/orders/${order.id}`)).body).toEqual(order);
     expect((await get('/orders/unknown')).status).toBe(404);
   });
+
+  it('POST /orders keeps the fields sent by the client and returns them on GET', async () => {
+    const payload = {
+      store_id: 'demo',
+      mode: 'take_away',
+      payment_mode: 'cash',
+      items: [{ total_price: 10 }, { total_price: 5 }],
+      order_number: 'A042',
+      status: 'pending',
+      subtotal: 15,
+      discount: 2,
+      fees: 1,
+      total: 14,
+      created_at: '2026-05-01T10:00:00.000Z',
+    };
+    const response = await handleRequest(
+      new Request('https://example.test/api/orders', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }),
+    );
+    expect(response.status).toBe(201);
+    const order = (await response.json()) as { id: string };
+    expect(order).toEqual({ ...payload, id: order.id });
+    expect((await get(`/orders/${order.id}`)).body).toEqual(order);
+  });
 });

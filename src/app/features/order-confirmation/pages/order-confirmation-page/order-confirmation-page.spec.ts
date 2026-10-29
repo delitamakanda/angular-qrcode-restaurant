@@ -5,6 +5,7 @@ import { Subject, of, throwError } from 'rxjs';
 import { provideTaiga } from '@taiga-ui/core';
 import { OrderApiService } from '@app/core/api/order-api.service';
 import { Order } from '@app/core/models/order.model';
+import { OrderHistoryStore } from '@app/state/order-history.store';
 import { OrderConfirmationPage } from './order-confirmation-page';
 
 const ORDER: Order = {
@@ -24,7 +25,7 @@ const ORDER: Order = {
 describe('OrderConfirmationPage', () => {
   const getOrder = vi.fn();
 
-  async function render() {
+  async function render(withLocalCopy = false) {
     TestBed.configureTestingModule({
       providers: [
         provideTaiga(),
@@ -34,13 +35,47 @@ describe('OrderConfirmationPage', () => {
         { provide: OrderApiService, useValue: { getOrder } },
       ],
     });
+    if (withLocalCopy) {
+      TestBed.inject(OrderHistoryStore).add({
+        id: 'order-1',
+        store_id: 'demo',
+        created_at: ORDER.created_at,
+        order: ORDER,
+      });
+    }
     const harness = await RouterTestingHarness.create();
     await harness.navigateByUrl('/store/demo/confirmation/order-1');
     harness.detectChanges();
     return harness;
   }
 
-  beforeEach(() => getOrder.mockReset());
+  beforeEach(() => {
+    getOrder.mockReset();
+    localStorage.clear();
+  });
+
+  it('shows the local copy when the API answers 404', async () => {
+    getOrder.mockReturnValue(throwError(() => 'Page not found'));
+    const el = (await render(true)).fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('[role="alert"]')).toBeNull();
+    expect(el.textContent).toContain('A003');
+    expect(el.textContent).toContain('$65.00');
+  });
+
+  it('shows an alert on 404 without a local copy', async () => {
+    getOrder.mockReturnValue(throwError(() => 'Page not found'));
+    const el = (await render()).fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('[role="alert"]')).not.toBeNull();
+  });
+
+  it('shows an alert on a server error even with a local copy', async () => {
+    getOrder.mockReturnValue(throwError(() => 'Internal server error'));
+    const el = (await render(true)).fixture.nativeElement as HTMLElement;
+
+    expect(el.querySelector('[role="alert"]')).not.toBeNull();
+  });
 
   it('shows a loading status, then the order', async () => {
     const response = new Subject<Order>();
@@ -53,7 +88,7 @@ describe('OrderConfirmationPage', () => {
     response.next(ORDER);
     harness.detectChanges();
 
-    expect(getOrder).toHaveBeenCalledWith('order-1');
+    expect(getOrder).toHaveBeenCalledWith('order-1', { silent: true });
     expect(el.querySelector('[role="status"]')).toBeNull();
     expect(el.querySelector('h1')?.textContent).toContain('Order Confirmed');
     expect(el.textContent).toContain('A003');
