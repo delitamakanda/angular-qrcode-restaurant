@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { of, throwError } from 'rxjs';
+import { Subject, of, throwError } from 'rxjs';
 import { provideTaiga } from '@taiga-ui/core';
 import { OrderApiService } from '@app/core/api/order-api.service';
+import { TrackingApiService } from '@app/core/api/tracking-api.service';
 import { Order } from '@app/core/models/order.model';
 import { OrderTrackingPage } from './order-tracking-page';
 
@@ -18,6 +19,7 @@ const ORDER = {
 
 describe('OrderTrackingPage', () => {
   const getOrder = vi.fn();
+  const watchOrder = vi.fn();
 
   async function render(url = '/store/demo/tracking/order-1001') {
     TestBed.configureTestingModule({
@@ -25,6 +27,7 @@ describe('OrderTrackingPage', () => {
         provideTaiga(),
         provideRouter([{ path: 'store/:storeId/tracking/:orderId', component: OrderTrackingPage }]),
         { provide: OrderApiService, useValue: { getOrder } },
+        { provide: TrackingApiService, useValue: { watchOrder } },
       ],
     });
     const harness = await RouterTestingHarness.create();
@@ -35,7 +38,11 @@ describe('OrderTrackingPage', () => {
 
   const el = (h: RouterTestingHarness) => h.fixture.nativeElement as HTMLElement;
 
-  beforeEach(() => getOrder.mockReset());
+  beforeEach(() => {
+    getOrder.mockReset();
+    watchOrder.mockReset();
+    watchOrder.mockReturnValue(new Subject<Order>());
+  });
 
   it('shows number, status label, total and a single h1', async () => {
     getOrder.mockReturnValue(of(ORDER));
@@ -101,5 +108,22 @@ describe('OrderTrackingPage', () => {
     await harness.navigateByUrl('/store/demo/tracking/order-1002');
 
     expect(getOrder).toHaveBeenLastCalledWith('order-1002');
+  });
+
+  it('updates the status label on live updates and stops watching on destroy', async () => {
+    const updates = new Subject<Order>();
+    getOrder.mockReturnValue(of(ORDER));
+    watchOrder.mockReturnValue(updates);
+    const harness = await render();
+    const root = el(harness);
+
+    updates.next({ ...ORDER, status: 'preparing' });
+    harness.detectChanges();
+
+    expect(root.querySelector('span[role="status"]')?.textContent).toContain('Preparing');
+    expect(root.querySelector('[aria-current="step"]')?.textContent).toContain('Preparing');
+
+    TestBed.resetTestingModule();
+    expect(updates.observed).toBe(false);
   });
 });
