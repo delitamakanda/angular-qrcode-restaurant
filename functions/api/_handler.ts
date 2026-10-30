@@ -110,16 +110,100 @@ const resolveRepository = (env: Env | OrderRepository): OrderRepository => {
   return env.ORDERS_DB ? createD1OrderRepository(env.ORDERS_DB, seedOrders) : fallbackRepository;
 };
 
+const ORDER_STATUSES = new Set([
+  'pending',
+  'accepted',
+  'preparing',
+  'ready',
+  'cancelled',
+  'completed',
+]);
+
+const roomFor = (env: Env, orderId: string) =>
+  env.ORDER_ROOM?.get(env.ORDER_ROOM.idFromName(orderId));
+
+const sendToRoom = (room: NonNullable<ReturnType<typeof roomFor>>, path: string, order: Row) =>
+  room.fetch(
+    new Request(`https://order-room${path}`, { method: 'POST', body: JSON.stringify(order) }),
+  );
+
+// `GET /orders/:id/ws`: hands the WebSocket upgrade to the order's Durable Object.
+// 501 without the ORDER_ROOM binding (the client then polls), 426 for a non-upgrade request.
+const connectToRoom = async (
+  request: Request,
+  env: Env,
+  repository: OrderRepository,
+  id: string,
+): Promise<Response> => {
+  const room = roomFor(env, id);
+  if (!room) {
+    return json({ message: 'WebSocket not available' }, 501);
+  }
+  if (request.headers.get('Upgrade')?.toLowerCase() !== 'websocket') {
+    return json({ message: 'Expected a WebSocket upgrade' }, 426);
+  }
+  const order = await repository.get(id);
+  if (!order) {
+    return notFound();
+  }
+  await sendToRoom(room, '/seed', order);
+  return room.fetch(request);
+};
+
+// `POST /orders/:id/status`: demo/back-office hook that pushes a new status to the room.
+// Disabled (404) unless both ORDER_ROOM and ORDER_STATUS_TOKEN are configured.
+const publishStatus = async (
+  request: Request,
+  env: Env,
+  repository: OrderRepository,
+  id: string,
+): Promise<Response> => {
+  const room = roomFor(env, id);
+  if (!room || !env.ORDER_STATUS_TOKEN) {
+    return notFound();
+  }
+  if (request.headers.get('authorization') !== `Bearer ${env.ORDER_STATUS_TOKEN}`) {
+    return json({ message: 'Unauthorized' }, 401);
+  }
+  let status: unknown;
+  try {
+    status = ((await request.json()) as { status?: unknown } | null)?.status;
+  } catch {
+    return badRequest('Invalid JSON');
+  }
+  if (typeof status !== 'string' || !ORDER_STATUSES.has(status)) {
+    return badRequest('Invalid status');
+  }
+  const order = await repository.get(id);
+  if (!order) {
+    return notFound();
+  }
+  const updated = { ...order, status };
+  await sendToRoom(room, '/publish', updated);
+  return json(updated);
+};
+
 /** `env` is the Pages Function environment, or directly an `OrderRepository` (tests). */
 export const handleRequest = async (
   request: Request,
   env: Env | OrderRepository = {},
 ): Promise<Response> => {
   const url = new URL(request.url);
-  const [resource, id] = parsePath(url);
+  const [resource, id, action] = parsePath(url);
   const repository = resolveRepository(env);
 
   if (!resource || (resource !== 'orders' && !Object.hasOwn(collections, resource))) {
+    return notFound();
+  }
+
+  if (resource === 'orders' && id && action) {
+    const roomEnv: Env = 'create' in env ? {} : env;
+    if (action === 'ws' && request.method === 'GET') {
+      return connectToRoom(request, roomEnv, repository, id);
+    }
+    if (action === 'status' && request.method === 'POST') {
+      return publishStatus(request, roomEnv, repository, id);
+    }
     return notFound();
   }
 

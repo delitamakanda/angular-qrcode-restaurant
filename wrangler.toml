@@ -13,3 +13,14 @@ pages_build_output_dir = "dist/angular-qrcode-restaurant/browser"
 # database_name = "angular-qrcode-restaurant-orders"
 # database_id = "<real-database-id>"
 # migrations_dir = "functions/migrations"
+
+# Real-time order tracking (WebSocket + Durable Object). Commented out on purpose, like
+# ORDERS_DB: the binding only resolves once the Worker in workers/order-room is deployed.
+# Without it /api/orders/:id/ws answers 501 and the client falls back to polling.
+#   1. npx wrangler deploy --config workers/order-room/wrangler.toml
+#   2. uncomment the block below
+#   3. optional: npx wrangler pages secret put ORDER_STATUS_TOKEN (enables POST /api/orders/:id/status)
+# [[durable_objects.bindings]]
+# name = "ORDER_ROOM"
+# class_name = "OrderRoom"
+# script_name = "angular-qrcode-restaurant-order-room"

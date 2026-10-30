@@ -19,8 +19,17 @@ export interface D1Like {
   };
 }
 
+// Minimal structural subset of a Durable Object namespace (the OrderRoom worker).
+export interface DurableObjectNamespaceLike {
+  idFromName(name: string): unknown;
+  get(id: unknown): { fetch(request: Request): Promise<Response> };
+}
+
 export interface Env {
   ORDERS_DB?: D1Like;
+  ORDER_ROOM?: DurableObjectNamespaceLike;
+  /** Shared secret enabling `POST /api/orders/:id/status` (disabled when unset). */
+  ORDER_STATUS_TOKEN?: string;
 }
 
 export const createMemoryOrderRepository = (seed: Row[] = []): OrderRepository => {
