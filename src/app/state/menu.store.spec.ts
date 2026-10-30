@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { MenuApiService } from '@app/core/api/menu-api.service';
 import { MenuItem } from '@app/core/models/menu-item.model';
+import { of } from 'rxjs';
 import { MenuStore } from './menu.store';
 
 const item = (id: string, extra: Partial<MenuItem>): MenuItem =>
@@ -40,6 +41,47 @@ describe('MenuStore filteredItems', () => {
     store.setSearchTerm('i');
     store.setSelectedCategory('c2');
     expect(names()).toEqual(['Latte']);
+  });
+});
+
+describe('MenuStore store change', () => {
+  const response = (id: string) => ({
+    categories: [{ id: `cat-${id}`, name: id, sort_order: 1 }],
+    items: [{ id: `item-${id}`, name: id, category_id: `cat-${id}`, base_price: 1 } as MenuItem],
+  });
+
+  function setup() {
+    const getMenu = vi.fn((storeId: string) => of(response(storeId)));
+    TestBed.configureTestingModule({
+      providers: [{ provide: MenuApiService, useValue: { getMenu } }],
+    });
+    return TestBed.inject(MenuStore);
+  }
+
+  it('drops the previous menu and filters when another store is loaded', async () => {
+    const store = setup();
+    await store.loadMenu('a', 'dine_in');
+    store.setSearchTerm('x');
+    store.setSelectedCategory('cat-a');
+    store.activeCategoryId.set('cat-a');
+
+    await store.loadMenu('b', 'dine_in');
+
+    expect(store.items().map((i) => i.id)).toEqual(['item-b']);
+    expect(store.categories().map((c) => c.id)).toEqual(['cat-b']);
+    expect(store.searchTerm()).toBe('');
+    expect(store.selectedCategoryId()).toBeNull();
+    expect(store.activeCategoryId()).toBeNull();
+  });
+
+  it('keeps the filters when the same store is reloaded', async () => {
+    const store = setup();
+    await store.loadMenu('a', 'dine_in');
+    store.setSearchTerm('x');
+
+    await store.loadMenu('a', 'take_away');
+
+    expect(store.searchTerm()).toBe('x');
   });
 });
 

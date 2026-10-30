@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.store-switcher {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 1);
+}
+
+.store-switcher__label {
+  font-weight: 600;
+}
+
+.store-switcher__select {
+  min-height: 2.75rem;
+  padding: 0 calc(var(--spacing) * 3);
+  border: 1px solid currentcolor;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.store-switcher__select:focus-visible {
+  outline: 2px solid currentcolor;
+  outline-offset: 2px;
+}

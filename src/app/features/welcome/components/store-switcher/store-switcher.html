@@ -1,0 +1,8 @@
+<div class="store-switcher">
+  <label class="store-switcher__label" for="store-switcher-select">Restaurant</label>
+  <select id="store-switcher-select" class="store-switcher__select" [formControl]="control">
+    @for (store of stores(); track store.id) {
+      <option [value]="store.id">{{ store.name }}</option>
+    }
+  </select>
+</div>

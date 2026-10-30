@@ -51,7 +51,7 @@ describe('MenuPage', () => {
         provideTaiga(),
         { provide: ActivatedRoute, useValue: {} },
         { provide: MenuApiService, useValue: {} },
-        { provide: ShopStore, useValue: { selectedMode: signal(null) } },
+        { provide: ShopStore, useValue: { selectedMode: signal(null), store: signal(null) } },
         {
           provide: MenuStore,
           useValue: {

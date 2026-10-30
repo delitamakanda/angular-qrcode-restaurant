@@ -11,6 +11,10 @@
   padding: calc(var(--spacing) * 4);
 }
 
+.welcome-page__switcher {
+  margin-bottom: calc(var(--spacing) * 4);
+}
+
 .welcome-page__title {
   margin: 0 0 calc(var(--spacing) * 3);
   font-size: 1.125rem;
