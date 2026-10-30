@@ -33,6 +33,24 @@ test('customer customizes a product and adds it to the cart', async ({ page }) =
   await expect(page.getByRole('button', { name: /View cart/ })).toContainText('2 items');
 });
 
+test('shows the product title, selected state and a footer that stays in view', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+
+  const dialog = page.getByRole('dialog', { name: 'Classic Milk Tea' });
+  await expect(dialog.locator('.customization__name')).toHaveText('Classic Milk Tea');
+
+  const large = dialog.getByRole('radio', { name: 'Large' });
+  await large.check();
+  await expect(large.locator('xpath=ancestor::label')).toHaveClass(/--selected/);
+
+  await dialog.getByRole('textbox').scrollIntoViewIfNeeded();
+  await expect(dialog.getByRole('button', { name: /^Add · / })).toBeInViewport();
+  await expect(dialog.getByRole('button', { name: 'Increase quantity' })).toBeInViewport();
+});
+
 test('closing the dialog adds nothing and restores focus', async ({ page }) => {
   const trigger = page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' });
   await trigger.click();

@@ -89,6 +89,7 @@ describe('ProductCustomizationDialog', () => {
 
     expect(el.querySelectorAll('fieldset').length).toBe(2);
     expect(el.textContent).toContain('Base price');
+    expect(el.querySelector('.customization__name')?.textContent).toBe('Tea');
   });
 
   it('shows an error with a retry action', () => {
