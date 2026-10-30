@@ -131,6 +131,20 @@ npx wrangler d1 migrations apply angular-qrcode-restaurant-orders --remote
 npx wrangler d1 migrations apply angular-qrcode-restaurant-orders --local   # for `wrangler pages dev`
 ```
 
+#### Real-time order tracking (WebSocket + Durable Object)
+
+The tracking page opens a WebSocket on `GET /api/orders/:id/ws` and falls back to HTTP polling (5 s, capped backoff) when it fails, closes early or receives a malformed message. **`json-server` does not support WebSockets**, so locally (`npm start`) the app always polls; that gap is intentional.
+
+On Cloudflare, one `OrderRoom` Durable Object per order keeps the latest order and broadcasts it to every connected client (`workers/order-room/`). A Pages Function cannot define a Durable Object class, so it is a separate Worker, deployed **before** Pages. The `ORDER_ROOM` binding is commented out in `wrangler.toml` (like `ORDERS_DB`); without it `/api/orders/:id/ws` answers `501` and clients poll.
+
+```bash
+npx wrangler deploy --config workers/order-room/wrangler.toml   # then uncomment [[durable_objects.bindings]] in wrangler.toml
+npx wrangler pages secret put ORDER_STATUS_TOKEN                  # optional: enables the status endpoint below
+curl -X POST -H "Authorization: Bearer $TOKEN" -d '{"status":"preparing"}' https://<site>/api/orders/<id>/status
+```
+
+`POST /api/orders/:id/status` (disabled unless `ORDER_ROOM` and `ORDER_STATUS_TOKEN` are set) pushes a new status to the room; sockets are closed on `completed` / `cancelled`. It does not update the stored order, so polling clients still read the previous status.
+
 To compare both environments (needs `jq`, mock API running on `:3000`):
 
 ```bash

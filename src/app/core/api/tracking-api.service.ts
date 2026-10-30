@@ -21,35 +21,54 @@ export class TrackingApiService {
 
   /**
    * Streams an order until it reaches a terminal status (`completed` / `cancelled`).
-   * Tries Server-Sent Events first and falls back to HTTP polling when the endpoint is
-   * missing, `EventSource` is unavailable or the stream fails. Transient network errors
-   * never reach the consumer: polling retries with a capped exponential backoff.
+   * Tries a WebSocket first (pushed by the Cloudflare `OrderRoom` Durable Object) and falls
+   * back to HTTP polling when `WebSocket` is unavailable, the connection fails or closes
+   * early, or a message is malformed. Transient network errors never reach the consumer:
+   * polling retries with a capped exponential backoff.
    * With `immediate: false` the first poll waits one interval (the caller already has the order).
    */
   watchOrder(orderId: string, options: { immediate?: boolean } = {}): Observable<Order> {
     const polling$ = this.poll(orderId, options.immediate ?? true);
     const source$ =
-      typeof EventSource === 'undefined'
+      typeof WebSocket === 'undefined'
         ? polling$
-        : this.stream(orderId).pipe(catchError(() => polling$));
+        : this.socket(orderId).pipe(catchError(() => polling$));
     return source$.pipe(takeWhile((order) => !isTerminal(order), true));
   }
 
-  private stream(orderId: string): Observable<Order> {
+  private socketUrl(orderId: string): string {
+    const url = new URL(
+      `${this.config.BASE_API_URL}/orders/${orderId}/ws`,
+      this.document.location.href,
+    );
+    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    return url.href;
+  }
+
+  private socket(orderId: string): Observable<Order> {
     return new Observable<Order>((subscriber) => {
-      const source = new EventSource(`${this.config.BASE_API_URL}/orders/${orderId}/events`);
-      source.onmessage = (event: MessageEvent<string>) => {
+      let socket: WebSocket;
+      try {
+        socket = new WebSocket(this.socketUrl(orderId));
+      } catch (error) {
+        subscriber.error(error);
+        return undefined;
+      }
+      socket.onmessage = (event: MessageEvent<string>) => {
         try {
           subscriber.next(JSON.parse(event.data) as Order);
         } catch (error) {
           subscriber.error(error);
         }
       };
-      source.onerror = () => {
-        subscriber.error(new Error('Order event stream unavailable'));
+      socket.onerror = () => {
+        subscriber.error(new Error('Order socket unavailable'));
+      };
+      socket.onclose = () => {
+        subscriber.error(new Error('Order socket closed'));
       };
       return () => {
-        source.close();
+        socket.close();
       };
     });
   }
