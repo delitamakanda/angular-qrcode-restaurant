@@ -42,8 +42,9 @@ test('a product image that fails to load falls back to the placeholder', async (
   await expect(image).toHaveAttribute('src', '/images/placeholder-food.svg');
 });
 
-test('every product image is a WebP under 60 KB', async ({ request }) => {
-  const response = await request.get('/api/menus');
+// Sushi Zen reuses the SVG placeholder (no dedicated assets): only the demo store ships WebP images.
+test('every demo product image is a WebP under 60 KB', async ({ request }) => {
+  const response = await request.get('/api/menus?store_id=demo');
   expect(response.ok()).toBe(true);
   const items = (await response.json()) as { image_url: string }[];
   expect(items.length).toBeGreaterThan(0);
