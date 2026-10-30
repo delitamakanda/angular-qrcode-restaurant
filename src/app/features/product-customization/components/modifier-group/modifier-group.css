@@ -1,27 +1,44 @@
 .modifier-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   margin: 0;
-  padding: 0;
-  border: 0;
+  padding: 0.75rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-panel);
+  background: var(--color-surface-muted);
   min-inline-size: 0;
+}
+
+.modifier-group[aria-invalid='true'] {
+  border-color: var(--color-danger);
 }
 
 .modifier-group__legend {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
   padding: 0;
   margin-bottom: 0.25rem;
 }
 
 .modifier-group__name {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-ink);
 }
 
-.modifier-group__badge,
+.modifier-group__badge {
+  padding: 0.125rem 0.625rem;
+  border: 1px solid var(--color-ink-muted);
+  border-radius: var(--radius-pill);
+  font-size: 0.8125rem;
+  color: var(--color-ink-muted);
+}
+
 .modifier-group__hint {
   font-size: 0.8125rem;
-  color: var(--tui-text-secondary, #4b5563);
+  color: var(--color-ink-muted);
 }
 
 .modifier-group__option {
@@ -29,7 +46,23 @@
   align-items: center;
   gap: 0.75rem;
   min-height: 2.75rem;
+  padding: 0.25rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-ink);
   cursor: pointer;
+}
+
+.modifier-group__option--selected {
+  border-color: var(--color-brand-600);
+  background: color-mix(in srgb, var(--color-brand-600) 10%, var(--color-surface));
+  font-weight: 600;
+}
+
+.modifier-group__option:has(.modifier-group__input:focus-visible) {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
 }
 
 .modifier-group__option--disabled {
@@ -41,7 +74,7 @@
   flex: none;
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  accent-color: var(--tui-background-accent-1, #1d4ed8);
+  accent-color: var(--color-brand-600);
 }
 
 .modifier-group__label {
@@ -54,14 +87,21 @@
 
 .modifier-group__delta {
   white-space: nowrap;
+  color: var(--color-ink-muted);
 }
 
 .modifier-group__clear {
+  align-self: flex-start;
   min-height: 2.75rem;
-  padding: 0;
+  padding: 0 0.75rem;
   border: 0;
   background: none;
-  color: inherit;
+  color: var(--color-ink);
   text-decoration: underline;
   cursor: pointer;
+}
+
+.modifier-group__clear:focus-visible {
+  outline: 2px solid var(--color-brand-600);
+  outline-offset: 2px;
 }

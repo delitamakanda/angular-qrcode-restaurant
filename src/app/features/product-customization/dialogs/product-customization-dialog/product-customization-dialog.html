@@ -19,12 +19,15 @@
           [src]="product().image_url || placeholder"
           [appImgFallback]="placeholder"
         />
-        @if (product().description) {
-          <p class="customization__description">{{ product().description }}</p>
-        }
-        <p class="customization__base-price">
-          Base price: {{ product().base_price | currencyFormat }}
-        </p>
+        <header class="customization__header">
+          <h2 class="customization__name">{{ product().name }}</h2>
+          @if (product().description) {
+            <p class="customization__description">{{ product().description }}</p>
+          }
+          <p class="customization__base-price">
+            Base price: {{ product().base_price | currencyFormat }}
+          </p>
+        </header>
 
         @for (group of groups(); track group.id) {
           <app-modifier-group

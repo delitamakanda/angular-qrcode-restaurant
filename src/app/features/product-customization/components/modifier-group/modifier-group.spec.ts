@@ -80,4 +80,22 @@ describe('ModifierGroup', () => {
 
     expect(cleared).toBe(1);
   });
+
+  it('marks the checked option as selected', () => {
+    const { el } = render({}, ['a']);
+    const options = el.querySelectorAll('.modifier-group__option');
+
+    expect(options[0].classList).toContain('modifier-group__option--selected');
+    expect(options[1].classList).not.toContain('modifier-group__option--selected');
+  });
+
+  it('sets aria-invalid on the fieldset when invalid', () => {
+    const { fixture, el } = render({});
+    expect(el.querySelector('fieldset')?.hasAttribute('aria-invalid')).toBe(false);
+
+    fixture.componentRef.setInput('invalid', true);
+    fixture.detectChanges();
+
+    expect(el.querySelector('fieldset')?.getAttribute('aria-invalid')).toBe('true');
+  });
 });
