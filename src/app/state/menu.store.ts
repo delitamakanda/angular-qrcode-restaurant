@@ -41,15 +41,33 @@ export class MenuStore {
       .filter((section) => section.items.length > 0);
   });
 
+  private loadedStoreId: string | null = null;
+
   async loadMenu(storeId: string, mode: OrderMode): Promise<void> {
+    if (this.loadedStoreId !== storeId) {
+      this.reset();
+      this.loadedStoreId = storeId;
+    }
     this.isLoading.set(true);
     try {
       const response = await firstValueFrom(this.menuApiService.getMenu(storeId, mode));
+      if (this.loadedStoreId !== storeId) {
+        return; // a newer load for another store superseded this one
+      }
       this.categories.set([...response.categories].sort((a, b) => a.sort_order - b.sort_order));
       this.items.set(response.items);
     } finally {
       this.isLoading.set(false);
     }
+  }
+
+  /** Drop the previous restaurant's menu and filters. */
+  private reset(): void {
+    this.categories.set([]);
+    this.items.set([]);
+    this.searchTerm.set('');
+    this.selectedCategoryId.set(null);
+    this.activeCategoryId.set(null);
   }
 
   setSearchTerm(term: string): void {

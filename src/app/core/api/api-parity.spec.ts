@@ -24,6 +24,23 @@ describe('Cloudflare Function parity with db.json', () => {
     expect((await get('/categories?store_id=unknown')).body).toEqual([]);
   });
 
+  it('serves every store by id and filters categories and menus per store', async () => {
+    expect(db.stores.length).toBeGreaterThanOrEqual(2);
+    for (const store of db.stores) {
+      expect(await get(`/stores/${store.id}`)).toEqual({ status: 200, body: store });
+      const categories = db.categories
+        .filter((c) => c.store_id === store.id)
+        .sort((a, b) => a.sort_order - b.sort_order);
+      expect(await get(`/categories?store_id=${store.id}&_sort=sort_order`)).toEqual({
+        status: 200,
+        body: categories,
+      });
+      expect((await get(`/menus?store_id=${store.id}`)).body).toEqual(
+        db.menus.filter((m) => m.store_id === store.id),
+      );
+    }
+  });
+
   it('GET /categories/:id returns the category, 404 when unknown', async () => {
     const category = db.categories[0];
     expect(await get(`/categories/${category.id}`)).toEqual({ status: 200, body: category });

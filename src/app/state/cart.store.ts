@@ -1,12 +1,19 @@
-import { computed, effect, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { CartItem } from '@app/core/models/cart.model';
+import { ShopStore } from './shop.store';
 
-const CART_STORAGE_KEY = 'cashier-cart';
+/** Legacy single-cart key, migrated to the `demo` restaurant on first load. */
+const LEGACY_CART_STORAGE_KEY = 'cashier-cart';
+const LEGACY_STORE_ID = 'demo';
+const cartStorageKey = (storeId: string): string => `${LEGACY_CART_STORAGE_KEY}:${storeId}`;
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartStore {
+  private readonly shopStore = inject(ShopStore);
+  private activeStoreId: string | null = null;
+
   readonly items = signal<CartItem[]>([]);
   readonly discount = signal<number>(0);
   readonly fees = signal<number>(0);
@@ -18,10 +25,15 @@ export class CartStore {
   readonly total = computed(() => this.subtotal() + this.fees() - this.discount());
 
   constructor() {
-    this.restoreCart();
+    effect(() => {
+      const storeId = this.shopStore.store()?.id ?? null;
+      untracked(() => {
+        this.switchStore(storeId);
+      });
+    });
 
     effect(() => {
-      this.persistCart();
+      this.persistCart(this.items());
     });
   }
 
@@ -59,24 +71,38 @@ export class CartStore {
     this.fees.set(0);
   }
 
-  private restoreCart(): void {
+  /** Each restaurant owns its cart: swap the in-memory items when the store changes. */
+  private switchStore(storeId: string | null): void {
+    if (storeId === this.activeStoreId) {
+      return;
+    }
+    this.activeStoreId = storeId;
+    this.discount.set(0);
+    this.fees.set(0);
+    this.items.set(storeId ? this.restoreCart(storeId) : []);
+  }
+
+  private restoreCart(storeId: string): CartItem[] {
     try {
-      const stored = localStorage.getItem(CART_STORAGE_KEY);
-      if (!stored) {
-        return;
+      let stored = localStorage.getItem(cartStorageKey(storeId));
+      if (stored === null && storeId === LEGACY_STORE_ID) {
+        stored = localStorage.getItem(LEGACY_CART_STORAGE_KEY);
+        localStorage.removeItem(LEGACY_CART_STORAGE_KEY);
       }
-      const parsed: unknown = JSON.parse(stored);
-      if (Array.isArray(parsed)) {
-        this.items.set(parsed.filter(isCartItem));
-      }
+      const parsed: unknown = stored ? JSON.parse(stored) : [];
+      return Array.isArray(parsed) ? parsed.filter(isCartItem) : [];
     } catch {
-      this.items.set([]);
+      return [];
     }
   }
 
-  private persistCart(): void {
+  private persistCart(items: CartItem[]): void {
+    const storeId = this.activeStoreId;
+    if (!storeId) {
+      return;
+    }
     try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(this.items()));
+      localStorage.setItem(cartStorageKey(storeId), JSON.stringify(items));
     } catch {
       // Storage unavailable or quota exceeded: the cart simply stays in memory.
     }

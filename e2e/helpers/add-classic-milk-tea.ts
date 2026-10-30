@@ -2,7 +2,7 @@ import { expect, type Page } from '@playwright/test';
 
 const persistedCartLength = (page: Page): Promise<number> =>
   page.evaluate(
-    () => (JSON.parse(localStorage.getItem('cashier-cart') ?? '[]') as unknown[]).length,
+    () => (JSON.parse(localStorage.getItem('cashier-cart:demo') ?? '[]') as unknown[]).length,
   );
 
 /** Adds a Classic Milk Tea through the customization dialog (required groups only). */

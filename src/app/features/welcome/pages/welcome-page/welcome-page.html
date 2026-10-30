@@ -3,6 +3,14 @@
     <app-store-hero [store]="store" />
 
     <div class="welcome-page__content">
+      @if (stores().length > 1) {
+        <app-store-switcher
+          class="welcome-page__switcher"
+          [stores]="stores()"
+          [selectedId]="store.id"
+          (storeSelected)="selectStore($event)"
+        />
+      }
       @if (!isOpen()) {
         <p class="welcome-page__closed" role="status">
           This restaurant is currently closed. Ordering is unavailable for now.
