@@ -130,4 +130,87 @@ describe('Cloudflare Function parity with db.json', () => {
     expect(order).toEqual({ ...payload, id: order.id });
     expect((await get(`/orders/${order.id}`)).body).toEqual(order);
   });
+
+  describe('GET /orders/:id/ws', () => {
+    const ws = (headers: Record<string, string> = {}) =>
+      new Request('https://example.test/api/orders/order-1001/ws', { headers });
+
+    it('answers 501 without the ORDER_ROOM binding so the client polls', async () => {
+      expect((await handleRequest(ws({ Upgrade: 'websocket' }))).status).toBe(501);
+    });
+
+    describe('with a Durable Object namespace', () => {
+      const fetchRoom = vi.fn<(request: Request) => Promise<Response>>();
+      const idFromName = vi.fn((name: string) => `id:${name}`);
+      const getRoom = vi.fn((id: unknown) => ({ id, fetch: fetchRoom }));
+      const env = { ORDER_ROOM: { idFromName, get: getRoom } };
+
+      beforeEach(() => {
+        fetchRoom.mockReset().mockResolvedValue(new Response(null, { status: 204 }));
+        idFromName.mockClear();
+        getRoom.mockClear();
+      });
+
+      it('answers 426 to a request that is not a WebSocket upgrade', async () => {
+        expect((await handleRequest(ws(), env)).status).toBe(426);
+        expect(fetchRoom).not.toHaveBeenCalled();
+      });
+
+      it('answers 404 for an unknown order', async () => {
+        const request = new Request('https://example.test/api/orders/unknown/ws', {
+          headers: { Upgrade: 'websocket' },
+        });
+        expect((await handleRequest(request, env)).status).toBe(404);
+      });
+
+      it('seeds the room with the order, then forwards the upgrade to the order room', async () => {
+        const request = ws({ Upgrade: 'websocket' });
+        const response = await handleRequest(request, env);
+
+        expect(response.status).toBe(204);
+        expect(idFromName).toHaveBeenCalledWith('order-1001');
+        expect(getRoom).toHaveBeenCalledWith('id:order-1001');
+        const [seed, upgrade] = fetchRoom.mock.calls.map(([r]) => r);
+        expect(new URL(seed.url).pathname).toBe('/seed');
+        expect(await seed.json()).toEqual(db.orders[0]);
+        expect(upgrade).toBe(request);
+      });
+    });
+  });
+
+  describe('POST /orders/:id/status', () => {
+    const fetchRoom = vi.fn<(request: Request) => Promise<Response>>();
+    const env = {
+      ORDER_STATUS_TOKEN: 's3cret',
+      ORDER_ROOM: { idFromName: (name: string) => name, get: () => ({ fetch: fetchRoom }) },
+    };
+    const post = (body: unknown, token = 's3cret') =>
+      new Request('https://example.test/api/orders/order-1001/status', {
+        method: 'POST',
+        headers: { authorization: `Bearer ${token}` },
+        body: JSON.stringify(body),
+      });
+
+    beforeEach(() => fetchRoom.mockReset().mockResolvedValue(new Response(null, { status: 204 })));
+
+    it('is disabled (404) without the room binding and token', async () => {
+      expect((await handleRequest(post({ status: 'ready' }))).status).toBe(404);
+    });
+
+    it('rejects a wrong token and an invalid status', async () => {
+      expect((await handleRequest(post({ status: 'ready' }, 'nope'), env)).status).toBe(401);
+      expect((await handleRequest(post({ status: 'burnt' }), env)).status).toBe(400);
+      expect(fetchRoom).not.toHaveBeenCalled();
+    });
+
+    it('publishes the updated order to the room', async () => {
+      const response = await handleRequest(post({ status: 'ready' }), env);
+
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ ...db.orders[0], status: 'ready' });
+      const [publish] = fetchRoom.mock.calls[0];
+      expect(new URL(publish.url).pathname).toBe('/publish');
+      expect(await publish.json()).toEqual({ ...db.orders[0], status: 'ready' });
+    });
+  });
 });

@@ -1,0 +1,15 @@
+# Durable Object host for the order tracking WebSockets. A Pages Function cannot define a
+# Durable Object class, so it lives in this separate Worker. Deploy it BEFORE Pages:
+#   npx wrangler deploy --config workers/order-room/wrangler.toml
+# Then uncomment [[durable_objects.bindings]] in the root wrangler.toml.
+name = "angular-qrcode-restaurant-order-room"
+main = "src/order-room.ts"
+compatibility_date = "2026-04-13"
+
+[[durable_objects.bindings]]
+name = "ORDER_ROOM"
+class_name = "OrderRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["OrderRoom"]
