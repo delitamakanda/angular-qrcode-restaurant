@@ -87,12 +87,26 @@ tui-dialog[data-appearance='bottom-sheet'] {
   overflow: hidden;
   border-radius: var(--radius-card) var(--radius-card) 0 0;
   padding-bottom: env(safe-area-inset-bottom);
+  animation: app-dialog-slide-up var(--motion-dialog-duration) var(--motion-ease-out) both;
+}
+
+@keyframes app-dialog-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
 }
 
 /* Micro-interaction timings: at most 300 ms, transform and opacity only. */
 :root {
   --motion-duration-fast: 150ms;
   --motion-duration-base: 200ms;
+  --motion-dialog-duration: 250ms;
   --motion-ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
 
