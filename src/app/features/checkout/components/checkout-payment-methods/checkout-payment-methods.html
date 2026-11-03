@@ -1,1 +1,17 @@
-<p>checkout-payment-methods works!</p>
+<fieldset class="payment-methods" role="radiogroup" [disabled]="disabled()">
+  <legend class="payment-methods__legend">Payment method</legend>
+  @for (option of options; track option.value) {
+    <label class="payment-methods__option">
+      <input
+        class="payment-methods__input"
+        type="radio"
+        name="payment-method"
+        [value]="option.value"
+        [checked]="value() === option.value"
+        (change)="select(option.value)"
+        (blur)="touch()"
+      />
+      <span>{{ option.label }}</span>
+    </label>
+  }
+</fieldset>

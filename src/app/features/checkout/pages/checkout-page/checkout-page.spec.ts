@@ -108,9 +108,9 @@ describe('CheckoutPage', () => {
   it('uses Taiga textfields with the expected autocomplete attributes', () => {
     const el = render().nativeElement as HTMLElement;
 
-    expect(el.querySelectorAll('tui-textfield').length).toBe(4);
+    expect(el.querySelectorAll('tui-textfield').length).toBe(3);
     expect(el.querySelectorAll('select').length).toBe(1);
-    expect(el.querySelector('input#payment-method')).not.toBeNull();
+    expect(el.querySelectorAll('app-checkout-payment-methods input[type="radio"]').length).toBe(2);
     expect(el.querySelector('#name')?.getAttribute('autocomplete')).toBe('name');
     expect(el.querySelector('#phone')?.getAttribute('autocomplete')).toBe('tel-national');
     expect(el.querySelector('#phone')?.getAttribute('inputmode')).toBe('tel');
@@ -316,7 +316,8 @@ describe('CheckoutPage', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     expect(fixture.componentInstance.checkoutForm.controls.paymentMethod.value).toBe('cash');
-    expect(el.querySelector<HTMLInputElement>('#payment-method')?.value).toBe('Cash');
+    expect(el.querySelector<HTMLInputElement>('input[type="radio"]:checked')?.value).toBe('cash');
+    expect(el.querySelector('.payment-methods__option')?.textContent).toContain('Cash');
   });
 
   it('sends payment_mode card when card is selected', async () => {
@@ -324,7 +325,9 @@ describe('CheckoutPage', () => {
     const el = fixture.nativeElement as HTMLElement;
     setValue(el, '#name', 'Jane');
     setValue(el, '#phone', '+33612345678');
-    fixture.componentInstance.checkoutForm.controls.paymentMethod.setValue('card');
+    const card = el.querySelector<HTMLInputElement>('input[type="radio"][value="card"]');
+    card?.click();
+    fixture.detectChanges();
 
     await fixture.componentInstance.submitForm();
 

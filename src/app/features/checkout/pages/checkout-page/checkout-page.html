@@ -25,11 +25,7 @@
     </div>
 
     <div class="checkout-page__field">
-      <tui-textfield tuiChevron>
-        <label tuiLabel for="payment-method">Payment method</label>
-        <input tuiSelect id="payment-method" formControlName="paymentMethod" required />
-        <tui-data-list-wrapper *tuiDropdown [items]="paymentOptions" />
-      </tui-textfield>
+      <app-checkout-payment-methods formControlName="paymentMethod" />
     </div>
   </form>
 
