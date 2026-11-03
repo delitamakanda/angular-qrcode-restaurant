@@ -87,7 +87,7 @@ tui-dialog[data-appearance='bottom-sheet'] {
   overflow: hidden;
   border-radius: var(--radius-card) var(--radius-card) 0 0;
   padding-bottom: env(safe-area-inset-bottom);
-  animation: app-dialog-slide-up var(--motion-dialog-duration) var(--motion-ease-out) both;
+  animation: app-dialog-slide-up var(--motion-dialog-duration) var(--motion-ease-out) backwards;
 }
 
 @keyframes app-dialog-slide-up {
