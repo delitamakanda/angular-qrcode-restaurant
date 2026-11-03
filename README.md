@@ -18,6 +18,27 @@ Regénérer le QR code localement (sans service tiers) : `npm run qrcode` (ou `n
 - order confirmation with access to the tracking page
 - mock API backed by `mock-api/db.json` and exposed under `/api/*`
 
+## Screenshots
+
+Customer journey on mobile (Pixel 7 viewport, `demo` store):
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/01-welcome.png" alt="Welcome page with the dine-in, take-away and delivery order mode buttons" width="200" height="433"><br>Welcome</td>
+    <td align="center"><img src="docs/screenshots/02-menu.png" alt="Menu page listing products by category with add-to-cart buttons" width="200" height="433"><br>Menu</td>
+    <td align="center"><img src="docs/screenshots/03-product-customization.png" alt="Product customization dialog for a Classic Milk Tea with size, sugar and ice options" width="200" height="433"><br>Customization</td>
+    <td align="center"><img src="docs/screenshots/04-cart.png" alt="Cart sheet showing the selected Classic Milk Tea and the checkout button" width="200" height="433"><br>Cart</td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/05-checkout.png" alt="Checkout form with customer name, phone number and payment method" width="200" height="433"><br>Checkout</td>
+    <td align="center"><img src="docs/screenshots/06-order-confirmation.png" alt="Order confirmation page with the order number and a link to track the order" width="200" height="433"><br>Confirmation</td>
+    <td align="center"><img src="docs/screenshots/07-order-tracking.png" alt="Order tracking page with the order status timeline" width="200" height="433"><br>Tracking</td>
+    <td></td>
+  </tr>
+</table>
+
+Regenerate them with `npm run screenshots` (starts the app and mock API if needed; orders are stubbed, `mock-api/db.json` is never modified).
+
 ## Tech stack
 
 - Angular 21 with standalone components
@@ -150,6 +171,7 @@ npm run format               # format files with Prettier
 npm run format:check         # check formatting with Prettier
 npm run build                 # create a production build
 npx ng test --watch=false     # run Angular/Vitest unit tests
+npm run screenshots           # regenerate the README screenshots in docs/screenshots
 ```
 
 ## Agentic workflow
