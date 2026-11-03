@@ -80,6 +80,17 @@ describe('Cloudflare Function parity with db.json', () => {
     expect((await get('/options/unknown')).status).toBe(404);
   });
 
+  it('GET /promotions filters by store_id and is_active like json-server', async () => {
+    for (const store of db.stores) {
+      const expected = db.promotions.filter((p) => p.store_id === store.id && p.is_active);
+      expect(await get(`/promotions?store_id=${store.id}&is_active=true`)).toEqual({
+        status: 200,
+        body: expected,
+      });
+    }
+    expect((await get('/promotions?store_id=unknown&is_active=true')).body).toEqual([]);
+  });
+
   it('GET /promotions serves the collection', async () => {
     expect(await get('/promotions')).toEqual({ status: 200, body: db.promotions });
   });

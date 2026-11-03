@@ -57,4 +57,23 @@ describe('PromotionApiService', () => {
   it('returns null when the promotion is inactive', async () => {
     expect(await lookup([promotion({ is_active: false })])).toBeNull();
   });
+
+  it('without a code, requests active promotions of the store and returns the first', () => {
+    let result: Promotion | null | undefined;
+    service.getActivePromotion('demo').subscribe((p) => (result = p));
+
+    const req = http.expectOne((r) => r.url === 'http://api/promotions');
+    expect(req.request.params.get('store_id')).toBe('demo');
+    expect(req.request.params.get('is_active')).toBe('true');
+    req.flush([promotion(), promotion({ id: 'p2' })]);
+
+    expect(result).toEqual(promotion());
+  });
+
+  it('without a code, returns null when there is no promotion', () => {
+    let result: Promotion | null | undefined;
+    service.getActivePromotion('demo').subscribe((p) => (result = p));
+    http.expectOne((r) => r.url === 'http://api/promotions').flush([]);
+    expect(result).toBeNull();
+  });
 });

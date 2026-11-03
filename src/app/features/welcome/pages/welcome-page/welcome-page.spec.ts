@@ -4,8 +4,10 @@ import { provideTaiga } from '@taiga-ui/core';
 import { APP_TOKEN_CONFIG } from '@app/core/config/app.token';
 import { StoreApiService } from '@app/core/api/store-api.service';
 import { Store } from '@app/core/models/store.model';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { ShopStore } from '@app/state/shop.store';
+import { PromotionApiService } from '@app/core/api/promotion-api.service';
+import { Promotion } from '@app/core/models/promotion.model';
 import { WelcomePage } from './welcome-page';
 
 const store: Store = {
@@ -18,11 +20,23 @@ const store: Store = {
 
 const stores: Store[] = [store, { ...store, id: 'second', name: 'Second Place' }];
 
+const promotion: Promotion = {
+  id: 'promo-1',
+  store_id: 'demo',
+  code: 'WELCOME10',
+  type: 'fixed',
+  value: 10,
+  is_active: true,
+};
+
+const getActivePromotion = vi.fn();
+
 const providers = () => [
   provideTaiga(),
   provideRouter([]),
   { provide: APP_TOKEN_CONFIG, useValue: {} },
   { provide: StoreApiService, useValue: { getStores: () => of(stores) } },
+  { provide: PromotionApiService, useValue: { getActivePromotion } },
 ];
 
 function setup(overrides: Partial<Store> = {}) {
@@ -37,6 +51,48 @@ function setup(overrides: Partial<Store> = {}) {
 }
 
 describe('WelcomePage', () => {
+  beforeEach(() => {
+    getActivePromotion.mockReset();
+    getActivePromotion.mockReturnValue(of(null));
+  });
+
+  it('shows the active promotion of the current store', () => {
+    getActivePromotion.mockReturnValue(of(promotion));
+    const { el, fixture } = setup();
+    fixture.detectChanges();
+
+    expect(getActivePromotion).toHaveBeenCalledWith('other');
+    expect(el.querySelector('app-coupon-banner')?.textContent).toContain('WELCOME10');
+  });
+
+  it('shows no banner without promotion', () => {
+    const { el } = setup();
+
+    expect(el.querySelector('section[aria-label="Offre promotionnelle"]')).toBeNull();
+  });
+
+  it('shows no banner and still renders the page when the request fails', () => {
+    getActivePromotion.mockReturnValue(throwError(() => new Error('boom')));
+    const { el, fixture } = setup();
+    fixture.detectChanges();
+
+    expect(el.querySelector('section[aria-label="Offre promotionnelle"]')).toBeNull();
+    expect(el.querySelector('h1')?.textContent).toContain('Bubble House');
+  });
+
+  it('moves the focus to the title when the banner is dismissed', () => {
+    getActivePromotion.mockReturnValue(of(promotion));
+    const { el, fixture } = setup();
+    fixture.detectChanges();
+
+    const close = el.querySelector<HTMLButtonElement>('button[aria-label="Close"]');
+    close?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('section[aria-label="Offre promotionnelle"]')).toBeNull();
+    expect(document.activeElement).toBe(el.querySelector('h2'));
+  });
+
   it('shows the store name and only the supported modes', () => {
     const { el, buttons } = setup();
 

@@ -1,1 +1,27 @@
-<p>coupon-banner works!</p>
+@if (visiblePromotion(); as promotion) {
+  <section class="coupon-banner" aria-label="Offre promotionnelle">
+    <div class="coupon-banner__text">
+      <p class="coupon-banner__message">
+        Use the code
+        <strong class="coupon-banner__code">{{ promotion.code }}</strong>
+        <span class="coupon-banner__discount">{{ discountLabel() }}</span>
+      </p>
+    </div>
+    <div class="coupon-banner__actions">
+      <button tuiButton type="button" appearance="primary" size="m" (click)="copy()">
+        {{ copied() ? 'Copied' : 'Copy code' }}
+      </button>
+      <button
+        tuiButton
+        type="button"
+        appearance="secondary"
+        size="m"
+        aria-label="Close"
+        (click)="close()"
+      >
+        Close
+      </button>
+    </div>
+    <p class="coupon-banner__status" aria-live="polite">{{ copied() ? 'Code copied' : '' }}</p>
+  </section>
+}

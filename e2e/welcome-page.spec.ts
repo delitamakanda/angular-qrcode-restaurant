@@ -18,6 +18,27 @@ test('welcome page shows the store and leads to the menu', async ({ page }) => {
   await expect(page).toHaveURL(/\/store\/demo\/menu$/);
 });
 
+test('welcome page shows the promotion banner and lets the user dismiss it', async ({ page }) => {
+  await page.goto('/store/demo/welcome');
+
+  const banner = page.getByRole('region', { name: 'Offre promotionnelle' });
+  await expect(banner).toBeVisible({ timeout: 15000 });
+  await expect(banner).toContainText('WELCOME10');
+  await expect(banner).toContainText('-10 €');
+
+  await banner.getByRole('button', { name: 'Close' }).click();
+  await expect(banner).toBeHidden();
+  await expect(page.getByRole('heading', { name: 'Select your order mode' })).toBeFocused();
+});
+
+test('welcome page still works when the promotion request fails', async ({ page }) => {
+  await page.route('**/promotions**', (route) => route.abort());
+  await page.goto('/store/demo/welcome');
+
+  await expect(page.getByRole('group', { name: 'Order mode' })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('region', { name: 'Offre promotionnelle' })).toHaveCount(0);
+});
+
 test('welcome page blocks ordering when the store is closed', async ({ page }) => {
   await page.route('**/stores/demo', async (route) => {
     const response = await route.fetch();
