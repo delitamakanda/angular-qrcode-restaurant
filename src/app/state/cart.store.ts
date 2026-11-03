@@ -1,5 +1,6 @@
 import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { CartItem } from '@app/core/models/cart.model';
+import { Promotion } from '@app/core/models/promotion.model';
 import { ShopStore } from './shop.store';
 
 /** Legacy single-cart key, migrated to the `demo` restaurant on first load. */
@@ -15,12 +16,24 @@ export class CartStore {
   private activeStoreId: string | null = null;
 
   readonly items = signal<CartItem[]>([]);
-  readonly discount = signal<number>(0);
+  readonly appliedPromotion = signal<Promotion | null>(null);
   readonly fees = signal<number>(0);
 
   readonly count = computed(() => this.items().reduce((sum, item) => sum + item.quantity, 0));
 
   readonly subtotal = computed(() => this.items().reduce((sum, item) => sum + item.total_price, 0));
+
+  /** Discount of the applied promotion: follows the subtotal, capped at it, rounded to cents. */
+  readonly discount = computed(() => {
+    const promotion = this.appliedPromotion();
+    if (!promotion) {
+      return 0;
+    }
+    const subtotal = this.subtotal();
+    const raw =
+      promotion.type === 'percentage' ? (subtotal * promotion.value) / 100 : promotion.value;
+    return Math.round(Math.min(Math.max(raw, 0), subtotal) * 100) / 100;
+  });
 
   readonly total = computed(() => this.subtotal() + this.fees() - this.discount());
 
@@ -65,9 +78,13 @@ export class CartStore {
     );
   }
 
+  applyPromotion(promotion: Promotion | null): void {
+    this.appliedPromotion.set(promotion);
+  }
+
   clearCart(): void {
     this.items.set([]);
-    this.discount.set(0);
+    this.appliedPromotion.set(null);
     this.fees.set(0);
   }
 
@@ -77,7 +94,7 @@ export class CartStore {
       return;
     }
     this.activeStoreId = storeId;
-    this.discount.set(0);
+    this.appliedPromotion.set(null);
     this.fees.set(0);
     this.items.set(storeId ? this.restoreCart(storeId) : []);
   }

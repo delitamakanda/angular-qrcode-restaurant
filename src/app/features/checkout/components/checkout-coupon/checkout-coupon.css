@@ -1,0 +1,37 @@
+.coupon__row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.coupon__field {
+  flex: 1 1 auto;
+}
+
+.coupon__row button {
+  min-block-size: 2.75rem;
+}
+
+@media (min-width: 480px) {
+  .coupon__row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.coupon__message {
+  margin: 0.25rem 0 0;
+  font-size: 0.875rem;
+}
+
+.coupon__message--error {
+  color: var(--color-danger);
+}
+
+.coupon__message--error::before {
+  content: '⚠ ';
+}
+
+.coupon__message--success::before {
+  content: '✓ ';
+}

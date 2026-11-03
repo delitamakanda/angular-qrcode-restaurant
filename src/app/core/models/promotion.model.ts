@@ -2,6 +2,7 @@ export type PromotionType = 'fixed' | 'percentage';
 
 export interface Promotion {
   id: string;
+  store_id: string;
   code: string;
   type: PromotionType;
   value: number;
