@@ -1,9 +1,11 @@
-import { signal } from '@angular/core';
+import { computed, signal } from '@angular/core';
+import { Promotion } from '@app/core/models/promotion.model';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { provideTaiga } from '@taiga-ui/core';
 import { OrderApiService } from '@app/core/api/order-api.service';
+import { PromotionApiService } from '@app/core/api/promotion-api.service';
 import { CartStore } from '@app/state/cart.store';
 import { CheckoutStore } from '@app/state/checkout.store';
 import { OrderHistoryStore } from '@app/state/order-history.store';
@@ -13,15 +15,19 @@ import { CheckoutPage } from './checkout-page';
 describe('CheckoutPage', () => {
   const createOrder = vi.fn();
   const navigate = vi.fn();
+  const getActivePromotion = vi.fn();
 
   function render() {
+    getActivePromotion.mockReset().mockReturnValue(of(null));
     createOrder.mockReset().mockReturnValue(of({ id: 'order-1' }));
     navigate.mockReset().mockResolvedValue(true);
+    const appliedPromotion = signal<Promotion | null>(null);
     TestBed.configureTestingModule({
       imports: [CheckoutPage],
       providers: [
         provideTaiga(),
         { provide: OrderApiService, useValue: { createOrder } },
+        { provide: PromotionApiService, useValue: { getActivePromotion } },
         { provide: Router, useValue: { navigate } },
         { provide: ActivatedRoute, useValue: {} },
         {
@@ -34,7 +40,11 @@ describe('CheckoutPage', () => {
             items: signal([]),
             count: signal(3),
             subtotal: signal(10),
-            discount: signal(1),
+            appliedPromotion,
+            applyPromotion: (promotion: Promotion | null) => {
+              appliedPromotion.set(promotion);
+            },
+            discount: computed(() => (appliedPromotion() ? 10 : 1)),
             fees: signal(3.5),
             total: signal(12.5),
             clearCart: vi.fn(),
@@ -220,6 +230,85 @@ describe('CheckoutPage', () => {
     await fixture.componentInstance.submitForm();
 
     expect(add).toHaveBeenCalledWith(expect.objectContaining({ id: 'order-1', store_id: 'demo' }));
+  });
+
+  const welcome: Promotion = {
+    id: 'promo-welcome',
+    store_id: 'demo',
+    code: 'WELCOME10',
+    type: 'fixed',
+    value: 10,
+    is_active: true,
+  };
+
+  function couponButton(el: HTMLElement, label: string): HTMLButtonElement | undefined {
+    return [...el.querySelectorAll<HTMLButtonElement>('app-checkout-coupon button')].find(
+      (b) => b.textContent.trim() === label,
+    );
+  }
+
+  async function applyCode(fixture: ReturnType<typeof render>, value: string): Promise<void> {
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#coupon-code', value);
+    couponButton(el, 'Apply')?.click();
+    await fixture.whenStable();
+    fixture.detectChanges();
+  }
+
+  it('applies a valid coupon, normalized, and sends it with the order', async () => {
+    getActivePromotion.mockReset().mockReturnValue(of(welcome));
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    getActivePromotion.mockReturnValue(of(welcome));
+
+    await applyCode(fixture, ' welcome10 ');
+
+    expect(getActivePromotion).toHaveBeenCalledWith('demo', 'WELCOME10');
+    expect(el.querySelector('#coupon-success')?.textContent).toContain(
+      'WELCOME10 applied: −$10.00',
+    );
+    expect(TestBed.inject(CheckoutStore).couponCode()).toBe('WELCOME10');
+
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+    await fixture.componentInstance.submitForm();
+
+    expect(createOrder).toHaveBeenCalledWith(
+      expect.objectContaining({ coupon_code: 'WELCOME10', discount: 10, total: 12.5 }),
+    );
+  });
+
+  it('shows an error for an invalid coupon and does not send a coupon_code', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+
+    await applyCode(fixture, 'NOPE');
+
+    expect(el.querySelector('#coupon-error')?.textContent).toContain(
+      'Invalid or expired coupon code',
+    );
+    expect(el.querySelector('#coupon-code')?.getAttribute('aria-invalid')).toBe('true');
+
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+    await fixture.componentInstance.submitForm();
+
+    expect(createOrder).toHaveBeenCalledWith(
+      expect.objectContaining({ coupon_code: undefined, discount: 1 }),
+    );
+  });
+
+  it('removes the applied coupon', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    getActivePromotion.mockReturnValue(of(welcome));
+    await applyCode(fixture, 'WELCOME10');
+
+    couponButton(el, 'Remove')?.click();
+    fixture.detectChanges();
+
+    expect(TestBed.inject(CheckoutStore).couponCode()).toBeNull();
+    expect(el.querySelector('#coupon-success')).toBeNull();
   });
 
   it('defaults the payment method to cash and displays its label', () => {
