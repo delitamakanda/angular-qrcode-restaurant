@@ -16,7 +16,12 @@
           This restaurant is currently closed. Ordering is unavailable for now.
         </p>
       }
-      <h2 class="welcome-page__title">Select your order mode</h2>
+      <app-coupon-banner
+        class="welcome-page__promotion"
+        [promotion]="promotion()"
+        (dismissed)="onPromotionDismissed()"
+      />
+      <h2 #title tabindex="-1" class="welcome-page__title">Select your order mode</h2>
       <app-order-mode-selector
         [modes]="store.supported_modes"
         [selected]="selectedMode()"

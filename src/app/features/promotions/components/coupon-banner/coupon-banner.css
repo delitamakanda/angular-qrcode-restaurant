@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.coupon-banner {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+  padding: calc(var(--spacing) * 4);
+  border: 2px dashed var(--color-brand-700);
+  border-radius: var(--radius-panel);
+  background: var(--color-brand-50);
+  color: var(--color-brand-950);
+}
+
+.coupon-banner__message {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.coupon-banner__code {
+  display: inline-block;
+  padding: 0 calc(var(--spacing) * 2);
+  border-radius: var(--radius-control);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: monospace;
+  font-size: 1.125rem;
+  letter-spacing: 0.05em;
+  user-select: all;
+}
+
+.coupon-banner__discount {
+  font-weight: 700;
+}
+
+.coupon-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--spacing) * 2);
+}
+
+.coupon-banner__actions button {
+  min-block-size: 2.75rem;
+}
+
+.coupon-banner__status {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.coupon-banner__status:empty {
+  display: none;
+}
+
+@media (min-width: 30rem) {
+  .coupon-banner {
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
