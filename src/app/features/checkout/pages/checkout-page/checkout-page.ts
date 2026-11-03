@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CartStore } from '../../../../state/cart.store';
 import { CheckoutStore } from '../../../../state/checkout.store';
@@ -11,23 +11,16 @@ import { firstValueFrom, map } from 'rxjs';
 import { normalizePhone, phoneValidator } from '@shared/validators/phone.validator';
 import {
   TuiButton,
-  TuiDropdown,
   TuiError,
   TuiLabel,
   TuiTextfield,
   TuiInput,
-  tuiItemsHandlersProvider,
   tuiValidationErrorsProvider,
 } from '@taiga-ui/core';
-import { TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
 import { CartSummary } from '../../../cart/components/cart-summary/cart-summary';
 import { PhoneInput } from '@shared/ui/forms/phone-input/phone-input';
 import { PaymentMode } from '../../../../core/models/checkout.model';
-
-const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
-  cash: 'Cash',
-  card: 'Visa/Mastercard',
-};
+import { CheckoutPaymentMethods } from '../../components/checkout-payment-methods/checkout-payment-methods';
 
 @Component({
   selector: 'app-checkout-page',
@@ -35,15 +28,12 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
     ReactiveFormsModule,
     PhoneInput,
     CartSummary,
+    CheckoutPaymentMethods,
     TuiButton,
     TuiTextfield,
     TuiLabel,
     TuiError,
     TuiInput,
-    TuiSelect,
-    TuiChevron,
-    TuiDataListWrapper,
-    TuiDropdown,
   ],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
@@ -51,9 +41,6 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
   providers: [
     tuiValidationErrorsProvider({
       required: 'Required field',
-    }),
-    tuiItemsHandlersProvider<PaymentMode>({
-      stringify: signal((mode: PaymentMode) => PAYMENT_LABELS[mode] ?? mode),
     }),
   ],
 })
@@ -66,8 +53,6 @@ export class CheckoutPage {
   private readonly orderApiService = inject(OrderApiService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-
-  protected readonly paymentOptions: readonly PaymentMode[] = ['cash', 'card'];
 
   readonly checkoutForm = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
