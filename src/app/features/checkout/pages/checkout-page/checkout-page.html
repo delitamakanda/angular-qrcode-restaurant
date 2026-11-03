@@ -27,20 +27,18 @@
     <div class="checkout-page__field">
       <app-checkout-payment-methods formControlName="paymentMethod" />
     </div>
-
-    <div class="checkout-page__field">
-      <tui-textfield>
-        <label tuiLabel for="coupon-code">Coupon code (optional)</label>
-        <input
-          tuiInput
-          type="text"
-          id="coupon-code"
-          autocomplete="off"
-          formControlName="couponCode"
-        />
-      </tui-textfield>
-    </div>
   </form>
+
+  <div class="checkout-page__field">
+    <app-checkout-coupon
+      [appliedCode]="checkoutStore.couponCode()"
+      [discount]="cartStore.discount()"
+      [error]="couponError()"
+      [pending]="couponPending()"
+      (apply)="applyCoupon($event)"
+      (remove)="removeCoupon()"
+    />
+  </div>
 
   <app-cart-summary [count]="cartStore.count()" [total]="cartStore.total()">
     <button

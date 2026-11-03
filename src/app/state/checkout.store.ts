@@ -1,12 +1,17 @@
-import { computed, Injectable, signal } from '@angular/core';
-import { CheckoutCustomer } from '@app/core/models/checkout.model';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { CheckoutCustomer, PaymentMode } from '@app/core/models/checkout.model';
+import { CartStore } from './cart.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CheckoutStore {
+  private readonly cartStore = inject(CartStore);
+
   readonly customer = signal<CheckoutCustomer | null>(null);
-  readonly couponCode = signal<string | null>(null);
+  readonly paymentMethod = signal<PaymentMode>('cash');
+  /** Code of the validated coupon (the promotion itself lives in `CartStore`). */
+  readonly couponCode = computed(() => this.cartStore.appliedPromotion()?.code ?? null);
   readonly submitting = signal<boolean>(false);
   readonly hasPhone = computed(() => !!this.customer()?.phone);
 
@@ -14,8 +19,8 @@ export class CheckoutStore {
     this.customer.set(customer);
   }
 
-  setCouponCode(code: string | null): void {
-    this.couponCode.set(code);
+  setPaymentMethod(method: PaymentMode): void {
+    this.paymentMethod.set(method);
   }
 
   setSubmitting(submitting: boolean): void {
@@ -24,7 +29,8 @@ export class CheckoutStore {
 
   resetForm(): void {
     this.customer.set(null);
-    this.couponCode.set(null);
+    this.paymentMethod.set('cash');
+    this.cartStore.applyPromotion(null);
     this.submitting.set(false);
   }
 }

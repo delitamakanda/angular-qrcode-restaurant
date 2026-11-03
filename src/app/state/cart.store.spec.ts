@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { CartItem } from '@app/core/models/cart.model';
+import { Promotion } from '@app/core/models/promotion.model';
 import { Store } from '@app/core/models/store.model';
 import { CartStore } from './cart.store';
 import { ShopStore } from './shop.store';
@@ -23,6 +24,16 @@ const makeStore = (id: string): Store => ({
   currency: 'EUR',
   is_open: true,
   supported_modes: ['dine_in'],
+});
+
+const promo = (overrides: Partial<Promotion> = {}): Promotion => ({
+  id: 'p1',
+  store_id: 'demo',
+  code: 'WELCOME10',
+  type: 'fixed',
+  value: 3,
+  is_active: true,
+  ...overrides,
 });
 
 const stored = (key = KEY): CartItem[] =>
@@ -118,7 +129,7 @@ describe('CartStore persistence', () => {
   it('clearCart empties the cart and the stored value', () => {
     const { cart } = createCart();
     cart.addToCart(makeItem());
-    cart.discount.set(3);
+    cart.applyPromotion(promo());
     cart.fees.set(2);
     TestBed.tick();
 
@@ -181,13 +192,53 @@ describe('CartStore per restaurant', () => {
 
   it('resets discount and fees when switching restaurant', () => {
     const { cart, switchTo } = createCart('demo');
-    cart.discount.set(3);
+    cart.addToCart(makeItem());
+    cart.applyPromotion(promo());
     cart.fees.set(2);
 
     switchTo('sushi-zen');
 
     expect(cart.discount()).toBe(0);
     expect(cart.fees()).toBe(0);
+  });
+
+  it('derives a fixed discount from the applied promotion', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem());
+    cart.applyPromotion(promo({ value: 3 }));
+
+    expect(cart.discount()).toBe(3);
+    expect(cart.total()).toBe(7);
+  });
+
+  it('computes a percentage discount on the subtotal and follows cart changes', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem());
+    cart.applyPromotion(promo({ type: 'percentage', value: 15 }));
+    expect(cart.discount()).toBe(1.5);
+
+    cart.updateQuantity('c1', 4);
+    expect(cart.discount()).toBe(3);
+  });
+
+  it('caps the discount at the subtotal and rounds to cents', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem({ total_price: 2 }));
+    cart.applyPromotion(promo({ value: 10 }));
+    expect(cart.discount()).toBe(2);
+    expect(cart.total()).toBe(0);
+
+    cart.applyPromotion(promo({ type: 'percentage', value: 33.333 }));
+    expect(cart.discount()).toBe(0.67);
+  });
+
+  it('removes the discount when the promotion is cleared', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem());
+    cart.applyPromotion(promo());
+    cart.applyPromotion(null);
+
+    expect(cart.discount()).toBe(0);
   });
 
   it('migrates the legacy cart to the demo restaurant', () => {
