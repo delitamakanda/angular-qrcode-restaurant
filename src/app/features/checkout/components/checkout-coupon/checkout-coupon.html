@@ -1,1 +1,46 @@
-<p>checkout-coupon works!</p>
+<div class="coupon">
+  <div class="coupon__row">
+    <tui-textfield class="coupon__field">
+      <label tuiLabel for="coupon-code">Coupon code (optional)</label>
+      <input
+        #field
+        tuiInput
+        type="text"
+        id="coupon-code"
+        autocomplete="off"
+        autocapitalize="characters"
+        [formControl]="code"
+        [readOnly]="!!appliedCode()"
+        [attr.aria-invalid]="error() ? 'true' : 'false'"
+        [attr.aria-describedby]="describedBy()"
+        (keydown.enter)="onApply($event)"
+      />
+    </tui-textfield>
+    @if (appliedCode()) {
+      <button tuiButton type="button" appearance="secondary" size="l" (click)="onRemove()">
+        Remove
+      </button>
+    } @else {
+      <button
+        tuiButton
+        type="button"
+        size="l"
+        [disabled]="pending()"
+        [attr.aria-busy]="pending()"
+        (click)="onApply()"
+      >
+        Apply
+      </button>
+    }
+  </div>
+  @if (appliedCode(); as applied) {
+    <p id="coupon-success" class="coupon__message coupon__message--success" role="status">
+      {{ applied }} applied: −{{ discount() | currencyFormat }}
+    </p>
+  }
+  @if (error(); as message) {
+    <p id="coupon-error" class="coupon__message coupon__message--error" role="alert">
+      {{ message }}
+    </p>
+  }
+</div>

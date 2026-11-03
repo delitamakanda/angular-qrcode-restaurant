@@ -12,8 +12,16 @@ export class PromotionApiService {
   private readonly http = inject(HttpClient);
   private readonly config = inject(APP_TOKEN_CONFIG);
 
-  /** First active promotion of a store, or `null` when there is none. */
-  getActivePromotion(storeId: string): Observable<Promotion | null> {
+  /**
+   * First active promotion of a store (optionally matching `code`), or `null` when there is none.
+   */
+  getActivePromotion(storeId: string, code?: string): Observable<Promotion | null> {
+    if (code !== undefined) {
+      const params = new HttpParams().set('store_id', storeId).set('code', code);
+      return this.http
+        .get<Promotion[]>(`${this.config.BASE_API_URL}/promotions`, { params })
+        .pipe(map((promotions) => promotions.find((p) => p.is_active) ?? null));
+    }
     // The banner is optional: a failure must not raise an error toast.
     const context = new HttpContext().set(SKIP_ERROR_NOTIFICATION, true);
     const params = new HttpParams().set('store_id', storeId).set('is_active', 'true');

@@ -95,6 +95,14 @@ describe('Cloudflare Function parity with db.json', () => {
     expect(await get('/promotions')).toEqual({ status: 200, body: db.promotions });
   });
 
+  it('GET /promotions?store_id&code (PromotionApiService request) finds the store coupon only', async () => {
+    const welcome = db.promotions.filter((p) => p.code === 'WELCOME10' && p.store_id === 'demo');
+    expect(welcome).toHaveLength(1);
+    expect((await get('/promotions?store_id=demo&code=WELCOME10')).body).toEqual(welcome);
+    expect((await get('/promotions?store_id=demo&code=UNKNOWN')).body).toEqual([]);
+    expect((await get('/promotions?store_id=demo&code=ZEN5')).body).toEqual([]);
+  });
+
   it('GET /stores serves the collection and unknown resources are 404', async () => {
     expect((await get('/stores')).body).toEqual(db.stores);
     expect((await get('/unknown')).status).toBe(404);

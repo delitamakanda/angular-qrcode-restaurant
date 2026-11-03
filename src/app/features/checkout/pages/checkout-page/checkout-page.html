@@ -25,26 +25,20 @@
     </div>
 
     <div class="checkout-page__field">
-      <tui-textfield tuiChevron>
-        <label tuiLabel for="payment-method">Payment method</label>
-        <input tuiSelect id="payment-method" formControlName="paymentMethod" required />
-        <tui-data-list-wrapper *tuiDropdown [items]="paymentOptions" />
-      </tui-textfield>
-    </div>
-
-    <div class="checkout-page__field">
-      <tui-textfield>
-        <label tuiLabel for="coupon-code">Coupon code (optional)</label>
-        <input
-          tuiInput
-          type="text"
-          id="coupon-code"
-          autocomplete="off"
-          formControlName="couponCode"
-        />
-      </tui-textfield>
+      <app-checkout-payment-methods formControlName="paymentMethod" />
     </div>
   </form>
+
+  <div class="checkout-page__field">
+    <app-checkout-coupon
+      [appliedCode]="checkoutStore.couponCode()"
+      [discount]="cartStore.discount()"
+      [error]="couponError()"
+      [pending]="couponPending()"
+      (apply)="applyCoupon($event)"
+      (remove)="removeCoupon()"
+    />
+  </div>
 
   <app-cart-summary [count]="cartStore.count()" [total]="cartStore.total()">
     <button

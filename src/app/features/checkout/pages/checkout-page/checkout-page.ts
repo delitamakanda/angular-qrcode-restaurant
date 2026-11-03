@@ -5,29 +5,24 @@ import { CheckoutStore } from '../../../../state/checkout.store';
 import { ShopStore } from '../../../../state/shop.store';
 import { OrderHistoryStore } from '../../../../state/order-history.store';
 import { OrderApiService } from '../../../../core/api/order-api.service';
+import { PromotionApiService } from '../../../../core/api/promotion-api.service';
+import { CheckoutCoupon } from '../../components/checkout-coupon/checkout-coupon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { firstValueFrom, map } from 'rxjs';
 import { normalizePhone, phoneValidator } from '@shared/validators/phone.validator';
 import {
   TuiButton,
-  TuiDropdown,
   TuiError,
   TuiLabel,
   TuiTextfield,
   TuiInput,
-  tuiItemsHandlersProvider,
   tuiValidationErrorsProvider,
 } from '@taiga-ui/core';
-import { TuiChevron, TuiDataListWrapper, TuiSelect } from '@taiga-ui/kit';
 import { CartSummary } from '../../../cart/components/cart-summary/cart-summary';
 import { PhoneInput } from '@shared/ui/forms/phone-input/phone-input';
 import { PaymentMode } from '../../../../core/models/checkout.model';
-
-const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
-  cash: 'Cash',
-  card: 'Visa/Mastercard',
-};
+import { CheckoutPaymentMethods } from '../../components/checkout-payment-methods/checkout-payment-methods';
 
 @Component({
   selector: 'app-checkout-page',
@@ -35,15 +30,13 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
     ReactiveFormsModule,
     PhoneInput,
     CartSummary,
+    CheckoutCoupon,
+    CheckoutPaymentMethods,
     TuiButton,
     TuiTextfield,
     TuiLabel,
     TuiError,
     TuiInput,
-    TuiSelect,
-    TuiChevron,
-    TuiDataListWrapper,
-    TuiDropdown,
   ],
   templateUrl: './checkout-page.html',
   styleUrl: './checkout-page.css',
@@ -51,9 +44,6 @@ const PAYMENT_LABELS: Partial<Record<PaymentMode, string>> = {
   providers: [
     tuiValidationErrorsProvider({
       required: 'Required field',
-    }),
-    tuiItemsHandlersProvider<PaymentMode>({
-      stringify: signal((mode: PaymentMode) => PAYMENT_LABELS[mode] ?? mode),
     }),
   ],
 })
@@ -64,17 +54,50 @@ export class CheckoutPage {
   private readonly shopStore = inject(ShopStore);
   private readonly orderHistoryStore = inject(OrderHistoryStore);
   private readonly orderApiService = inject(OrderApiService);
+  private readonly promotionApiService = inject(PromotionApiService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-
-  protected readonly paymentOptions: readonly PaymentMode[] = ['cash', 'card'];
 
   readonly checkoutForm = this.fb.nonNullable.group({
     name: ['', [Validators.required]],
     phone: ['', [Validators.required, phoneValidator()]],
     paymentMethod: ['cash' as PaymentMode, [Validators.required]],
-    couponCode: [''],
   });
+
+  protected readonly couponError = signal<string | null>(null);
+  protected readonly couponPending = signal(false);
+
+  protected async applyCoupon(code: string): Promise<void> {
+    const store = this.shopStore.store();
+    if (!store) {
+      return;
+    }
+    if (!code) {
+      this.couponError.set('Enter a coupon code');
+      return;
+    }
+    this.couponError.set(null);
+    this.couponPending.set(true);
+    try {
+      const promotion = await firstValueFrom(
+        this.promotionApiService.getActivePromotion(store.id, code),
+      );
+      if (promotion) {
+        this.cartStore.applyPromotion(promotion);
+      } else {
+        this.couponError.set('Invalid or expired coupon code');
+      }
+    } catch {
+      this.couponError.set('Could not check the coupon code, please try again');
+    } finally {
+      this.couponPending.set(false);
+    }
+  }
+
+  protected removeCoupon(): void {
+    this.cartStore.applyPromotion(null);
+    this.couponError.set(null);
+  }
 
   protected readonly phoneError = toSignal(
     this.checkoutForm.controls.phone.events.pipe(map(() => this.getPhoneError())),
@@ -117,7 +140,7 @@ export class CheckoutPage {
             name: value.name,
             phone: normalizePhone(value.phone),
           },
-          coupon_code: value.couponCode || undefined,
+          coupon_code: this.checkoutStore.couponCode() ?? undefined,
           payment_mode: value.paymentMethod,
           items: this.cartStore.items(),
           order_number: `A${String(this.orderHistoryStore.entries().length + 1).padStart(3, '0')}`,

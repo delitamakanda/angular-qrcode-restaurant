@@ -5,6 +5,7 @@ import { CouponBanner } from './coupon-banner';
 
 const promotion: Promotion = {
   id: 'p1',
+  store_id: 'demo',
   code: 'WELCOME10',
   type: 'fixed',
   value: 10,

@@ -22,6 +22,7 @@ const stores: Store[] = [store, { ...store, id: 'second', name: 'Second Place' }
 
 const promotion: Promotion = {
   id: 'promo-1',
+  store_id: 'demo',
   code: 'WELCOME10',
   type: 'fixed',
   value: 10,
