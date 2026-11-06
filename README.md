@@ -18,6 +18,12 @@ Regénérer le QR code localement (sans service tiers) : `npm run qrcode` (ou `n
 - order confirmation with access to the tracking page
 - mock API backed by `mock-api/db.json` and exposed under `/api/*`
 
+## Demo
+
+<img src="docs/demo/demo.gif" alt="Animated customer journey on mobile: welcome page, dine-in choice, menu, Classic Milk Tea customization, cart, checkout, order confirmation and order tracking" width="360" height="799">
+
+Regenerate it with `npm run demo` (starts the app and mock API if needed, records the journey with Playwright and converts it with `ffmpeg`, which must be installed; orders are stubbed, `mock-api/db.json` is never modified).
+
 ## Screenshots
 
 Customer journey on mobile (Pixel 7 viewport, `demo` store):
