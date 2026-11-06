@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { MenuItem, ProductBadgeType } from '@app/core/models/menu-item.model';
 import { CurrencyFormatPipe } from '@app/shared/pipes/currency-format.pipe';
 import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive';
@@ -41,8 +33,8 @@ export class MenuItemCard {
   protected readonly isFavorite = computed(() => this.favorites.ids().includes(this.item().id));
   /** Emitted when the customer wants to add the product; the parent opens the customization flow. */
   readonly customize = output<MenuItem>();
-  /** Drives the brief confirmation pulse on the add button; cleared on animationend. */
-  protected readonly confirming = signal(false);
+  /** Set by the parent once the product was really added to the cart: shows the "Added" state. */
+  readonly added = input(false);
 
   toggleFavorite(): void {
     this.favorites.toggle(this.item().id);
@@ -52,12 +44,7 @@ export class MenuItemCard {
     const product = this.item();
 
     if (!product.is_sold_out) {
-      this.confirming.set(true);
       this.customize.emit(product);
     }
-  }
-
-  protected endConfirm(): void {
-    this.confirming.set(false);
   }
 }

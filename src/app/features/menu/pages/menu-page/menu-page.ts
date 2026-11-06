@@ -8,20 +8,24 @@ import {
   computed,
   effect,
   inject,
+  signal,
   viewChild,
 } from '@angular/core';
+import { MenuItem } from '@app/core/models/menu-item.model';
 import { MenuItemCard } from '@shared/ui/cards/menu-item-card/menu-item-card';
 import { MenuItemCardSkeleton } from '@shared/ui/cards/menu-item-card-skeleton/menu-item-card-skeleton';
 import { ActivatedRoute } from '@angular/router';
 import { ShopStore } from '@app/state/shop.store';
 import { MenuStore } from '@app/state/menu.store';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map, EMPTY } from 'rxjs';
 import { MenuCategorySelection } from '@app/features/menu/components/menu-category-selection/menu-category-selection';
 import { ProductSearch } from '@app/features/menu/components/product-search/product-search';
 import { ProductCustomizationService } from '@app/features/product-customization/services/product-customization.service';
 
 const ANCHOR_PREFIX = 'category-';
+/** How long a card keeps its "Added" state. */
+const ADDED_DURATION_MS = 1500;
 
 @Component({
   selector: 'app-menu-page',
@@ -78,6 +82,11 @@ export class MenuPage {
     return count === 0 ? 'No results' : `${String(count)} ${count === 1 ? 'result' : 'results'}`;
   });
 
+  /** Id of the card currently showing its "Added" confirmation. */
+  protected readonly addedId = signal<string | null>(null);
+  protected readonly addedAnnouncement = signal('');
+  private addedTimer: ReturnType<typeof setTimeout> | undefined;
+
   private observer: IntersectionObserver | null = null;
   private fragmentHandled = false;
 
@@ -99,7 +108,29 @@ export class MenuPage {
 
     this.destroyRef.onDestroy(() => {
       this.disconnectObserver();
+      clearTimeout(this.addedTimer);
     });
+  }
+
+  protected customize(item: MenuItem): void {
+    this.customization
+      .open(item)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((added) => {
+        if (added) {
+          this.confirmAdded(item);
+        }
+      });
+  }
+
+  private confirmAdded(item: MenuItem): void {
+    clearTimeout(this.addedTimer);
+    this.addedId.set(item.id);
+    this.addedAnnouncement.set(`${item.name} added to cart`);
+    this.addedTimer = setTimeout(() => {
+      this.addedId.set(null);
+      this.addedAnnouncement.set('');
+    }, ADDED_DURATION_MS);
   }
 
   protected scrollToCategory(categoryId: string): void {
