@@ -6,6 +6,7 @@ import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
 import { TuiDialogService } from '@taiga-ui/core';
 import { PolymorpheusComponent } from '@taiga-ui/polymorpheus';
+import { Observable, ReplaySubject } from 'rxjs';
 import {
   ProductCustomizationDialog,
   ProductCustomizationResult,
@@ -24,26 +25,42 @@ export class ProductCustomizationService {
    * Loads the modifiers first so a product without groups is added directly,
    * without a dialog flashing open and closed. On a load error the dialog
    * opens anyway, to offer a retry.
+   *
+   * The returned stream emits once: `true` if the product was actually added to
+   * the cart (directly or through the dialog), `false` if the customer gave up.
    */
-  open(item: MenuItem): void {
+  open(item: MenuItem): Observable<boolean> {
     const trigger = this.document.activeElement as HTMLElement | null;
+    const outcome = new ReplaySubject<boolean>(1);
+    const finish = (added: boolean): void => {
+      outcome.next(added);
+      outcome.complete();
+    };
 
     this.menuApi.getItemWithModifiers(item.id).subscribe({
       next: (loaded) => {
         if (loaded.modifierGroups.length === 0) {
           this.cartStore.addToCart(buildCartItem(loaded, [], MIN_QUANTITY));
           this.notifications.success(`${loaded.name} added to cart`);
+          finish(true);
           return;
         }
-        this.openDialog(loaded, trigger);
+        this.openDialog(loaded, trigger, finish);
       },
       error: () => {
-        this.openDialog(item, trigger);
+        this.openDialog(item, trigger, finish);
       },
     });
+    return outcome.asObservable();
   }
 
-  private openDialog(item: MenuItem, trigger: HTMLElement | null): void {
+  private openDialog(
+    item: MenuItem,
+    trigger: HTMLElement | null,
+    finish: (added: boolean) => void,
+  ): void {
+    let added = false;
+
     this.dialogs
       .open<ProductCustomizationResult>(new PolymorpheusComponent(ProductCustomizationDialog), {
         label: item.name,
@@ -52,10 +69,14 @@ export class ProductCustomizationService {
         data: item,
       })
       .subscribe({
+        next: (result) => {
+          added = result === 'added';
+        },
         complete: () => {
           if (trigger?.isConnected) {
             trigger.focus();
           }
+          finish(added);
         },
       });
   }

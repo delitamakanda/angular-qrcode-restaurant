@@ -28,7 +28,7 @@ test('customer customizes a product and adds it to the cart', async ({ page }) =
 
   await add.click();
   await expect(dialog).toBeHidden();
-  await expect(page.getByText('Classic Milk Tea added to cart')).toBeVisible();
+  await expect(page.getByRole('alert').getByText('Classic Milk Tea added to cart')).toBeVisible();
   await expect(trigger).toBeFocused();
   await expect(page.getByRole('button', { name: /View cart/ })).toContainText('2 items');
 });

@@ -203,7 +203,7 @@ describe('MenuItemCard', () => {
     expect(addToCart).not.toHaveBeenCalled();
   });
 
-  it('plays the confirmation pulse on the add button without blocking the emit', () => {
+  it('does not show the added state on click alone, and still emits', () => {
     const fixture = create();
     const emitted: unknown[] = [];
     fixture.componentInstance.customize.subscribe((value) => emitted.push(value));
@@ -215,12 +215,28 @@ describe('MenuItemCard', () => {
     fixture.detectChanges();
 
     expect(emitted).toEqual([item]);
-    expect(button?.classList.contains('menu-item-card__button--confirm')).toBe(true);
+    expect(button?.classList.contains('menu-item-card__button--added')).toBe(false);
+    expect(button?.getAttribute('aria-label')).toBe('Add to cart: Burger');
+  });
 
-    button?.dispatchEvent(new Event('animationend'));
+  it('shows the added state when the parent confirms, then goes back to normal', () => {
+    const fixture = create();
+    const button = (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>(
+      '.menu-item-card__button',
+    );
+
+    fixture.componentRef.setInput('added', true);
     fixture.detectChanges();
 
-    expect(button?.classList.contains('menu-item-card__button--confirm')).toBe(false);
+    expect(button?.classList.contains('menu-item-card__button--added')).toBe(true);
+    expect(button?.getAttribute('aria-label')).toBe('Added to cart: Burger');
+    expect(button?.textContent).toContain('Added');
+
+    fixture.componentRef.setInput('added', false);
+    fixture.detectChanges();
+
+    expect(button?.classList.contains('menu-item-card__button--added')).toBe(false);
+    expect(button?.getAttribute('aria-label')).toBe('Add to cart: Burger');
   });
 
   describe('favorite button', () => {

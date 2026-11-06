@@ -142,7 +142,28 @@
   outline-offset: 2px;
 }
 
-.menu-item-card__button--confirm {
+/* Both labels share one grid cell so the button keeps a stable width. */
+.menu-item-card__labels {
+  display: inline-grid;
+}
+
+.menu-item-card__label {
+  display: inline-flex;
+  grid-area: 1 / 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.menu-item-card__label--hidden {
+  visibility: hidden;
+}
+
+/* White on #166534 is about 7:1; the check icon and the text carry the state, not the colour. */
+.menu-item-card__button--added {
+  --t-bg: #166534;
+  background: #166534;
+  color: #fff;
   animation: menu-item-card-confirm var(--motion-duration-base) var(--motion-ease-out);
 }
 
@@ -153,7 +174,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .menu-item-card__button--confirm {
+  .menu-item-card__button--added {
     animation: none;
   }
 

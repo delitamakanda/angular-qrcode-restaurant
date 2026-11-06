@@ -14,6 +14,9 @@
   <p class="menu-page__visually-hidden" role="status" aria-live="polite">
     {{ resultsAnnouncement() }}
   </p>
+  <p class="menu-page__visually-hidden" role="status" aria-live="polite">
+    {{ addedAnnouncement() }}
+  </p>
   <div class="menu-page__sections" [attr.aria-busy]="menuStore.isLoading()">
     @if (menuStore.isLoading()) {
       <span class="menu-page__visually-hidden" role="status">Loading menu…</span>
@@ -36,7 +39,8 @@
               <app-menu-item-card
                 [item]="item"
                 [priority]="priorityIds().has(item.id)"
-                (customize)="customization.open($event)"
+                [added]="addedId() === item.id"
+                (customize)="customize($event)"
               />
             }
           </div>

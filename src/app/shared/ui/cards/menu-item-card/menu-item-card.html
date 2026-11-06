@@ -41,13 +41,20 @@
       type="button"
       size="m"
       class="menu-item-card__button"
-      [class.menu-item-card__button--confirm]="confirming()"
-      (animationend)="endConfirm()"
-      [attr.aria-label]="'Add to cart: ' + item().name"
+      [class.menu-item-card__button--added]="added()"
+      [attr.aria-label]="(added() ? 'Added to cart: ' : 'Add to cart: ') + item().name"
       (click)="addToCart()"
       [disabled]="item().is_sold_out"
     >
-      Add to cart
+      <span class="menu-item-card__labels">
+        <span class="menu-item-card__label" [class.menu-item-card__label--hidden]="added()">
+          Add to cart
+        </span>
+        <span class="menu-item-card__label" [class.menu-item-card__label--hidden]="!added()">
+          <tui-icon aria-hidden="true" icon="@tui.check" />
+          Added
+        </span>
+      </span>
     </button>
   </div>
 </article>

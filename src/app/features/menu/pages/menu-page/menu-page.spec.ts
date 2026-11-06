@@ -5,6 +5,8 @@ import { provideTaiga } from '@taiga-ui/core';
 import { MenuApiService } from '@app/core/api/menu-api.service';
 import { MenuStore } from '@app/state/menu.store';
 import { ShopStore } from '@app/state/shop.store';
+import { ProductCustomizationService } from '@app/features/product-customization/services/product-customization.service';
+import { of } from 'rxjs';
 import { MenuPage } from './menu-page';
 
 interface TestItem {
@@ -261,6 +263,45 @@ describe('MenuPage', () => {
       const { el } = await render(false, [item('a', 'tea')]);
 
       expect(el.querySelectorAll('section.menu-page__section').length).toBe(1);
+    });
+  });
+
+  describe('add confirmation', () => {
+    async function renderAndAdd(outcome: boolean) {
+      vi.useFakeTimers();
+      const { fixture, el } = await render(false, [item('a', 'tea')]);
+      const service = TestBed.inject(ProductCustomizationService);
+      const open = vi.spyOn(service, 'open').mockReturnValue(of(outcome));
+      el.querySelector<HTMLButtonElement>('.menu-item-card__button')?.click();
+      fixture.detectChanges();
+      return { fixture, el, open };
+    }
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('marks the card as added, announces it, then resets after 1.5 s', async () => {
+      const { fixture, el, open } = await renderAndAdd(true);
+      const button = el.querySelector('.menu-item-card__button');
+
+      expect(open).toHaveBeenCalledTimes(1);
+      expect(button?.classList.contains('menu-item-card__button--added')).toBe(true);
+      expect(el.querySelector('.menu-page__visually-hidden[aria-live="polite"]')).not.toBeNull();
+      expect(el.textContent).toContain('a added to cart');
+
+      vi.advanceTimersByTime(1500);
+      fixture.detectChanges();
+
+      expect(button?.classList.contains('menu-item-card__button--added')).toBe(false);
+      expect(el.textContent).not.toContain('a added to cart');
+    });
+
+    it('does nothing when the customer dismisses without adding', async () => {
+      const { el } = await renderAndAdd(false);
+
+      expect(el.querySelector('.menu-item-card__button--added')).toBeNull();
+      expect(el.textContent).not.toContain('added to cart');
     });
   });
 
