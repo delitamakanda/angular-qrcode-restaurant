@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { Subject, of, throwError } from 'rxjs';
 import { OrderApiService } from '@app/core/api/order-api.service';
@@ -7,13 +8,14 @@ import { TrackingApiService } from './tracking-api.service';
 
 const order = (status: Order['status']) => ({ id: 'o1', status }) as Order;
 
-class FakeEventSource {
-  static instances: FakeEventSource[] = [];
+class FakeWebSocket {
+  static instances: FakeWebSocket[] = [];
   onmessage: ((event: MessageEvent<string>) => void) | null = null;
   onerror: (() => void) | null = null;
+  onclose: (() => void) | null = null;
   close = vi.fn();
   constructor(public url: string) {
-    FakeEventSource.instances.push(this);
+    FakeWebSocket.instances.push(this);
   }
 }
 
@@ -37,7 +39,7 @@ describe('TrackingApiService', () => {
 
   beforeEach(() => {
     getOrder.mockReset();
-    FakeEventSource.instances = [];
+    FakeWebSocket.instances = [];
     vi.useFakeTimers();
   });
 
@@ -47,8 +49,8 @@ describe('TrackingApiService', () => {
     vi.restoreAllMocks();
   });
 
-  describe('polling (no EventSource)', () => {
-    beforeEach(() => vi.stubGlobal('EventSource', undefined));
+  describe('polling (no WebSocket)', () => {
+    beforeEach(() => vi.stubGlobal('WebSocket', undefined));
 
     it('emits the initial order, then each poll, and completes on a terminal status', () => {
       getOrder
@@ -137,40 +139,83 @@ describe('TrackingApiService', () => {
     });
   });
 
-  describe('with EventSource', () => {
-    beforeEach(() => vi.stubGlobal('EventSource', FakeEventSource));
+  describe('with WebSocket', () => {
+    beforeEach(() => vi.stubGlobal('WebSocket', FakeWebSocket));
 
-    it('emits stream messages and closes the source on completion', () => {
+    const message = (data: string) => ({ data }) as MessageEvent<string>;
+
+    it('emits socket messages and closes the socket on completion', () => {
       const next = vi.fn();
       const complete = vi.fn();
 
       setup().watchOrder('o1').subscribe({ next, complete });
-      const source = FakeEventSource.instances[0];
-      source.onmessage?.({ data: JSON.stringify(order('pending')) } as MessageEvent<string>);
-      source.onmessage?.({ data: JSON.stringify(order('completed')) } as MessageEvent<string>);
+      const socket = FakeWebSocket.instances[0];
+      socket.onmessage?.(message(JSON.stringify(order('pending'))));
+      socket.onmessage?.(message(JSON.stringify(order('completed'))));
 
-      expect(source.url).toBe('http://api/orders/o1/events');
       expect(next).toHaveBeenCalledTimes(2);
       expect(complete).toHaveBeenCalled();
-      expect(source.close).toHaveBeenCalled();
+      expect(socket.close).toHaveBeenCalled();
       expect(getOrder).not.toHaveBeenCalled();
     });
 
-    it('closes the source on unsubscribe', () => {
+    it('derives a ws:// URL from an http base URL', () => {
       setup().watchOrder('o1').subscribe().unsubscribe();
 
-      expect(FakeEventSource.instances[0].close).toHaveBeenCalled();
+      expect(FakeWebSocket.instances[0].url).toBe('ws://api/orders/o1/ws');
     });
 
-    it('falls back to polling when the stream fails', () => {
+    it('derives a wss:// URL from a relative base URL on an https page', () => {
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: OrderApiService, useValue: { getOrder } },
+          { provide: APP_TOKEN_CONFIG, useValue: { BASE_API_URL: '/api' } },
+          { provide: DOCUMENT, useValue: { location: { href: 'https://shop.test/store/demo' } } },
+        ],
+      });
+
+      TestBed.inject(TrackingApiService).watchOrder('o1').subscribe().unsubscribe();
+
+      expect(FakeWebSocket.instances[0].url).toBe('wss://shop.test/api/orders/o1/ws');
+    });
+
+    it('closes the socket on unsubscribe', () => {
+      setup().watchOrder('o1').subscribe().unsubscribe();
+
+      expect(FakeWebSocket.instances[0].close).toHaveBeenCalled();
+    });
+
+    it.each([
+      ['an error', (socket: FakeWebSocket) => socket.onerror?.()],
+      ['an early close', (socket: FakeWebSocket) => socket.onclose?.()],
+      ['a malformed message', (socket: FakeWebSocket) => socket.onmessage?.(message('{nope'))],
+    ])('falls back to polling on %s without erroring', (_name, trigger) => {
+      getOrder.mockReturnValue(of(order('ready')));
+      const next = vi.fn();
+      const error = vi.fn();
+
+      const sub = setup().watchOrder('o1').subscribe({ next, error });
+      trigger(FakeWebSocket.instances[0]);
+
+      expect(FakeWebSocket.instances[0].close).toHaveBeenCalled();
+      expect(getOrder).toHaveBeenCalledWith('o1', { silent: true });
+      expect(next).toHaveBeenCalledWith(order('ready'));
+      expect(error).not.toHaveBeenCalled();
+      sub.unsubscribe();
+    });
+
+    it('falls back to polling when the WebSocket constructor throws', () => {
+      vi.stubGlobal(
+        'WebSocket',
+        vi.fn(function () {
+          throw new Error('blocked');
+        }),
+      );
       getOrder.mockReturnValue(of(order('ready')));
       const next = vi.fn();
 
       const sub = setup().watchOrder('o1').subscribe({ next });
-      FakeEventSource.instances[0].onerror?.();
 
-      expect(FakeEventSource.instances[0].close).toHaveBeenCalled();
-      expect(getOrder).toHaveBeenCalledWith('o1', { silent: true });
       expect(next).toHaveBeenCalledWith(order('ready'));
       sub.unsubscribe();
     });
