@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <title>QR Restaurant</title>
     <base href="/" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, interactive-widget=resizes-content"
+    />
     <meta
       name="description"
       content="Order food from your favorite restaurant by scanning a QR code. Browse the menu, customize your order, and pay online."
@@ -28,6 +31,8 @@
               : 'light';
         }
         document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#121212' : '#e8141c');
       })();
     </script>
   </head>

@@ -1,9 +1,13 @@
+import { DOCUMENT } from '@angular/common';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { TUI_DARK_MODE } from '@taiga-ui/core';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 
 export const THEME_STORAGE_KEY = 'app-theme';
+
+/** Status bar colours: brand red in light mode, `--color-surface` in dark mode. */
+export const THEME_COLORS = { light: '#e8141c', dark: '#121212' } as const;
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 
@@ -25,6 +29,7 @@ function readStoredPreference(): ThemePreference {
 })
 export class ThemeStore {
   private readonly tuiDarkMode = inject(TUI_DARK_MODE);
+  private readonly document = inject(DOCUMENT);
   private readonly media = safeMatchMedia();
 
   readonly preference = signal<ThemePreference>(readStoredPreference());
@@ -47,6 +52,9 @@ export class ThemeStore {
       const resolved = this.resolved();
       document.documentElement.setAttribute('data-theme', resolved);
       this.tuiDarkMode.set(resolved === 'dark');
+      this.document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute('content', THEME_COLORS[resolved]);
     });
 
     effect(() => {

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { THEME_STORAGE_KEY, ThemeStore } from './theme.store';
+import { THEME_COLORS, THEME_STORAGE_KEY, ThemeStore } from './theme.store';
 
 describe('ThemeStore', () => {
   let systemDark: boolean;
@@ -44,6 +44,22 @@ describe('ThemeStore', () => {
 
     expect(store.preference()).toBe('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
+
+  it('updates the theme-color meta on load and when the theme changes', () => {
+    const meta = document.createElement('meta');
+    meta.name = 'theme-color';
+    meta.content = '#e8141c';
+    document.head.appendChild(meta);
+    localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+
+    const store = create();
+    expect(meta.content).toBe(THEME_COLORS.dark);
+
+    store.setPreference('light');
+    TestBed.tick();
+    expect(meta.content).toBe(THEME_COLORS.light);
+    meta.remove();
   });
 
   it('ignores an invalid stored value', () => {
