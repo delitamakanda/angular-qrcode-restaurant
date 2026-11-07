@@ -5,6 +5,8 @@
   max-width: 30rem;
   min-height: 100dvh;
   margin-inline: auto;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-inline: env(safe-area-inset-left, 0px) env(safe-area-inset-right, 0px);
 }
 
 .centered-layout__main {
