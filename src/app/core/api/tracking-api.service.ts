@@ -23,14 +23,14 @@ export class TrackingApiService {
    * Streams an order until it reaches a terminal status (`completed` / `cancelled`).
    * Tries a WebSocket first (pushed by the Cloudflare `OrderRoom` Durable Object) and falls
    * back to HTTP polling when `WebSocket` is unavailable, the connection fails or closes
-   * early, or a message is malformed. Transient network errors never reach the consumer:
+   * early, or a message is malformed, and polls directly when `ORDER_SOCKET_ENABLED` is `false`. Transient network errors never reach the consumer:
    * polling retries with a capped exponential backoff.
    * With `immediate: false` the first poll waits one interval (the caller already has the order).
    */
   watchOrder(orderId: string, options: { immediate?: boolean } = {}): Observable<Order> {
     const polling$ = this.poll(orderId, options.immediate ?? true);
     const source$ =
-      typeof WebSocket === 'undefined'
+      typeof WebSocket === 'undefined' || this.config.ORDER_SOCKET_ENABLED === false
         ? polling$
         : this.socket(orderId).pipe(catchError(() => polling$));
     return source$.pipe(takeWhile((order) => !isTerminal(order), true));

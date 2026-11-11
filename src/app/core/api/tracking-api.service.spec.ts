@@ -159,6 +159,25 @@ describe('TrackingApiService', () => {
       expect(getOrder).not.toHaveBeenCalled();
     });
 
+    it('skips the socket and polls when ORDER_SOCKET_ENABLED is false', () => {
+      getOrder.mockReturnValue(of(order('ready')));
+      TestBed.configureTestingModule({
+        providers: [
+          { provide: OrderApiService, useValue: { getOrder } },
+          {
+            provide: APP_TOKEN_CONFIG,
+            useValue: { BASE_API_URL: 'http://api', ORDER_SOCKET_ENABLED: false },
+          },
+        ],
+      });
+      const next = vi.fn();
+
+      TestBed.inject(TrackingApiService).watchOrder('o1').subscribe(next);
+
+      expect(FakeWebSocket.instances).toHaveLength(0);
+      expect(next).toHaveBeenCalledWith(order('ready'));
+    });
+
     it('derives a ws:// URL from an http base URL', () => {
       setup().watchOrder('o1').subscribe().unsubscribe();
 

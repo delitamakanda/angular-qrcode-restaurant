@@ -394,7 +394,11 @@
       "base_price": 45,
       "is_sold_out": false,
       "tags": ["popular"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
     },
     {
       "id": "item-zen-tuna-nigiri",
@@ -406,7 +410,11 @@
       "base_price": 55,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
     },
     {
       "id": "item-zen-california-roll",
@@ -418,7 +426,11 @@
       "base_price": 70,
       "is_sold_out": false,
       "tags": ["new"],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
     },
     {
       "id": "item-zen-spicy-tuna-roll",
@@ -430,7 +442,11 @@
       "base_price": 80,
       "is_sold_out": false,
       "tags": [],
-      "mode_availability": { "dine_in": true, "take_away": true, "delivery": false }
+      "mode_availability": {
+        "dine_in": true,
+        "take_away": true,
+        "delivery": false
+      }
     }
   ],
   "groups": [
@@ -1614,6 +1630,112 @@
       "total": 75,
       "created_at": "2026-10-29T20:20:38.253Z",
       "id": "8HmqhL0kczs"
+    },
+    {
+      "store_id": "sushi-zen",
+      "mode": "take_away",
+      "customer": {
+        "name": "Délita",
+        "phone": "+886606787045"
+      },
+      "coupon_code": "ZEN5",
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "0e6e53d8-6f46-496a-8583-b4b13c9c34a8",
+          "menu_item_id": "item-zen-california-roll",
+          "quantity": 1,
+          "name": "California Roll",
+          "note": "",
+          "unit_base_price": 70,
+          "selected_options": [
+            {
+              "group_id": "mg-zen-california-extras",
+              "option_id": "opt-zen-california-avocado",
+              "label": "Extra avocado",
+              "price_delta": 10
+            },
+            {
+              "group_id": "mg-zen-california-extras",
+              "option_id": "opt-zen-california-sesame",
+              "label": "Sesame seeds",
+              "price_delta": 5
+            }
+          ],
+          "total_price": 85
+        },
+        {
+          "id": "6985c607-0983-445e-974f-0f4f1eb0b751",
+          "menu_item_id": "item-zen-spicy-tuna-roll",
+          "quantity": 1,
+          "name": "Spicy Tuna Roll",
+          "note": "",
+          "unit_base_price": 80,
+          "selected_options": [
+            {
+              "group_id": "mg-zen-spicy-heat",
+              "option_id": "opt-zen-spicy-mild",
+              "label": "Mild",
+              "price_delta": 0
+            }
+          ],
+          "total_price": 80
+        }
+      ],
+      "order_number": "A005",
+      "status": "pending",
+      "subtotal": 165,
+      "discount": 0,
+      "fees": 0,
+      "total": 165,
+      "created_at": "2026-11-11T19:21:36.297Z",
+      "id": "4oK81ol6ZDY"
+    },
+    {
+      "store_id": "sushi-zen",
+      "mode": "dine_in",
+      "customer": {
+        "name": "Délitaa",
+        "phone": "+49606787045"
+      },
+      "payment_mode": "cash",
+      "items": [
+        {
+          "id": "79ad35b0-ebc7-466d-a3b5-4ff149ac1351",
+          "menu_item_id": "item-zen-salmon-nigiri",
+          "quantity": 1,
+          "name": "Salmon Nigiri",
+          "note": "",
+          "unit_base_price": 45,
+          "selected_options": [
+            {
+              "group_id": "mg-zen-salmon-sauce",
+              "option_id": "opt-zen-salmon-soy",
+              "label": "Soy sauce",
+              "price_delta": 0
+            }
+          ],
+          "total_price": 45
+        },
+        {
+          "id": "43f36d5e-8fc6-4d5d-83af-7361e0b64fcc",
+          "menu_item_id": "item-zen-california-roll",
+          "quantity": 1,
+          "name": "California Roll",
+          "note": "",
+          "unit_base_price": 70,
+          "selected_options": [],
+          "total_price": 70
+        }
+      ],
+      "order_number": "A006",
+      "status": "pending",
+      "subtotal": 115,
+      "discount": 0,
+      "fees": 0,
+      "total": 115,
+      "created_at": "2026-11-11T19:31:11.485Z",
+      "id": "gcl5I8f0U94"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
