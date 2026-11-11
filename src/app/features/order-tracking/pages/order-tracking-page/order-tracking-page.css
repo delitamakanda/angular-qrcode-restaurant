@@ -33,6 +33,17 @@
   font-size: 1.5rem;
 }
 
+.order-tracking-page__note-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.order-tracking-page__note p {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
 .order-tracking-page__actions {
   display: flex;
   flex-direction: column;

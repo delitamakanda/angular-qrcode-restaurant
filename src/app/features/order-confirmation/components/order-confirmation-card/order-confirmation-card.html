@@ -20,6 +20,13 @@
     }
   </dl>
 
+  @if (order().note; as note) {
+    <section class="confirmation-card__note" aria-label="Note">
+      <h2 class="confirmation-card__note-title">Note</h2>
+      <p>{{ note }}</p>
+    </section>
+  }
+
   <ul class="confirmation-card__items">
     @for (item of order().items; track item.id) {
       <li>

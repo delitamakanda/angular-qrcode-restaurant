@@ -51,6 +51,17 @@ describe('OrderConfirmationCard', () => {
     expect(text).toContain('$125.00');
   });
 
+  it('shows the note as plain text when present and nothing otherwise', () => {
+    expect(render(ORDER).querySelector('.confirmation-card__note')).toBeNull();
+
+    TestBed.resetTestingModule();
+    const root = render({ ...ORDER, note: '<b>x</b> ring' });
+    const note = root.querySelector('.confirmation-card__note');
+    expect(note?.textContent).toContain('Note');
+    expect(note?.textContent).toContain('<b>x</b> ring');
+    expect(note?.querySelector('b')).toBeNull();
+  });
+
   it('hides the estimated time when absent and shows it when present', () => {
     expect(render(ORDER).textContent).not.toContain('Estimated Time');
 

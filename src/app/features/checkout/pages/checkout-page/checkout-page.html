@@ -40,6 +40,21 @@
     />
   </div>
 
+  <div class="checkout-page__field checkout-page__note">
+    <label for="order-note" class="checkout-page__note-label">Order note (optional)</label>
+    <textarea
+      id="order-note"
+      class="checkout-page__note-input"
+      rows="3"
+      [maxlength]="noteMaxLength"
+      [formControl]="checkoutForm.controls.note"
+      aria-describedby="order-note-count"
+    ></textarea>
+    <p id="order-note-count" class="checkout-page__note-count">
+      {{ noteLength() }}/{{ noteMaxLength }} characters
+    </p>
+  </div>
+
   <app-cart-summary [count]="cartStore.count()" [total]="cartStore.total()">
     <button
       tuiButton

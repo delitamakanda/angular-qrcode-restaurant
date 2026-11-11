@@ -14,6 +14,7 @@ export interface CheckoutPayload {
   mode: OrderMode;
   customer?: CheckoutCustomer;
   coupon_code?: string;
+  note?: string;
   payment_mode: PaymentMode;
   items: CartItem[];
   /**

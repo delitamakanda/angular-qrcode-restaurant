@@ -24,6 +24,8 @@ import { PhoneInput } from '@shared/ui/forms/phone-input/phone-input';
 import { PaymentMode } from '../../../../core/models/checkout.model';
 import { CheckoutPaymentMethods } from '../../components/checkout-payment-methods/checkout-payment-methods';
 
+const NOTE_MAX_LENGTH = 200;
+
 @Component({
   selector: 'app-checkout-page',
   imports: [
@@ -62,7 +64,14 @@ export class CheckoutPage {
     name: ['', [Validators.required]],
     phone: ['', [Validators.required, phoneValidator()]],
     paymentMethod: ['cash' as PaymentMode, [Validators.required]],
+    note: ['', [Validators.maxLength(NOTE_MAX_LENGTH)]],
   });
+
+  protected readonly noteMaxLength = NOTE_MAX_LENGTH;
+  protected readonly noteLength = toSignal(
+    this.checkoutForm.controls.note.valueChanges.pipe(map((note) => note.length)),
+    { initialValue: 0 },
+  );
 
   protected readonly couponError = signal<string | null>(null);
   protected readonly couponPending = signal(false);
@@ -132,6 +141,7 @@ export class CheckoutPage {
 
     try {
       const value = this.checkoutForm.getRawValue();
+      const note = value.note.trim();
       const order = await firstValueFrom(
         this.orderApiService.createOrder({
           store_id: store.id,
@@ -141,6 +151,7 @@ export class CheckoutPage {
             phone: normalizePhone(value.phone),
           },
           coupon_code: this.checkoutStore.couponCode() ?? undefined,
+          ...(note ? { note } : {}),
           payment_mode: value.paymentMethod,
           items: this.cartStore.items(),
           order_number: `A${String(this.orderHistoryStore.entries().length + 1).padStart(3, '0')}`,

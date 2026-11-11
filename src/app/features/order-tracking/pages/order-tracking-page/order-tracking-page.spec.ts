@@ -57,6 +57,22 @@ describe('OrderTrackingPage', () => {
     expect(root.querySelector('[aria-live="polite"][role="status"]')).not.toBeNull();
   });
 
+  it('shows the note as plain text only when the order has one', async () => {
+    getOrder.mockReturnValue(of({ ...ORDER, note: '<b>x</b> ring' }));
+    const root = el(await render());
+
+    const note = root.querySelector('.order-tracking-page__note');
+    expect(note?.textContent).toContain('<b>x</b> ring');
+    expect(note?.querySelector('b')).toBeNull();
+  });
+
+  it('shows no note block without a note', async () => {
+    getOrder.mockReturnValue(of(ORDER));
+    const root = el(await render());
+
+    expect(root.querySelector('.order-tracking-page__note')).toBeNull();
+  });
+
   it('shows the live badge next to the status', async () => {
     getOrder.mockReturnValue(of(ORDER));
     const root = el(await render());

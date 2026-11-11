@@ -51,6 +51,17 @@ dd {
   color: var(--tui-text-secondary, #555);
 }
 
+.confirmation-card__note-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.confirmation-card__note p {
+  margin: 0.25rem 0 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
 .confirmation-card__total {
   font-size: 1.125rem;
   font-weight: 700;
