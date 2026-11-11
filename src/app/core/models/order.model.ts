@@ -19,6 +19,7 @@ export interface Order {
   customer?: CheckoutCustomer;
   payment_mode?: PaymentMode;
   items: CartItem[];
+  note?: string;
   estimated_delivery_time?: string;
   created_at: string;
   total: number;

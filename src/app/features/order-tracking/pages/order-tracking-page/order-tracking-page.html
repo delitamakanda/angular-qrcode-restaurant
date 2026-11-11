@@ -52,6 +52,12 @@
         </div>
       }
     </dl>
+    @if (currentOrder.note; as note) {
+      <section class="order-tracking-page__note" aria-label="Note">
+        <h2 class="order-tracking-page__note-title">Note</h2>
+        <p>{{ note }}</p>
+      </section>
+    }
     <a tuiButton appearance="secondary" size="l" [routerLink]="['../../menu']">Back to Menu</a>
   }
 </section>

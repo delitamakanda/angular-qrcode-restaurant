@@ -204,6 +204,52 @@ describe('CheckoutPage', () => {
     expect(navigate).toHaveBeenCalled();
   });
 
+  it('sends the trimmed order note', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+    setValue(el, '#order-note', '  Ring the bell  ');
+
+    await fixture.componentInstance.submitForm();
+
+    expect(createOrder).toHaveBeenCalledWith(expect.objectContaining({ note: 'Ring the bell' }));
+  });
+
+  it('omits the note when empty or blank, and stays valid without it', async () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    setValue(el, '#name', 'Jane');
+    setValue(el, '#phone', '+33612345678');
+    setValue(el, '#order-note', '   ');
+
+    expect(fixture.componentInstance.checkoutForm.valid).toBe(true);
+    await fixture.componentInstance.submitForm();
+
+    expect(createOrder).toHaveBeenCalledTimes(1);
+    expect(createOrder.mock.calls[0][0]).not.toHaveProperty('note');
+  });
+
+  it('labels the note field, caps it at 200 characters and counts them', () => {
+    const fixture = render();
+    const el = fixture.nativeElement as HTMLElement;
+    const textarea = el.querySelector<HTMLTextAreaElement>('#order-note');
+
+    expect(el.querySelector('label[for="order-note"]')?.textContent).toContain(
+      'Order note (optional)',
+    );
+    expect(textarea?.getAttribute('maxlength')).toBe('200');
+    expect(textarea?.getAttribute('aria-describedby')).toBe('order-note-count');
+
+    setValue(el, '#order-note', 'abc');
+    fixture.detectChanges();
+    expect(el.querySelector('#order-note-count')?.textContent).toContain('3/200');
+    expect(el.querySelector('[aria-live]')).toBeNull();
+
+    fixture.componentInstance.checkoutForm.controls.note.setValue('a'.repeat(201));
+    expect(fixture.componentInstance.checkoutForm.controls.note.invalid).toBe(true);
+  });
+
   it('keeps a local copy of the created order in the history', async () => {
     localStorage.clear();
     const created = { id: 'order-1', total: 12.5, items: [] };

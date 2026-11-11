@@ -137,6 +137,7 @@ describe('Cloudflare Function parity with db.json', () => {
       fees: 1,
       total: 14,
       created_at: '2026-05-01T10:00:00.000Z',
+      note: 'Ring the bell',
     };
     const response = await handleRequest(
       new Request('https://example.test/api/orders', {
