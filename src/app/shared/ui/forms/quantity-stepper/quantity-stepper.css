@@ -1,0 +1,15 @@
+.quantity-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-stepper button {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.quantity-stepper__value {
+  min-width: 1.5rem;
+  text-align: center;
+}

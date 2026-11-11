@@ -68,11 +68,11 @@ export class CartStore {
         if (item.id !== itemId) {
           return item;
         }
-        const oldUnit = item.total_price / item.quantity;
+        const oldUnit = Math.round((item.total_price / item.quantity) * 100) / 100;
         return {
           ...item,
           quantity,
-          total_price: oldUnit * quantity,
+          total_price: Math.round(oldUnit * quantity * 100) / 100,
         };
       }),
     );

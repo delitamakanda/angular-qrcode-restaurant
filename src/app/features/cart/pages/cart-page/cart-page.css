@@ -49,6 +49,13 @@ app-cart-summary {
   transition: transform 0.2s ease;
 }
 
+.cart-row__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cart-row {
     transition: none;

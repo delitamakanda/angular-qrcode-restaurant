@@ -1,1 +1,24 @@
-<p>quantity-stepper works!</p>
+<div class="quantity-stepper">
+  <button
+    tuiButton
+    type="button"
+    appearance="secondary"
+    size="m"
+    [attr.aria-label]="'Decrease quantity of ' + label()"
+    (click)="changed.emit(value() - 1)"
+  >
+    −
+  </button>
+  <span class="quantity-stepper__value" role="status" aria-live="polite">{{ value() }}</span>
+  <button
+    tuiButton
+    type="button"
+    appearance="secondary"
+    size="m"
+    [attr.aria-label]="'Increase quantity of ' + label()"
+    [disabled]="value() >= max()"
+    (click)="changed.emit(value() + 1)"
+  >
+    +
+  </button>
+</div>
