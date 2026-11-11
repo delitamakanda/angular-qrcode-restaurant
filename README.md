@@ -160,7 +160,7 @@ npx wrangler d1 migrations apply angular-qrcode-restaurant-orders --local   # fo
 
 #### Real-time order tracking (WebSocket + Durable Object)
 
-The tracking page opens a WebSocket on `GET /api/orders/:id/ws` and falls back to HTTP polling (5 s, capped backoff) when it fails, closes early or receives a malformed message. **`json-server` does not support WebSockets**, so locally (`npm start`) the app always polls; that gap is intentional.
+The tracking page opens a WebSocket on `GET /api/orders/:id/ws` and falls back to HTTP polling (5 s, capped backoff) when it fails, closes early or receives a malformed message. **`json-server` does not support WebSockets**, so locally (`npm start`) the app polls directly (`ORDER_SOCKET_ENABLED: false` in `src/environments/environment*.ts`) instead of logging a failed handshake; that gap is intentional.
 
 On Cloudflare, one `OrderRoom` Durable Object per order keeps the latest order and broadcasts it to every connected client (`workers/order-room/`). A Pages Function cannot define a Durable Object class, so it is a separate Worker, deployed **before** Pages. The `ORDER_ROOM` binding is commented out in `wrangler.toml` (like `ORDERS_DB`); without it `/api/orders/:id/ws` answers `501` and clients poll.
 
