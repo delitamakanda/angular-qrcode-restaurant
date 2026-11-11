@@ -5,6 +5,7 @@ import { CurrencyFormatPipe } from '../../../../shared/pipes/currency-format.pip
 import { SwipeActionDirective } from '@shared/directives/swipe-action.directive';
 import { TuiButton } from '@taiga-ui/core';
 import { EmptyState } from '@shared/ui/layout/empty-state/empty-state';
+import { QuantityStepper } from '@shared/ui/forms/quantity-stepper/quantity-stepper';
 import { CartSummary } from '../../components/cart-summary/cart-summary';
 
 @Component({
@@ -13,7 +14,14 @@ import { CartSummary } from '../../components/cart-summary/cart-summary';
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cart-page.html',
   styleUrl: './cart-page.css',
-  imports: [CurrencyFormatPipe, SwipeActionDirective, TuiButton, EmptyState, CartSummary],
+  imports: [
+    CurrencyFormatPipe,
+    SwipeActionDirective,
+    TuiButton,
+    EmptyState,
+    CartSummary,
+    QuantityStepper,
+  ],
 })
 export class CartPage {
   protected readonly cartStore = inject(CartStore);
@@ -25,6 +33,13 @@ export class CartPage {
   protected onSwiped(itemId: string, name: string): void {
     this.cartStore.removeFromCart(itemId);
     this.announcement.set(`${name} retiré du panier`);
+  }
+
+  protected onQuantityChange(itemId: string, name: string, quantity: number): void {
+    this.cartStore.updateQuantity(itemId, quantity);
+    if (quantity <= 0) {
+      this.announcement.set(`${name} retiré du panier`);
+    }
   }
 
   goToMenu(): void {

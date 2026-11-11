@@ -126,6 +126,31 @@ describe('CartStore persistence', () => {
     expect(stored().map((i) => i.id)).toEqual(['c1']);
   });
 
+  it('updateQuantity keeps total_price = unit price x quantity without rounding drift', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem({ quantity: 1, unit_base_price: 3.33, total_price: 3.33 }));
+
+    for (let q = 2; q <= 20; q++) {
+      cart.updateQuantity('c1', q);
+    }
+    for (let q = 19; q >= 3; q--) {
+      cart.updateQuantity('c1', q);
+    }
+
+    expect(cart.items()[0].quantity).toBe(3);
+    expect(cart.items()[0].total_price).toBe(9.99);
+  });
+
+  it('updateQuantity ignores an unknown id', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem());
+    const before = cart.items();
+
+    cart.updateQuantity('nope', 5);
+
+    expect(cart.items()).toEqual(before);
+  });
+
   it('clearCart empties the cart and the stored value', () => {
     const { cart } = createCart();
     cart.addToCart(makeItem());

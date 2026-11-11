@@ -22,16 +22,23 @@
           <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
           <div>Total: {{ item.total_price | currencyFormat }}</div>
 
-          <button
-            tuiButton
-            type="button"
-            appearance="secondary"
-            size="s"
-            [attr.aria-label]="'Remove ' + item.name + ' from cart'"
-            (click)="cartStore.removeFromCart(item.id)"
-          >
-            Remove
-          </button>
+          <div class="cart-row__actions">
+            <app-quantity-stepper
+              [value]="item.quantity"
+              [label]="item.name"
+              (changed)="onQuantityChange(item.id, item.name, $event)"
+            />
+            <button
+              tuiButton
+              type="button"
+              appearance="secondary"
+              size="s"
+              [attr.aria-label]="'Remove ' + item.name + ' from cart'"
+              (click)="cartStore.removeFromCart(item.id)"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       </div>
     </div>

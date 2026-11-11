@@ -28,6 +28,14 @@ function setup(empty = false) {
   return { store, fixture, el: fixture.nativeElement as HTMLElement };
 }
 
+function removeButton(el: HTMLElement): HTMLButtonElement {
+  const button = el.querySelector<HTMLButtonElement>('[aria-label="Remove Burger from cart"]');
+  if (!button) {
+    throw new Error('Remove button not found');
+  }
+  return button;
+}
+
 function fire(el: HTMLElement, type: string, x: number, y: number): void {
   const event = new Event(type, { bubbles: true });
   Object.assign(event, { pointerId: 1, pointerType: 'touch', clientX: x, clientY: y });
@@ -44,11 +52,11 @@ describe('CartPage accessibility', () => {
     expect(button?.getAttribute('aria-label')).toBe('Remove Burger from cart');
   });
 
-  it('renders Remove and Checkout as Taiga buttons', () => {
+  it('renders stepper, Remove and Checkout as Taiga buttons', () => {
     const { el } = setup();
     const buttons = Array.from(el.querySelectorAll('button'));
 
-    expect(buttons.length).toBe(2);
+    expect(buttons.length).toBe(4);
     expect(buttons.every((b) => b.hasAttribute('tuiButton'))).toBe(true);
   });
 });
@@ -79,7 +87,7 @@ describe('CartPage summary', () => {
     expect(summary?.textContent).toContain('1 item');
     expect(summary?.textContent).toContain('$5.00');
 
-    el.querySelectorAll<HTMLButtonElement>('.cart-row button').item(0).click();
+    removeButton(el).click();
     fixture.detectChanges();
 
     expect(el.querySelector('app-cart-summary')).toBeNull();
@@ -119,8 +127,43 @@ describe('CartPage swipe to remove', () => {
     fire(row, 'pointerup', 280, 10);
     expect(store.items().length).toBe(1);
 
-    el.querySelectorAll<HTMLButtonElement>('.cart-row button').item(0).click();
+    removeButton(el).click();
     fixture.detectChanges();
     expect(store.items()).toEqual([]);
+  });
+});
+
+describe('CartPage quantity stepper', () => {
+  it('increments the quantity and updates the line, count and total', () => {
+    const { store, fixture, el } = setup();
+
+    el.querySelector<HTMLButtonElement>('[aria-label="Increase quantity of Burger"]')?.click();
+    fixture.detectChanges();
+
+    expect(store.items()[0]).toMatchObject({ quantity: 2, total_price: 10 });
+    expect(el.querySelector('.cart-row')?.textContent).toContain('$10.00');
+    expect(el.querySelector('app-cart-summary')?.textContent).toContain('2 items');
+    expect(el.querySelector('app-cart-summary')?.textContent).toContain('$10.00');
+  });
+
+  it('decrements the quantity above 1', () => {
+    const { store, fixture, el } = setup();
+    store.updateQuantity('1', 3);
+    fixture.detectChanges();
+
+    el.querySelector<HTMLButtonElement>('[aria-label="Decrease quantity of Burger"]')?.click();
+    fixture.detectChanges();
+
+    expect(store.items()[0]).toMatchObject({ quantity: 2, total_price: 10 });
+  });
+
+  it('removes the line and announces it when decreasing from 1', () => {
+    const { store, fixture, el } = setup();
+
+    el.querySelector<HTMLButtonElement>('[aria-label="Decrease quantity of Burger"]')?.click();
+    fixture.detectChanges();
+
+    expect(store.items()).toEqual([]);
+    expect(el.querySelector('.cart-page__live')?.textContent).toContain('Burger retiré du panier');
   });
 });

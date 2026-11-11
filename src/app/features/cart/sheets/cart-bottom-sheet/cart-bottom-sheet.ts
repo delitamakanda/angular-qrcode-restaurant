@@ -4,13 +4,14 @@ import { injectContext } from '@taiga-ui/polymorpheus';
 import { CartStore } from '@app/state/cart.store';
 import { SwipeActionDirective } from '@shared/directives/swipe-action.directive';
 import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
+import { QuantityStepper } from '@shared/ui/forms/quantity-stepper/quantity-stepper';
 import { EmptyState } from '@shared/ui/layout/empty-state/empty-state';
 
 export type CartSheetResult = 'checkout' | 'menu' | undefined;
 
 @Component({
   selector: 'app-cart-bottom-sheet',
-  imports: [CurrencyFormatPipe, SwipeActionDirective, TuiButton, EmptyState],
+  imports: [CurrencyFormatPipe, SwipeActionDirective, TuiButton, EmptyState, QuantityStepper],
   templateUrl: './cart-bottom-sheet.html',
   styleUrl: './cart-bottom-sheet.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,6 +33,13 @@ export class CartBottomSheet {
   protected onSwiped(itemId: string, name: string): void {
     this.cartStore.removeFromCart(itemId);
     this.announcement.set(`${name} retiré du panier`);
+  }
+
+  protected onQuantityChange(itemId: string, name: string, quantity: number): void {
+    this.cartStore.updateQuantity(itemId, quantity);
+    if (quantity <= 0) {
+      this.announcement.set(`${name} retiré du panier`);
+    }
   }
 
   protected goToMenu(): void {

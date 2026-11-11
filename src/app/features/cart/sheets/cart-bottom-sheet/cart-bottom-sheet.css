@@ -66,7 +66,7 @@
   gap: 0.5rem;
 }
 
-.cart-sheet__actions button {
+.cart-sheet__actions > button {
   min-width: 2.75rem;
   min-height: 2.75rem;
 }
