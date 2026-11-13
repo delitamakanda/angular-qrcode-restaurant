@@ -26,11 +26,16 @@
         @if (!option.is_available) {
           <span class="modifier-group__unavailable">(unavailable)</span>
         }
+        @if (option.price_delta) {
+          <span class="modifier-group__visually-hidden"
+            >, {{ deltaSpokenLabel(option.price_delta) }}</span
+          >
+        }
       </span>
       @if (option.price_delta) {
-        <span class="modifier-group__delta">
-          {{ option.price_delta > 0 ? '+' : '' }}{{ option.price_delta | currencyFormat }}
-        </span>
+        <span class="modifier-group__delta" aria-hidden="true">{{
+          deltaLabel(option.price_delta)
+        }}</span>
       }
     </label>
   }

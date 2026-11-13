@@ -50,6 +50,36 @@ describe('ModifierGroup', () => {
     expect(el.textContent).toContain('+$5.00');
   });
 
+  it('shows a negative delta with a minus sign and no double sign', () => {
+    const { el } = render({ options: [option('a', true, -1)] });
+    const delta = el.querySelector('.modifier-group__delta');
+
+    expect(delta?.textContent.trim()).toBe('\u2212$1.00');
+    expect(el.textContent).not.toContain('+-');
+  });
+
+  it('renders no delta element for a zero delta', () => {
+    const { el } = render({ options: [option('a', true, 0)] });
+
+    expect(el.querySelector('.modifier-group__delta')).toBeNull();
+    expect(el.querySelector('.modifier-group__visually-hidden')).toBeNull();
+  });
+
+  it('exposes the delta to assistive technology without a redundant visible symbol', () => {
+    const { el } = render({ options: [option('a', true, 1.5), option('b', true, -1)] });
+    const hidden = el.querySelectorAll('.modifier-group__visually-hidden');
+
+    expect(el.querySelector('.modifier-group__delta')?.getAttribute('aria-hidden')).toBe('true');
+    expect(hidden[0].textContent).toContain('plus $1.50');
+    expect(hidden[1].textContent).toContain('minus $1.00');
+  });
+
+  it('keeps the unavailable mention', () => {
+    const { el } = render({});
+
+    expect(el.textContent).toContain('(unavailable)');
+  });
+
   it('disables unchecked options once max_select is reached', () => {
     const { el } = render(
       { required: false, max_select: 1 + 1, options: [option('a'), option('b'), option('c')] },

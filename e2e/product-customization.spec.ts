@@ -97,3 +97,14 @@ test('the quantity stepper is bounded between 1 and the maximum', async ({ page 
   await expect(increase).toBeDisabled();
   await expect(decrease).toBeEnabled();
 });
+
+test('shows the price delta of paid options and exposes it to assistive technology', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+
+  const dialog = page.getByRole('dialog', { name: 'Classic Milk Tea' });
+  await expect(dialog.getByRole('radio', { name: /Large.*plus \$/ })).toBeVisible();
+  await expect(dialog.locator('.modifier-group__delta').first()).toContainText(/^\s*\+\$/);
+});
