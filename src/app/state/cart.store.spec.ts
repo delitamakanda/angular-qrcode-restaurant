@@ -292,3 +292,98 @@ describe('CartStore per restaurant', () => {
     expect(localStorage.length).toBe(0);
   });
 });
+
+describe('CartStore merging identical lines', () => {
+  const opt = (group_id: string, option_id: string) => ({
+    group_id,
+    option_id,
+    label: option_id,
+    price_delta: 0,
+  });
+  const line = (overrides: Partial<CartItem> = {}): CartItem =>
+    makeItem({ id: 'n', quantity: 1, total_price: 5, ...overrides });
+
+  beforeEach(() => {
+    localStorage.clear();
+    TestBed.resetTestingModule();
+  });
+
+  it('merges identical lines, keeping the original id and repricing', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'first' }));
+    cart.addToCart(line({ id: 'second' }));
+
+    expect(cart.items()).toEqual([line({ id: 'first', quantity: 2, total_price: 10 })]);
+    expect(cart.count()).toBe(2);
+    expect(cart.subtotal()).toBe(10);
+  });
+
+  it('merges options selected in a different order', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'a', selected_options: [opt('g1', 'o1'), opt('g2', 'o2')] }));
+    cart.addToCart(line({ id: 'b', selected_options: [opt('g2', 'o2'), opt('g1', 'o1')] }));
+
+    expect(cart.items().length).toBe(1);
+    expect(cart.items()[0].quantity).toBe(2);
+  });
+
+  it('keeps lines with another note or other options apart', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'a' }));
+    cart.addToCart(line({ id: 'b', note: 'no ice' }));
+    cart.addToCart(line({ id: 'c', selected_options: [opt('g1', 'o1')] }));
+
+    expect(cart.items().map((i) => i.id)).toEqual(['a', 'b', 'c']);
+  });
+
+  it('treats empty, undefined and blank notes as equivalent', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'a' }));
+    cart.addToCart(line({ id: 'b', note: '' }));
+    cart.addToCart(line({ id: 'c', note: '   ' }));
+
+    expect(cart.items().length).toBe(1);
+    expect(cart.items()[0].quantity).toBe(3);
+  });
+
+  it('caps the merged quantity at 20 without error or second line', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'a', quantity: 15, total_price: 75 }));
+    cart.addToCart(line({ id: 'b', quantity: 10, total_price: 50 }));
+
+    expect(cart.items().length).toBe(1);
+    expect(cart.items()[0].quantity).toBe(20);
+    expect(cart.items()[0].total_price).toBe(100);
+  });
+
+  it('does not drift on rounding (unit price 3.33)', () => {
+    const { cart } = createCart();
+    for (let i = 0; i < 3; i++) {
+      cart.addToCart(line({ id: `x${String(i)}`, unit_base_price: 3.33, total_price: 3.33 }));
+    }
+
+    expect(cart.items()[0].quantity).toBe(3);
+    expect(cart.items()[0].total_price).toBe(9.99);
+  });
+
+  it('persists the merged line with the original id', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'first' }));
+    cart.addToCart(line({ id: 'second' }));
+    TestBed.tick();
+
+    expect(stored()).toEqual([line({ id: 'first', quantity: 2, total_price: 10 })]);
+  });
+
+  it('recomputes a percentage discount after a merge', () => {
+    const { cart } = createCart();
+    cart.applyPromotion(promo({ type: 'percentage', value: 10 }));
+    cart.addToCart(line({ id: 'a' }));
+    expect(cart.discount()).toBe(0.5);
+    cart.addToCart(line({ id: 'b' }));
+
+    expect(cart.subtotal()).toBe(10);
+    expect(cart.discount()).toBe(1);
+    expect(cart.total()).toBe(9);
+  });
+});

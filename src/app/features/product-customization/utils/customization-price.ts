@@ -1,3 +1,4 @@
+import { MAX_QUANTITY } from '@app/core/constants/cart.constants';
 import { CartItem, CartSelectedOption } from '@app/core/models/cart.model';
 import { MenuItem } from '@app/core/models/menu-item.model';
 import { ModifierGroup } from '@app/core/models/modifier.model';
@@ -6,7 +7,6 @@ import { ModifierGroup } from '@app/core/models/modifier.model';
 export type Selection = Partial<Record<string, string[]>>;
 
 export const MIN_QUANTITY = 1;
-export const MAX_QUANTITY = 20;
 
 const formatAmount = (value: number): string =>
   new Intl.NumberFormat('en-US', {
