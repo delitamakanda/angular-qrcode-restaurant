@@ -1,6 +1,8 @@
 import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { MAX_QUANTITY } from '@app/core/constants/cart.constants';
 import { CartItem } from '@app/core/models/cart.model';
 import { Promotion } from '@app/core/models/promotion.model';
+import { cartLineKey } from '@app/core/utils/cart-line.util';
 import { ShopStore } from './shop.store';
 
 /** Legacy single-cart key, migrated to the `demo` restaurant on first load. */
@@ -51,7 +53,13 @@ export class CartStore {
   }
 
   addToCart(item: CartItem): void {
-    this.items.update((items) => [...items, item]);
+    const key = cartLineKey(item);
+    const existing = this.items().find((line) => cartLineKey(line) === key);
+    if (!existing) {
+      this.items.update((items) => [...items, item]);
+      return;
+    }
+    this.setQuantity(existing.id, Math.min(MAX_QUANTITY, existing.quantity + item.quantity));
   }
 
   removeFromCart(itemId: string): void {
@@ -63,6 +71,11 @@ export class CartStore {
       this.removeFromCart(itemId);
       return;
     }
+    this.setQuantity(itemId, quantity);
+  }
+
+  /** Sets a line quantity and reprices it from its rounded unit price (no rounding drift). */
+  private setQuantity(itemId: string, quantity: number): void {
     this.items.update((items) =>
       items.map((item) => {
         if (item.id !== itemId) {

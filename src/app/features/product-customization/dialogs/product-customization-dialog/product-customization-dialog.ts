@@ -21,10 +21,10 @@ import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive'
 import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 import { TuiButton, type TuiDialogContext } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
+import { MAX_QUANTITY } from '@app/core/constants/cart.constants';
 import { ModifierGroup } from '../../components/modifier-group/modifier-group';
 import { ProductNote } from '../../components/product-note/product-note';
 import {
-  MAX_QUANTITY,
   MIN_QUANTITY,
   Selection,
   buildCartItem,
