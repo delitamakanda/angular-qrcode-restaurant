@@ -44,6 +44,9 @@
 
       <footer class="customization__footer">
         <p class="customization__error" role="status" aria-live="polite">{{ errorMessage() }}</p>
+        <span class="customization__visually-hidden" role="status" aria-live="polite"
+          >Total: {{ total() | currencyFormat }}</span
+        >
         <div class="customization__row">
           <div class="customization__quantity" role="group" aria-label="Quantity">
             <button

@@ -21,6 +21,7 @@ test('customer customizes a product and adds it to the cart', async ({ page }) =
   await dialog.getByRole('radio', { name: 'Less Ice' }).check();
   await expect(add).toBeEnabled();
   await expect(add).toContainText('$65.00');
+  await expect(dialog.getByText('Total: $65.00')).toBeAttached();
 
   await dialog.getByRole('radio', { name: /Boba/ }).check();
   await dialog.getByRole('button', { name: 'Increase quantity' }).click();
