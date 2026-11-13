@@ -8,6 +8,25 @@ export type Selection = Partial<Record<string, string[]>>;
 export const MIN_QUANTITY = 1;
 export const MAX_QUANTITY = 20;
 
+const formatAmount = (value: number): string =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format(value);
+
+/** Signed delta for display ("+$1.50", "−$1.00" with U+2212); empty when there is no delta. */
+export function deltaLabel(delta: number): string {
+  if (!delta) return '';
+  return `${delta > 0 ? '+' : '\u2212'}${formatAmount(Math.abs(delta))}`;
+}
+
+/** Delta spelled out for assistive technology ("plus $1.50", "minus $1.00"). */
+export function deltaSpokenLabel(delta: number): string {
+  if (!delta) return '';
+  return `${delta > 0 ? 'plus' : 'minus'} ${formatAmount(Math.abs(delta))}`;
+}
+
 /** `required: false` takes precedence over `min_select` (no minimum for optional groups). */
 export function minSelect(group: ModifierGroup): number {
   return group.required ? Math.max(group.min_select ?? 1, 1) : 0;

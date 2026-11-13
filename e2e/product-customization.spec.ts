@@ -82,3 +82,14 @@ test('shows an error with a retry when options fail to load', async ({ page }) =
   await dialog.getByRole('button', { name: 'Retry' }).click();
   await expect(dialog.getByRole('radio', { name: 'Medium' })).toBeVisible();
 });
+
+test('shows the price delta of paid options and exposes it to assistive technology', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+
+  const dialog = page.getByRole('dialog', { name: 'Classic Milk Tea' });
+  await expect(dialog.getByRole('radio', { name: /Large.*plus \$/ })).toBeVisible();
+  await expect(dialog.locator('.modifier-group__delta').first()).toContainText(/^\s*\+\$/);
+});

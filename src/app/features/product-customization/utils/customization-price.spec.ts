@@ -1,6 +1,8 @@
 import { ModifierGroup } from '@app/core/models/modifier.model';
 import {
   clampQuantity,
+  deltaLabel,
+  deltaSpokenLabel,
   maxSelect,
   minSelect,
   missingGroups,
@@ -79,5 +81,19 @@ describe('customization-price', () => {
     expect(clampQuantity(0)).toBe(1);
     expect(clampQuantity(21)).toBe(20);
     expect(clampQuantity(4)).toBe(4);
+  });
+});
+
+describe('deltaLabel', () => {
+  it('formats positive, negative and zero deltas', () => {
+    expect(deltaLabel(1.5)).toBe('+$1.50');
+    expect(deltaLabel(-1)).toBe('−$1.00');
+    expect(deltaLabel(0)).toBe('');
+  });
+
+  it('spells deltas out for screen readers', () => {
+    expect(deltaSpokenLabel(1.5)).toBe('plus $1.50');
+    expect(deltaSpokenLabel(-1)).toBe('minus $1.00');
+    expect(deltaSpokenLabel(0)).toBe('');
   });
 });
