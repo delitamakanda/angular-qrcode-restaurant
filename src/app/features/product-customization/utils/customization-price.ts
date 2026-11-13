@@ -83,10 +83,6 @@ export function totalPrice(
   return unitPrice(basePrice, options) * quantity;
 }
 
-export function clampQuantity(quantity: number): number {
-  return Math.min(MAX_QUANTITY, Math.max(MIN_QUANTITY, quantity));
-}
-
 /** Builds a complete cart line (unique id, options, note, quantity and total). */
 export function buildCartItem(
   product: MenuItem,

@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
+import { MIN_QUANTITY } from '@app/core/constants/quantity.constants';
 import { MenuApiService } from '@app/core/api/menu-api.service';
 import { MenuItem } from '@app/core/models/menu-item.model';
 import { NotificationService } from '@app/core/services/notification.service';
@@ -11,7 +12,7 @@ import {
   ProductCustomizationDialog,
   ProductCustomizationResult,
 } from '../dialogs/product-customization-dialog/product-customization-dialog';
-import { MIN_QUANTITY, buildCartItem } from '../utils/customization-price';
+import { buildCartItem } from '../utils/customization-price';
 
 @Injectable({ providedIn: 'root' })
 export class ProductCustomizationService {

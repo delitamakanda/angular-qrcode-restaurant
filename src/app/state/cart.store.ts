@@ -1,4 +1,5 @@
 import { computed, effect, inject, Injectable, signal, untracked } from '@angular/core';
+import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { CartItem } from '@app/core/models/cart.model';
 import { Promotion } from '@app/core/models/promotion.model';
 import { ShopStore } from './shop.store';
@@ -58,21 +59,34 @@ export class CartStore {
     this.items.update((items) => items.filter((item) => item.id !== itemId));
   }
 
+  /**
+   * `quantity <= 0` removes the line, a value above `MAX_QUANTITY` is capped and a
+   * non-integer value is ignored. The line total is recomputed from the unit price
+   * (base price + option deltas), never derived from the previous total.
+   */
   updateQuantity(itemId: string, quantity: number): void {
+    if (!Number.isInteger(quantity)) {
+      return;
+    }
     if (quantity <= 0) {
       this.removeFromCart(itemId);
       return;
     }
+    const nextQuantity = Math.min(quantity, MAX_QUANTITY);
     this.items.update((items) =>
       items.map((item) => {
         if (item.id !== itemId) {
           return item;
         }
-        const oldUnit = Math.round((item.total_price / item.quantity) * 100) / 100;
+        const unitCents = Math.round(
+          (item.unit_base_price +
+            (item.selected_options ?? []).reduce((sum, option) => sum + option.price_delta, 0)) *
+            100,
+        );
         return {
           ...item,
-          quantity,
-          total_price: Math.round(oldUnit * quantity * 100) / 100,
+          quantity: nextQuantity,
+          total_price: (unitCents * nextQuantity) / 100,
         };
       }),
     );

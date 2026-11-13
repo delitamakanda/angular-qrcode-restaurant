@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Subject, of, throwError } from 'rxjs';
+import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { MenuApiService, MenuItemWithModifiers } from '@app/core/api/menu-api.service';
 import { MenuItem } from '@app/core/models/menu-item.model';
 import { NotificationService } from '@app/core/services/notification.service';
@@ -133,11 +134,30 @@ describe('ProductCustomizationDialog', () => {
 
     click(input('l'));
     click(input('a'));
-    click('button[aria-label="Increase quantity"]');
+    click('button[aria-label="Increase quantity of Tea"]');
 
     // (50 + 10 + 5) × 2
     expect(add()?.textContent).toContain('130.00');
-    expect(el.querySelector('.customization__quantity span')?.textContent).toBe('2');
+    expect(el.querySelector('app-quantity-stepper [role="status"]')?.textContent).toBe('2');
+  });
+
+  it('disables "−" at 1 and "+" at the maximum, and adds the chosen quantity', () => {
+    const { click, add, input, el } = render();
+    const button = (name: string) =>
+      el.querySelector<HTMLButtonElement>(`button[aria-label="${name} quantity of Tea"]`);
+    click(input('m'));
+    expect(button('Decrease')?.disabled).toBe(true);
+
+    for (let i = 0; i < MAX_QUANTITY + 3; i++) {
+      click(button('Increase'));
+    }
+    expect(button('Increase')?.disabled).toBe(true);
+
+    click(add());
+    expect(addToCart.mock.calls[0][0]).toMatchObject({
+      quantity: MAX_QUANTITY,
+      total_price: 50 * MAX_QUANTITY,
+    });
   });
 
   it('adds a consistent cart item, notifies and closes', () => {
