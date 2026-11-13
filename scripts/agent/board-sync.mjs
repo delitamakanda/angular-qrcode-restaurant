@@ -20,6 +20,8 @@
 //   STATUS_FIELD     optionnel : nom du champ (défaut « Status »)
 //   DRY_RUN=1        optionnel : affiche sans écrire
 
+import { graphql as requestGraphql } from './graphql.mjs';
+
 const token = process.env.GH_TOKEN;
 const repo = process.env.REPO ?? process.env.GITHUB_REPOSITORY;
 const projectNumber = Number(process.env.PROJECT_NUMBER);
@@ -58,16 +60,7 @@ async function rest(path) {
 }
 
 async function graphql(query, variables) {
-  const res = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: { authorization: `Bearer ${token}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ query, variables }),
-  });
-  const json = await res.json();
-  if (!res.ok || json.errors) {
-    throw new Error(`GraphQL → ${res.status} ${JSON.stringify(json.errors ?? json)}`);
-  }
-  return json.data;
+  return requestGraphql(token, query, variables);
 }
 
 async function loadProject() {
