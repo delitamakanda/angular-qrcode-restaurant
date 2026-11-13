@@ -1,5 +1,6 @@
 import { ModifierGroup } from '@app/core/models/modifier.model';
 import {
+  buildCartItem,
   clampQuantity,
   deltaLabel,
   deltaSpokenLabel,
@@ -95,5 +96,36 @@ describe('deltaLabel', () => {
     expect(deltaSpokenLabel(1.5)).toBe('plus $1.50');
     expect(deltaSpokenLabel(-1)).toBe('minus $1.00');
     expect(deltaSpokenLabel(0)).toBe('');
+  });
+});
+
+describe('price rounding and bounds', () => {
+  const sel = (price_delta: number) => ({
+    group_id: 'g',
+    option_id: String(price_delta),
+    label: 'x',
+    price_delta,
+  });
+
+  it('rounds to the cent', () => {
+    expect(unitPrice(0, [sel(0.1), sel(0.2)])).toBe(0.3);
+    expect(totalPrice(9.99, [sel(0.1), sel(0.2)], 3)).toBe(30.87);
+  });
+
+  it('applies negative deltas and never goes below 0', () => {
+    expect(unitPrice(10, [sel(-2.5)])).toBe(7.5);
+    expect(unitPrice(1, [sel(-5)])).toBe(0);
+    expect(totalPrice(1, [sel(-5)], 3)).toBe(0);
+  });
+
+  it('ignores unavailable and unselected options', () => {
+    const options = toSelectedOptions([single, multi], { size: ['xl', 'l'], top: [] });
+    expect(totalPrice(50, options, 2)).toBe(120);
+  });
+
+  it('builds a cart item whose total matches totalPrice', () => {
+    const product = { id: 'p', name: 'P', base_price: 9.99 } as Parameters<typeof buildCartItem>[0];
+    const options = [sel(0.1), sel(0.2)];
+    expect(buildCartItem(product, options, 3).total_price).toBe(totalPrice(9.99, options, 3));
   });
 });
