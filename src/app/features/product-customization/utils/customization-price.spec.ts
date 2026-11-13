@@ -1,6 +1,5 @@
 import { ModifierGroup } from '@app/core/models/modifier.model';
 import {
-  clampQuantity,
   maxSelect,
   minSelect,
   missingGroups,
@@ -73,11 +72,5 @@ describe('customization-price', () => {
 
     expect(unitPrice(55, options)).toBe(75);
     expect(totalPrice(55, options, 3)).toBe(225);
-  });
-
-  it('clamps the quantity between 1 and 20', () => {
-    expect(clampQuantity(0)).toBe(1);
-    expect(clampQuantity(21)).toBe(20);
-    expect(clampQuantity(4)).toBe(4);
   });
 });

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { CartItem } from '@app/core/models/cart.model';
 import { Promotion } from '@app/core/models/promotion.model';
 import { Store } from '@app/core/models/store.model';
@@ -139,6 +140,66 @@ describe('CartStore persistence', () => {
 
     expect(cart.items()[0].quantity).toBe(3);
     expect(cart.items()[0].total_price).toBe(9.99);
+  });
+
+  it('updateQuantity recomputes the total from base price and option deltas', () => {
+    const { cart } = createCart();
+    cart.addToCart(
+      makeItem({
+        quantity: 1,
+        unit_base_price: 3.33,
+        total_price: 4.33,
+        selected_options: [
+          { group_id: 'g', option_id: 'o1', label: 'A', price_delta: 1 },
+          { group_id: 'g', option_id: 'o2', label: 'B', price_delta: 0.1 },
+        ],
+      }),
+    );
+
+    cart.updateQuantity('c1', 3);
+
+    // unit = 4.43
+    expect(cart.items()[0]).toMatchObject({ quantity: 3, total_price: 13.29 });
+  });
+
+  it('updateQuantity caps at MAX_QUANTITY, removes at <= 0 and ignores non-integers', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem());
+
+    cart.updateQuantity('c1', MAX_QUANTITY + 50);
+    expect(cart.items()[0]).toMatchObject({
+      quantity: MAX_QUANTITY,
+      total_price: 5 * MAX_QUANTITY,
+    });
+
+    cart.updateQuantity('c1', 2.5);
+    cart.updateQuantity('c1', Number.NaN);
+    expect(cart.items()[0].quantity).toBe(MAX_QUANTITY);
+
+    cart.updateQuantity('c1', 0);
+    expect(cart.items()).toEqual([]);
+  });
+
+  it('count, subtotal, discount and total follow quantity changes, with and without promotion', () => {
+    const { cart } = createCart();
+    cart.addToCart(makeItem({ quantity: 1, total_price: 5 }));
+    cart.addToCart(makeItem({ id: 'c2', quantity: 1, unit_base_price: 2, total_price: 2 }));
+
+    cart.updateQuantity('c1', 3);
+    cart.updateQuantity('c2', 2);
+    expect(cart.count()).toBe(5);
+    expect(cart.subtotal()).toBe(19);
+    expect(cart.discount()).toBe(0);
+    expect(cart.total()).toBe(19);
+
+    cart.applyPromotion(promo({ type: 'percentage', value: 10 }));
+    expect(cart.discount()).toBe(1.9);
+    expect(cart.total()).toBe(17.1);
+
+    cart.updateQuantity('c1', 4);
+    expect(cart.subtotal()).toBe(24);
+    expect(cart.discount()).toBe(2.4);
+    expect(cart.total()).toBe(21.6);
   });
 
   it('updateQuantity ignores an unknown id', () => {

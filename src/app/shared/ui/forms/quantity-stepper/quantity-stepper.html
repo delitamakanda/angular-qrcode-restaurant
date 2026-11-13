@@ -5,6 +5,7 @@
     appearance="secondary"
     size="m"
     [attr.aria-label]="'Decrease quantity of ' + label()"
+    [disabled]="value() <= min()"
     (click)="changed.emit(value() - 1)"
   >
     −

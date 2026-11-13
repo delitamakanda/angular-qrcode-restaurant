@@ -5,9 +5,6 @@ import { ModifierGroup } from '@app/core/models/modifier.model';
 /** Selected option ids, keyed by modifier group id. */
 export type Selection = Partial<Record<string, string[]>>;
 
-export const MIN_QUANTITY = 1;
-export const MAX_QUANTITY = 20;
-
 /** `required: false` takes precedence over `min_select` (no minimum for optional groups). */
 export function minSelect(group: ModifierGroup): number {
   return group.required ? Math.max(group.min_select ?? 1, 1) : 0;
@@ -62,10 +59,6 @@ export function totalPrice(
   quantity: number,
 ): number {
   return unitPrice(basePrice, options) * quantity;
-}
-
-export function clampQuantity(quantity: number): number {
-  return Math.min(MAX_QUANTITY, Math.max(MIN_QUANTITY, quantity));
 }
 
 /** Builds a complete cart line (unique id, options, note, quantity and total). */

@@ -13,22 +13,21 @@ import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { MIN_QUANTITY, clampQuantity } from '@app/core/constants/quantity.constants';
 import { MenuApiService, MenuItemWithModifiers } from '@app/core/api/menu-api.service';
 import { MenuItem } from '@app/core/models/menu-item.model';
 import { NotificationService } from '@app/core/services/notification.service';
 import { CartStore } from '@app/state/cart.store';
 import { ImgFallbackDirective } from '@shared/directives/img-fallback.directive';
+import { QuantityStepper } from '@shared/ui/forms/quantity-stepper/quantity-stepper';
 import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
 import { TuiButton, type TuiDialogContext } from '@taiga-ui/core';
 import { injectContext } from '@taiga-ui/polymorpheus';
 import { ModifierGroup } from '../../components/modifier-group/modifier-group';
 import { ProductNote } from '../../components/product-note/product-note';
 import {
-  MAX_QUANTITY,
-  MIN_QUANTITY,
   Selection,
   buildCartItem,
-  clampQuantity,
   minSelect,
   missingGroups,
   toSelectedOptions,
@@ -47,6 +46,7 @@ type LoadState = 'loading' | 'error' | 'ready';
     ImgFallbackDirective,
     ModifierGroup,
     ProductNote,
+    QuantityStepper,
     ReactiveFormsModule,
     TuiButton,
   ],
@@ -64,7 +64,6 @@ export class ProductCustomizationDialog {
 
   protected readonly placeholder = '/images/placeholder-food.svg';
   protected readonly minQuantity = MIN_QUANTITY;
-  protected readonly maxQuantity = MAX_QUANTITY;
 
   protected readonly product = signal<MenuItem>(this.context.data);
   // Groups already fetched by the opener: show them right away, no loading flash.
@@ -145,8 +144,8 @@ export class ProductCustomizationDialog {
     this.selection.update((current) => ({ ...current, [groupId]: [] }));
   }
 
-  protected changeQuantity(delta: number): void {
-    this.quantity.update((current) => clampQuantity(current + delta));
+  protected changeQuantity(quantity: number): void {
+    this.quantity.set(clampQuantity(quantity));
   }
 
   protected submit(): void {

@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideTaiga } from '@taiga-ui/core';
 import { POLYMORPHEUS_CONTEXT } from '@taiga-ui/polymorpheus';
+import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { CartStore } from '@app/state/cart.store';
 import { CartBottomSheet } from './cart-bottom-sheet';
 
@@ -73,6 +74,17 @@ describe('CartBottomSheet', () => {
     fixture.detectChanges();
 
     expect(cart.items()[0].quantity).toBe(3);
+  });
+
+  it('disables the increase button at the maximum quantity', () => {
+    const { fixture, cart, el } = setup();
+
+    cart.updateQuantity('1', MAX_QUANTITY);
+    fixture.detectChanges();
+
+    expect(
+      el.querySelector<HTMLButtonElement>('[aria-label="Increase quantity of Burger"]')?.disabled,
+    ).toBe(true);
   });
 
   it('shows the empty state without Checkout and closes with the menu result', () => {

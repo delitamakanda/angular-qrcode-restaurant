@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { provideTaiga } from '@taiga-ui/core';
+import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { CartStore } from '@app/state/cart.store';
 import { CartPage } from './cart-page';
 
@@ -144,6 +145,17 @@ describe('CartPage quantity stepper', () => {
     expect(el.querySelector('.cart-row')?.textContent).toContain('$10.00');
     expect(el.querySelector('app-cart-summary')?.textContent).toContain('2 items');
     expect(el.querySelector('app-cart-summary')?.textContent).toContain('$10.00');
+  });
+
+  it('disables the increase button at the maximum quantity', () => {
+    const { store, fixture, el } = setup();
+
+    store.updateQuantity('1', MAX_QUANTITY);
+    fixture.detectChanges();
+
+    expect(
+      el.querySelector<HTMLButtonElement>('[aria-label="Increase quantity of Burger"]')?.disabled,
+    ).toBe(true);
   });
 
   it('decrements the quantity above 1', () => {
