@@ -1,11 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { ModifierGroup as ModifierGroupModel } from '@app/core/models/modifier.model';
-import { CurrencyFormatPipe } from '@shared/pipes/currency-format.pipe';
-import { isSingleChoice, maxSelect, minSelect } from '../../utils/customization-price';
+import {
+  deltaLabel,
+  deltaSpokenLabel,
+  isSingleChoice,
+  maxSelect,
+  minSelect,
+} from '../../utils/customization-price';
 
 @Component({
   selector: 'app-modifier-group',
-  imports: [CurrencyFormatPipe],
   templateUrl: './modifier-group.html',
   styleUrl: './modifier-group.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +29,9 @@ export class ModifierGroup {
     const max = maxSelect(this.group());
     return this.single() ? '' : `Choose up to ${String(max)}`;
   });
+
+  protected readonly deltaLabel = deltaLabel;
+  protected readonly deltaSpokenLabel = deltaSpokenLabel;
 
   protected isChecked(optionId: string): boolean {
     return this.selected().includes(optionId);
