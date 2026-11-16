@@ -1,6 +1,5 @@
 import { ModifierGroup } from '@app/core/models/modifier.model';
 import {
-  clampQuantity,
   deltaLabel,
   deltaSpokenLabel,
   maxSelect,
