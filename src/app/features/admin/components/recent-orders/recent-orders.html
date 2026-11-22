@@ -1,0 +1,19 @@
+<ul class="recent-orders">
+  @for (order of orders(); track order.id) {
+    <li class="recent-orders__item">
+      <span class="recent-orders__head">
+        <strong>{{ order.order_number }}</strong>
+        <span [attr.data-status]="order.status">
+          <span aria-hidden="true">●</span> {{ order.status | orderStatusLabel }}
+        </span>
+      </span>
+      <span class="recent-orders__meta">
+        {{ modeLabels[order.mode] }}
+        @if (order.created_at) {
+          · {{ order.created_at | date: 'shortTime' }}
+        }
+        · <strong>{{ order.total | currencyFormat }}</strong>
+      </span>
+    </li>
+  }
+</ul>

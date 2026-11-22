@@ -1,0 +1,44 @@
+<section class="admin-page" aria-labelledby="admin-title">
+  <a routerLink="../settings" class="admin-page__back">Back to settings</a>
+  <h1 id="admin-title" class="admin-page__title">Dashboard</h1>
+
+  <div aria-live="polite">
+    @if (store.loading()) {
+      <p role="status">Loading orders…</p>
+    }
+    @if (store.error()) {
+      <div role="alert" class="admin-page__error">
+        <p>We could not load the orders. Check your connection and try again.</p>
+        <button tuiButton type="button" appearance="primary" size="l" (click)="load()">
+          Retry
+        </button>
+      </div>
+    }
+  </div>
+
+  @if (loaded()) {
+    @if (store.orders().length === 0) {
+      <app-empty-state title="No orders" />
+    } @else {
+      <section aria-labelledby="admin-kpi-title">
+        <h2 id="admin-kpi-title">Key figures</h2>
+        <div class="admin-page__kpis">
+          <app-kpi-card label="Orders" [value]="'' + store.kpis().orderCount" />
+          <app-kpi-card label="Revenue" [value]="revenueLabel()" />
+          <app-kpi-card label="Average basket" [value]="averageLabel()" />
+          <app-kpi-card label="In progress" [value]="'' + store.kpis().inProgressCount" />
+        </div>
+      </section>
+
+      <section aria-labelledby="admin-status-title">
+        <h2 id="admin-status-title">Orders by status</h2>
+        <app-status-breakdown [counts]="store.statusCounts()" />
+      </section>
+
+      <section aria-labelledby="admin-recent-title">
+        <h2 id="admin-recent-title">Latest orders</h2>
+        <app-recent-orders [orders]="store.recentOrders()" />
+      </section>
+    }
+  }
+</section>

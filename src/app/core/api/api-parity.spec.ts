@@ -109,6 +109,13 @@ describe('Cloudflare Function parity with db.json', () => {
     expect((await get('/constructor')).status).toBe(404);
   });
 
+  it('GET /orders filters by store_id', async () => {
+    expect((await get('/orders?store_id=demo')).body).toEqual(
+      db.orders.filter((o) => o.store_id === 'demo'),
+    );
+    expect((await get('/orders?store_id=unknown')).body).toEqual([]);
+  });
+
   it('POST /orders creates an order retrievable by id, with totals', async () => {
     const response = await handleRequest(
       new Request('https://example.test/api/orders', {
