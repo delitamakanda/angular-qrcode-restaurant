@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpContext } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
 import { SKIP_ERROR_NOTIFICATION } from '@app/core/interceptors/error.interceptor';
 import { CheckoutPayload } from '@app/core/models/checkout.model';
 import { Observable } from 'rxjs';
@@ -21,5 +21,10 @@ export class OrderApiService {
   getOrder(orderId: string, options: { silent?: boolean } = {}): Observable<Order> {
     const context = new HttpContext().set(SKIP_ERROR_NOTIFICATION, options.silent === true);
     return this.http.get<Order>(`${this.config.BASE_API_URL}/orders/${orderId}`, { context });
+  }
+
+  getOrders(storeId: string): Observable<Order[]> {
+    const params = new HttpParams().set('store_id', storeId);
+    return this.http.get<Order[]>(`${this.config.BASE_API_URL}/orders`, { params });
   }
 }

@@ -58,6 +58,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'admin',
+        loadComponent: () =>
+          import('./features/admin/pages/admin-dashboard-page/admin-dashboard-page').then(
+            (m) => m.AdminDashboardPage,
+          ),
+      },
+      {
         path: 'settings',
         loadComponent: () =>
           import('./features/settings/pages/settings-page/settings-page').then(

@@ -1,0 +1,19 @@
+:host {
+  display: block;
+  padding: 0.75rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-control);
+}
+
+p {
+  margin: 0;
+}
+
+.kpi-card__label {
+  font-size: 0.875rem;
+}
+
+.kpi-card__value {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
