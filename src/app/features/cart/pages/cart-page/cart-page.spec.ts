@@ -4,6 +4,19 @@ import { provideTaiga } from '@taiga-ui/core';
 import { CartStore } from '@app/state/cart.store';
 import { CartPage } from './cart-page';
 
+function line(id: string, name: string) {
+  return {
+    id,
+    menu_item_id: `m${id}`,
+    quantity: 1,
+    name,
+    note: '',
+    unit_base_price: 5,
+    selected_options: [],
+    total_price: 5,
+  };
+}
+
 function setup(empty = false) {
   TestBed.configureTestingModule({ providers: [provideRouter([]), provideTaiga()] });
   const store = TestBed.inject(CartStore);
@@ -165,5 +178,43 @@ describe('CartPage quantity stepper', () => {
 
     expect(store.items()).toEqual([]);
     expect(el.querySelector('.cart-page__live')?.textContent).toContain('Burger retiré du panier');
+  });
+});
+
+describe('CartPage remove button', () => {
+  it('announces the removal and shows the empty state with focus on View menu', async () => {
+    const { fixture, el } = setup();
+    document.body.append(el);
+
+    removeButton(el).click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(el.querySelector('.cart-page__live')?.textContent).toContain('Burger retiré du panier');
+    expect(el.querySelector('app-empty-state')).not.toBeNull();
+    expect(el.querySelector('app-cart-summary')).toBeNull();
+    expect(document.activeElement).toBe(el.querySelector('app-empty-state button'));
+    el.remove();
+  });
+
+  it('moves the focus to the next line, or the previous one for the last line', async () => {
+    const { store, fixture, el } = setup();
+    store.items.set([line('1', 'Burger'), line('2', 'Pizza'), line('3', 'Salad')]);
+    fixture.detectChanges();
+    document.body.append(el);
+    const remove = (name: string) =>
+      el.querySelector<HTMLButtonElement>(`[aria-label="Remove ${name} from cart"]`);
+
+    remove('Pizza')?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(remove('Salad'));
+
+    remove('Salad')?.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(remove('Burger'));
+    expect(store.items().map((i) => i.id)).toEqual(['1']);
+    el.remove();
   });
 });
