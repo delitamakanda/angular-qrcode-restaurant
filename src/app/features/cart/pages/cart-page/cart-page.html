@@ -16,7 +16,7 @@
   @for (item of cartStore.items(); track item.id) {
     <div class="cart-row-wrapper">
       <span class="cart-row-wrapper__action" aria-hidden="true">Remove</span>
-      <div class="cart-row" appSwipeAction (swiped)="onSwiped(item.id, item.name)">
+      <div class="cart-row" appSwipeAction (swiped)="onRemove(item.id, item.name)">
         <div>
           <strong>{{ item.name }}</strong>
           <div>{{ item.quantity }} x {{ item.unit_base_price | currencyFormat }}</div>
@@ -34,7 +34,8 @@
               appearance="secondary"
               size="s"
               [attr.aria-label]="'Remove ' + item.name + ' from cart'"
-              (click)="cartStore.removeFromCart(item.id)"
+              data-cart-remove
+              (click)="onRemove(item.id, item.name)"
             >
               Remove
             </button>

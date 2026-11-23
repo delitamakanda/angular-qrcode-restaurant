@@ -318,6 +318,20 @@ describe('CartStore merging identical lines', () => {
     expect(cart.subtotal()).toBe(10);
   });
 
+  it('removes only one of two lines with the same product and different options', () => {
+    const { cart } = createCart();
+    cart.addToCart(line({ id: 'a', selected_options: [opt('size', 'small')] }));
+    cart.addToCart(line({ id: 'b', selected_options: [opt('size', 'large')] }));
+    expect(cart.items()).toHaveLength(2);
+
+    cart.removeFromCart('a');
+    TestBed.tick();
+
+    expect(cart.items().map((i) => i.id)).toEqual(['b']);
+    expect(cart.count()).toBe(1);
+    expect(stored().map((i) => i.id)).toEqual(['b']);
+  });
+
   it('merges options selected in a different order', () => {
     const { cart } = createCart();
     cart.addToCart(line({ id: 'a', selected_options: [opt('g1', 'o1'), opt('g2', 'o2')] }));

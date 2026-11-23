@@ -44,8 +44,17 @@ describe('CartBottomSheet', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(el.textContent).not.toContain('Burger');
+    expect(el.querySelector('[aria-label="Remove Burger from cart"]')).toBeNull();
     expect(completeWith).toHaveBeenCalledWith(undefined);
+  });
+
+  it('announces the removal when clicking Remove', () => {
+    const { fixture, el } = setup();
+
+    el.querySelector<HTMLButtonElement>('[aria-label="Remove Burger from cart"]')?.click();
+    fixture.detectChanges();
+
+    expect(el.querySelector('[role="status"]')?.textContent).toContain('Burger retiré du panier');
   });
 
   it('removes and announces a line swiped left past the threshold', () => {
