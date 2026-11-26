@@ -20,6 +20,23 @@ function statusOf(order: { readonly status?: OrderStatus }): OrderStatus {
   return order.status ?? 'pending';
 }
 
+/**
+ * Orders created through checkout may have no `total`: fall back to `subtotal`,
+ * then to the sum of the item lines, so the KPIs never become NaN.
+ */
+function totalOf(order: {
+  readonly total?: number;
+  readonly subtotal?: number;
+  readonly items?: readonly { readonly total_price?: number }[];
+}): number {
+  if (Number.isFinite(order.total)) return order.total as number;
+  if (Number.isFinite(order.subtotal)) return order.subtotal as number;
+  return (order.items ?? []).reduce(
+    (sum, item) => sum + (Number.isFinite(item.total_price) ? (item.total_price as number) : 0),
+    0,
+  );
+}
+
 @Injectable({ providedIn: 'root' })
 export class AdminDashboardStore {
   private readonly orderApi = inject(OrderApiService);
@@ -36,7 +53,7 @@ export class AdminDashboardStore {
   readonly kpis = computed<DashboardKpis>(() => {
     const orders = this._orders();
     const billable = orders.filter((order) => statusOf(order) !== 'cancelled');
-    const revenue = billable.reduce((sum, order) => sum + order.total, 0);
+    const revenue = billable.reduce((sum, order) => sum + totalOf(order), 0);
     return {
       orderCount: orders.length,
       revenue,

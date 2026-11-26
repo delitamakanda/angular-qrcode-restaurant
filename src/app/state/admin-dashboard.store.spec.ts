@@ -51,6 +51,20 @@ describe('AdminDashboardStore', () => {
     });
   });
 
+  it('never yields NaN when orders have no total (falls back to subtotal, then items)', () => {
+    const line = { total_price: 60 } as Order['items'][number];
+    const noTotal = { ...order('x', 'pending', 0, '2026-01-01T10:00:00Z'), items: [line, line] };
+    delete (noTotal as { total?: number }).total;
+    delete (noTotal as { subtotal?: number }).subtotal;
+    const noTotalButSubtotal = { ...order('y', 'pending', 40, '2026-01-01T11:00:00Z') };
+    delete (noTotalButSubtotal as { total?: number }).total;
+    getOrders.mockReturnValue(of([noTotal, noTotalButSubtotal]));
+    const store = setup();
+    store.load('demo');
+    expect(store.kpis().revenue).toBe(160);
+    expect(store.kpis().averageBasket).toBe(80);
+  });
+
   it('does not divide by zero without orders', () => {
     getOrders.mockReturnValue(of([]));
     const store = setup();
