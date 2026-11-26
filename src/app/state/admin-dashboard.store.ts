@@ -29,10 +29,10 @@ function totalOf(order: {
   readonly subtotal?: number;
   readonly items?: readonly { readonly total_price?: number }[];
 }): number {
-  if (Number.isFinite(order.total)) return order.total as number;
-  if (Number.isFinite(order.subtotal)) return order.subtotal as number;
+  if (Number.isFinite(order.total)) return order.total ?? 0;
+  if (Number.isFinite(order.subtotal)) return order.subtotal ?? 0;
   return (order.items ?? []).reduce(
-    (sum, item) => sum + (Number.isFinite(item.total_price) ? (item.total_price as number) : 0),
+    (sum, item) => sum + (Number.isFinite(item.total_price ?? 0) ? (item.total_price ?? 0) : 0),
     0,
   );
 }
