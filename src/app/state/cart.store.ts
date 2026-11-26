@@ -2,6 +2,7 @@ import { computed, effect, inject, Injectable, signal, untracked } from '@angula
 import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { CartItem } from '@app/core/models/cart.model';
 import { Promotion } from '@app/core/models/promotion.model';
+import { cartLineKey } from '@app/core/utils/cart-line.util';
 import { ShopStore } from './shop.store';
 
 /** Legacy single-cart key, migrated to the `demo` restaurant on first load. */
@@ -52,7 +53,13 @@ export class CartStore {
   }
 
   addToCart(item: CartItem): void {
-    this.items.update((items) => [...items, item]);
+    const key = cartLineKey(item);
+    const existing = this.items().find((line) => cartLineKey(line) === key);
+    if (!existing) {
+      this.items.update((items) => [...items, item]);
+      return;
+    }
+    this.setQuantity(existing.id, Math.min(MAX_QUANTITY, existing.quantity + item.quantity));
   }
 
   removeFromCart(itemId: string): void {
@@ -72,21 +79,29 @@ export class CartStore {
       this.removeFromCart(itemId);
       return;
     }
-    const nextQuantity = Math.min(quantity, MAX_QUANTITY);
+    this.setQuantity(itemId, Math.min(quantity, MAX_QUANTITY));
+  }
+
+  /** Sets a line quantity and reprices it from its rounded unit price (no rounding drift). */
+  private setQuantity(itemId: string, quantity: number): void {
     this.items.update((items) =>
       items.map((item) => {
         if (item.id !== itemId) {
           return item;
         }
-        const unitCents = Math.round(
-          (item.unit_base_price +
-            (item.selected_options ?? []).reduce((sum, option) => sum + option.price_delta, 0)) *
-            100,
+        const unitCents = Math.max(
+          0,
+          Math.round(
+            (item.unit_base_price +
+              (item.selected_options ?? []).reduce((sum, option) => sum + option.price_delta, 0) +
+              Number.EPSILON) *
+              100,
+          ),
         );
         return {
           ...item,
-          quantity: nextQuantity,
-          total_price: (unitCents * nextQuantity) / 100,
+          quantity,
+          total_price: (unitCents * quantity) / 100,
         };
       }),
     );

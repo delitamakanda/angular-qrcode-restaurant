@@ -160,6 +160,23 @@ describe('ProductCustomizationDialog', () => {
     });
   });
 
+  it('recomputes the total when unchecking and replacing options, and announces it', () => {
+    const { el, click, add, input } = render();
+
+    click(input('m'));
+    click(input('a'));
+    expect(add()?.textContent).toContain('55.00');
+
+    click(input('a'));
+    expect(add()?.textContent).toContain('50.00');
+
+    click(input('l'));
+    expect(add()?.textContent).toContain('60.00');
+
+    const live = el.querySelector('.customization__visually-hidden[aria-live="polite"]');
+    expect(live?.textContent).toContain('60.00');
+  });
+
   it('adds a consistent cart item, notifies and closes', () => {
     const { el, click, add, input } = render();
 

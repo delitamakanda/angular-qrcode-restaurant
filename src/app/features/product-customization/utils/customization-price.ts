@@ -5,9 +5,6 @@ import { ModifierGroup } from '@app/core/models/modifier.model';
 /** Selected option ids, keyed by modifier group id. */
 export type Selection = Partial<Record<string, string[]>>;
 
-export const MIN_QUANTITY = 1;
-export const MAX_QUANTITY = 20;
-
 const formatAmount = (value: number): string =>
   new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -71,8 +68,15 @@ export function toSelectedOptions(
   );
 }
 
+/** Rounds a monetary amount to the nearest cent (avoids floating-point drift). */
+export function roundToCents(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
+/** Base price plus option deltas, rounded to the cent and never below 0. */
 export function unitPrice(basePrice: number, options: CartSelectedOption[]): number {
-  return basePrice + options.reduce((sum, option) => sum + option.price_delta, 0);
+  const sum = options.reduce((total, option) => total + option.price_delta, basePrice);
+  return Math.max(0, roundToCents(sum));
 }
 
 export function totalPrice(
@@ -80,7 +84,7 @@ export function totalPrice(
   options: CartSelectedOption[],
   quantity: number,
 ): number {
-  return unitPrice(basePrice, options) * quantity;
+  return roundToCents(unitPrice(basePrice, options) * quantity);
 }
 
 /** Builds a complete cart line (unique id, options, note, quantity and total). */
