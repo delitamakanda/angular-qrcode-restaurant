@@ -1,12 +1,9 @@
-import { MAX_QUANTITY } from '@app/core/constants/cart.constants';
 import { CartItem, CartSelectedOption } from '@app/core/models/cart.model';
 import { MenuItem } from '@app/core/models/menu-item.model';
 import { ModifierGroup } from '@app/core/models/modifier.model';
 
 /** Selected option ids, keyed by modifier group id. */
 export type Selection = Partial<Record<string, string[]>>;
-
-export const MIN_QUANTITY = 1;
 
 const formatAmount = (value: number): string =>
   new Intl.NumberFormat('en-US', {
@@ -88,10 +85,6 @@ export function totalPrice(
   quantity: number,
 ): number {
   return roundToCents(unitPrice(basePrice, options) * quantity);
-}
-
-export function clampQuantity(quantity: number): number {
-  return Math.min(MAX_QUANTITY, Math.max(MIN_QUANTITY, quantity));
 }
 
 /** Builds a complete cart line (unique id, options, note, quantity and total). */

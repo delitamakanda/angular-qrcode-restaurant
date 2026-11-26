@@ -24,7 +24,7 @@ test('customer customizes a product and adds it to the cart', async ({ page }) =
   await expect(dialog.getByText('Total: $65.00')).toBeAttached();
 
   await dialog.getByRole('radio', { name: /Boba/ }).check();
-  await dialog.getByRole('button', { name: 'Increase quantity' }).click();
+  await dialog.getByRole('button', { name: 'Increase quantity of' }).click();
   await expect(add).toContainText('$150.00');
 
   await add.click();
@@ -49,7 +49,7 @@ test('shows the product title, selected state and a footer that stays in view', 
 
   await dialog.getByRole('textbox').scrollIntoViewIfNeeded();
   await expect(dialog.getByRole('button', { name: /^Add · / })).toBeInViewport();
-  await expect(dialog.getByRole('button', { name: 'Increase quantity' })).toBeInViewport();
+  await expect(dialog.getByRole('button', { name: 'Increase quantity of' })).toBeInViewport();
 });
 
 test('closing the dialog adds nothing and restores focus', async ({ page }) => {
@@ -82,6 +82,21 @@ test('shows an error with a retry when options fail to load', async ({ page }) =
   fail = false;
   await dialog.getByRole('button', { name: 'Retry' }).click();
   await expect(dialog.getByRole('radio', { name: 'Medium' })).toBeVisible();
+});
+
+test('the quantity stepper is bounded between 1 and the maximum', async ({ page }) => {
+  await page.getByRole('button', { name: 'Add to cart: Classic Milk Tea' }).click();
+  const dialog = page.getByRole('dialog', { name: 'Classic Milk Tea' });
+  const increase = dialog.getByRole('button', { name: 'Increase quantity of Classic Milk Tea' });
+  const decrease = dialog.getByRole('button', { name: 'Decrease quantity of Classic Milk Tea' });
+
+  await expect(decrease).toBeDisabled();
+  for (let i = 0; i < 19; i++) {
+    await increase.click();
+  }
+  await expect(dialog.getByRole('status').filter({ hasText: /^20$/ })).toBeVisible();
+  await expect(increase).toBeDisabled();
+  await expect(decrease).toBeEnabled();
 });
 
 test('shows the price delta of paid options and exposes it to assistive technology', async ({

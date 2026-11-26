@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { MAX_QUANTITY } from '@app/core/constants/quantity.constants';
 import { provideTaiga } from '@taiga-ui/core';
 import { QuantityStepper } from './quantity-stepper';
 
@@ -31,10 +32,28 @@ describe('QuantityStepper', () => {
   });
 
   it('disables the increase button at the maximum', () => {
-    const { el } = setup(99);
+    const { el } = setup(MAX_QUANTITY);
 
     expect(
       el.querySelector<HTMLButtonElement>('[aria-label="Increase quantity of Burger"]')?.disabled,
+    ).toBe(true);
+  });
+
+  it('keeps the decrease button enabled at 1 by default (removes the line)', () => {
+    const { el } = setup(1);
+
+    expect(
+      el.querySelector<HTMLButtonElement>('[aria-label="Decrease quantity of Burger"]')?.disabled,
+    ).toBe(false);
+  });
+
+  it('disables the decrease button at the minimum', () => {
+    const { fixture, el } = setup(1);
+    fixture.componentRef.setInput('min', 1);
+    fixture.detectChanges();
+
+    expect(
+      el.querySelector<HTMLButtonElement>('[aria-label="Decrease quantity of Burger"]')?.disabled,
     ).toBe(true);
   });
 });
